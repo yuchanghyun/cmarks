@@ -6,7 +6,7 @@ Quick Look 미리보기가 선택을 바꾸면 사라지는 문제를 대신한�
 ## 설치
 
 - **DMG**: [Releases](https://github.com/yuchanghyun/cmarks/releases)에서 `cmarks-<버전>.dmg`를 받아 Applications 폴더로 끌어 넣는다. Developer ID 서명·공증된 빌드다.
-- **Homebrew**: `brew tap yuchanghyun/cmarks https://github.com/yuchanghyun/cmarks && brew install --cask cmarks`
+- **Homebrew**: `brew tap yuchanghyun/cmarks https://github.com/yuchanghyun/cmarks && brew trust yuchanghyun/cmarks && brew install --cask cmarks` (서드파티 tap이라 `brew trust`가 한 번 필요하다)
 - **소스에서**: 아래 "빌드와 실행".
 
 라이선스는 [MIT](LICENSE). 무료다.

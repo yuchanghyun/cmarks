@@ -1,4 +1,4 @@
-# Homebrew cask. 설치: brew tap yuchanghyun/cmarks https://github.com/yuchanghyun/cmarks && brew install --cask cmarks
+# Homebrew cask. 설치: brew tap yuchanghyun/cmarks https://github.com/yuchanghyun/cmarks && brew trust yuchanghyun/cmarks && brew install --cask cmarks
 # scripts/release.sh 가 버전과 sha256을 갱신한다.
 cask "cmarks" do
   version "1.0.0"
@@ -9,7 +9,7 @@ cask "cmarks" do
   desc "Native GitHub-style Markdown viewer with workspaces, tabs and splits"
   homepage "https://github.com/yuchanghyun/cmarks"
 
-  depends_on macos: ">= :sequoia"
+  depends_on macos: :sequoia
 
   app "cmarks.app"
   binary "#{appdir}/cmarks.app/Contents/Resources/cmarks", target: "cmarks"

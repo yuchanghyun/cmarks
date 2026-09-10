@@ -84,7 +84,7 @@ fi
 ZIP_SHA=$(grep 'zip' "$OUT/checksums.txt" | cut -d' ' -f1)
 mkdir -p Casks
 cat > Casks/cmarks.rb <<CASK
-# Homebrew cask. 설치: brew tap yuchanghyun/cmarks https://github.com/yuchanghyun/cmarks && brew install --cask cmarks
+# Homebrew cask. 설치: brew tap yuchanghyun/cmarks https://github.com/yuchanghyun/cmarks && brew trust yuchanghyun/cmarks && brew install --cask cmarks
 # scripts/release.sh 가 버전과 sha256을 갱신한다.
 cask "cmarks" do
   version "$VERSION"
@@ -95,7 +95,7 @@ cask "cmarks" do
   desc "Native GitHub-style Markdown viewer with workspaces, tabs and splits"
   homepage "https://github.com/yuchanghyun/cmarks"
 
-  depends_on macos: ">= :sequoia"
+  depends_on macos: :sequoia
 
   app "cmarks.app"
   binary "#{appdir}/cmarks.app/Contents/Resources/cmarks", target: "cmarks"
