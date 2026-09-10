@@ -1,0 +1,11 @@
+{
+  "sourceLanguage" : "ko",
+  "strings" : {
+    "cmarks로 열기" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Open in cmarks" } }
+      }
+    }
+  },
+  "version" : "1.0"
+}

@@ -109,6 +109,7 @@ final class AppSettings {
         settings.contentMaxWidth = useGitHubWidth ? 980 : nil
         settings.largeDocumentBytes = max(1, largeDocumentMB) << 20
         settings.hugeDocumentBytes = max(largeDocumentMB + 1, hugeDocumentMB) << 20
+        settings.language = Bundle.main.preferredLocalizations.first ?? "ko"
         return settings
     }
 

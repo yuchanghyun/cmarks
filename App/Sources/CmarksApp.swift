@@ -53,7 +53,7 @@ struct AppCommands: Commands {
             Button("Finder에서 보기") { model.revealInFinder() }
                 .keyboardShortcut(key(.revealInFinder))
                 .disabled(!model.hasDocument)
-            Button("기본 편집기로 열기") { model.openInDefaultEditor() }
+            Button("외부 편집기로 열기") { model.openInDefaultEditor() }
                 .keyboardShortcut(key(.openInEditor))
                 .disabled(!model.hasDocument)
         }
@@ -78,8 +78,13 @@ struct AppCommands: Commands {
                 .disabled(!model.hasDocument)
         }
         CommandGroup(after: .sidebar) {
-            Button(model.columnVisibility == .detailOnly ? "사이드바 보기" : "사이드바 숨기기") { model.toggleSidebar() }
-                .keyboardShortcut(key(.toggleSidebar))
+            if model.columnVisibility == .detailOnly {
+                Button("사이드바 보기") { model.toggleSidebar() }
+                    .keyboardShortcut(key(.toggleSidebar))
+            } else {
+                Button("사이드바 숨기기") { model.toggleSidebar() }
+                    .keyboardShortcut(key(.toggleSidebar))
+            }
             Toggle("아웃라인", isOn: $model.isOutlineVisible)
                 .keyboardShortcut(key(.toggleOutline))
             Toggle("숨김 파일 표시", isOn: $model.showHiddenFiles)
@@ -117,10 +122,13 @@ struct AppCommands: Commands {
                 .keyboardShortcut(key(.closeWorkspace))
             Button("이름 변경…") { model.beginRenamingActiveWorkspace() }
                 .keyboardShortcut(key(.renameWorkspace))
-            Button(model.workspace.isEphemeral ? "워크스페이스 고정" : "임시 워크스페이스로 전환") {
-                model.togglePinWorkspace(model.activeWorkspaceID)
+            if model.workspace.isEphemeral {
+                Button("워크스페이스 고정") { model.togglePinWorkspace(model.activeWorkspaceID) }
+                    .disabled(model.workspace.rootURL == nil)
+            } else {
+                Button("임시 워크스페이스로 전환") { model.togglePinWorkspace(model.activeWorkspaceID) }
+                    .disabled(model.workspace.rootURL == nil)
             }
-            .disabled(model.workspace.rootURL == nil)
             Divider()
             Button("다음 워크스페이스") { model.cycleWorkspace(offset: 1) }
                 .keyboardShortcut(key(.nextWorkspace))

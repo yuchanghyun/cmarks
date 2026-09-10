@@ -84,6 +84,8 @@ final class PaneViewer {
     var onNavigate: ((DocumentRef, NavigationIntent) -> Void)?
     /// 웹뷰가 첫 응답자가 됐을 때(패인 포커스).
     var onFocus: (() -> Void)?
+    /// 컨텍스트 메뉴 "외부 편집기로 열기". AppModel이 앱 선택 규칙을 갖고 있다.
+    var onOpenInEditor: (() -> Void)?
 
     // 찾기(⌘F)
     var isFindBarVisible = false
@@ -286,7 +288,7 @@ final class PaneViewer {
         case .revealInFinder:
             NSWorkspace.shared.activateFileViewerSelecting([url])
         case .openInEditor:
-            NSWorkspace.shared.open(url)
+            onOpenInEditor?()
         case .copySource:
             guard let data = try? Data(contentsOf: url) else { return }
             let text = TextDecoder.decode(data).text
@@ -383,7 +385,7 @@ final class PaneViewer {
             } catch {
                 logger.error("PDF export failed: \(error.localizedDescription, privacy: .public)")
                 let alert = NSAlert()
-                alert.messageText = "PDF를 만들 수 없습니다"
+                alert.messageText = String(localized: "PDF를 만들 수 없습니다")
                 alert.informativeText = error.localizedDescription
                 alert.runModal()
             }

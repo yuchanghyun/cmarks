@@ -102,6 +102,19 @@ struct RenderPipelineTests {
         #expect(small.pageHTML.contains("&quot;highlight&quot;:true"))
     }
 
+    @Test func bannerFollowsLanguage() async throws {
+        let pipeline = RenderPipeline(assetsBaseURL: assets)
+        var settings = RenderSettings.github
+        settings.largeDocumentBytes = 10
+        settings.language = "en"
+        let doc = await pipeline.render(RenderPipeline.Input(url: URL(fileURLWithPath: "/tmp/l.md"), data: Data(String(repeating: "x", count: 50).utf8), modificationDate: nil), settings: settings)
+        #expect(doc.bodyHTML.contains("code highlighting, math and diagrams are skipped"))
+        #expect(doc.pageHTML.contains("<html lang=\"en\""))
+        settings.hugeDocumentBytes = 20
+        let huge = await pipeline.render(RenderPipeline.Input(url: URL(fileURLWithPath: "/tmp/l2.md"), data: Data(String(repeating: "y", count: 50).utf8), modificationDate: nil), settings: settings)
+        #expect(huge.bodyHTML.contains(">Show All<"))
+    }
+
     @Test func readerRunsInsidePipeline() async throws {
         let pipeline = RenderPipeline(assetsBaseURL: assets)
         let doc = try await pipeline.render(fileURL: URL(fileURLWithPath: "/tmp/r.md"), settings: .github) { url in

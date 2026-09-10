@@ -28,7 +28,7 @@ public struct HTMLTemplate: Sendable {
 
         return """
         <!doctype html>
-        <html lang="ko" data-config="\(Self.escapeAttribute(config))">
+        <html lang="\(Self.escapeAttribute(settings.language))" data-config="\(Self.escapeAttribute(config))">
         <head>
         <meta charset="utf-8">
         <meta name="color-scheme" content="light dark">
@@ -52,17 +52,26 @@ public struct HTMLTemplate: Sendable {
         """
     }
 
-    /// 큰 문서 안내. 버튼의 동작은 app.js가 붙인다(CSP로 인라인 스크립트 불가).
-    public static func largeDocumentBanner(byteCount: Int, truncatedTo characters: Int?) -> String {
+    /// 큰 문서 안내. 버튼의 동작은 app.js가 붙인다(CSP로 인라인 스크립트 불가). 문구는 설정 언어를 따른다.
+    public static func largeDocumentBanner(byteCount: Int, truncatedTo characters: Int?, language: String = "ko") -> String {
         let size = ByteCountFormatter.string(fromByteCount: Int64(byteCount), countStyle: .file)
+        let english = language.lowercased().hasPrefix("en")
         if let characters {
+            let count = characters.formatted()
+            let text = english
+                ? "This document is \(size), so only the first \(count) characters are shown. Code highlighting, math and diagrams are skipped."
+                : "문서가 \(size)로 커서 앞부분 \(count)자만 표시했습니다. 코드 하이라이팅·수식·다이어그램도 생략했습니다."
+            let button = english ? "Show All" : "전체 표시"
             return """
-            <div class="cmarks-banner" role="status">문서가 \(size)로 커서 앞부분 \(characters.formatted())자만 표시했습니다. 코드 하이라이팅·수식·다이어그램도 생략했습니다. <button type="button" id="cmarks-load-full">전체 표시</button></div>
+            <div class="cmarks-banner" role="status">\(text) <button type="button" id="cmarks-load-full">\(button)</button></div>
 
             """
         }
+        let text = english
+            ? "This document is \(size), so code highlighting, math and diagrams are skipped."
+            : "문서가 \(size)로 커서 코드 하이라이팅·수식·다이어그램을 생략했습니다."
         return """
-        <div class="cmarks-banner" role="status">문서가 \(size)로 커서 코드 하이라이팅·수식·다이어그램을 생략했습니다.</div>
+        <div class="cmarks-banner" role="status">\(text)</div>
 
         """
     }

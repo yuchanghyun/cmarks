@@ -1,7 +1,1982 @@
 {
-  "sourceLanguage" : "ko",
-  "strings" : {
-
+  "sourceLanguage": "ko",
+  "strings": {
+    "%lld B · %@ · code %lld · img %lld · h %lld": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld B · %@ · code %lld · img %lld · h %lld"
+          }
+        }
+      },
+      "shouldTranslate": false
+    },
+    "Aa": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aa"
+          }
+        }
+      },
+      "shouldTranslate": false
+    },
+    "Finder에서 .md를 열면 cmarks로 열립니다.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Markdown files opened from the Finder will open in cmarks."
+          }
+        }
+      }
+    },
+    "Finder에서 보기": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Show in Finder"
+          }
+        }
+      }
+    },
+    "GitHub와 같은 980px": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "980 px, like GitHub"
+          }
+        }
+      }
+    },
+    "Markdown 소스 복사": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Copy Markdown Source"
+          }
+        }
+      }
+    },
+    "Markdown 파일이나 폴더를 선택하세요": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choose Markdown files or folders"
+          }
+        }
+      }
+    },
+    "Markdown 파일이나 폴더를 열거나 여기로 끌어다 놓으세요.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Open a Markdown file or folder, or drop one here."
+          }
+        }
+      }
+    },
+    "Mermaid 다이어그램": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mermaid diagrams"
+          }
+        }
+      }
+    },
+    "PDF로 내보내기": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Export as PDF"
+          }
+        }
+      }
+    },
+    "PDF로 내보내기…": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Export as PDF…"
+          }
+        }
+      }
+    },
+    "PDF를 만들 수 없습니다": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Couldn't Export PDF"
+          }
+        }
+      }
+    },
+    "cmarks": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "cmarks"
+          }
+        }
+      },
+      "shouldTranslate": false
+    },
+    "cmarks가 .md 파일의 기본 앱입니다.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "cmarks is the default app for Markdown files."
+          }
+        }
+      }
+    },
+    "cmarks를 .md 파일의 기본 앱으로 지정": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Make cmarks the default app for Markdown files"
+          }
+        }
+      }
+    },
+    "js enhanced %.1f ms": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "js enhanced %.1f ms"
+          }
+        }
+      },
+      "shouldTranslate": false
+    },
+    "js ready %.1f ms%@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "js ready %.1f ms%@"
+          }
+        }
+      },
+      "shouldTranslate": false
+    },
+    "raw HTML 허용 (위험 태그는 항상 걸러냄)": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Allow raw HTML (dangerous tags are always removed)"
+          }
+        }
+      }
+    },
+    "render %.1f ms%@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "render %.1f ms%@"
+          }
+        }
+      },
+      "shouldTranslate": false
+    },
+    "↑↓ 이동 · ⏎ 열기 · ⌘⏎ 오른쪽 분할 · ⌘⇧⏎ 아래 분할 · Esc 닫기": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "↑↓ Move · ⏎ Open · ⌘⏎ Split Right · ⌘⇧⏎ Split Down · Esc Close"
+          }
+        }
+      }
+    },
+    "⌘N으로 폴더를 열어 워크스페이스를 만드세요.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Press ⌘N to open a folder as a workspace."
+          }
+        }
+      }
+    },
+    "각주": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Footnotes"
+          }
+        }
+      }
+    },
+    "같은 조합을 쓰는 동작: %@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Also assigned to: %@"
+          }
+        }
+      }
+    },
+    "경로 복사": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Copy Path"
+          }
+        }
+      }
+    },
+    "고정": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pin"
+          }
+        }
+      }
+    },
+    "고정 해제": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Unpin"
+          }
+        }
+      }
+    },
+    "공백으로 구분. 파일 트리·빠른 열기·드롭에서 마크다운으로 취급합니다.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Separate with spaces. Files with these extensions are treated as Markdown in the file tree, Quick Open and drag and drop."
+          }
+        }
+      }
+    },
+    "기본 앱": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Default App"
+          }
+        }
+      }
+    },
+    "기본 앱으로 지정": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Set as Default"
+          }
+        }
+      }
+    },
+    "기본값으로 (%@)": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reset to default (%@)"
+          }
+        }
+      }
+    },
+    "기본값으로 되돌리기": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Restore Defaults"
+          }
+        }
+      }
+    },
+    "기타": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Other"
+          }
+        }
+      }
+    },
+    "다른 탭 모두 닫기": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Close Other Tabs"
+          }
+        }
+      }
+    },
+    "다시 렌더링": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reload"
+          }
+        }
+      }
+    },
+    "다시 시도": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Try Again"
+          }
+        }
+      }
+    },
+    "다시 지정": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Set Again"
+          }
+        }
+      }
+    },
+    "다음 / 이전 워크스페이스": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Next / Previous Workspace"
+          }
+        }
+      }
+    },
+    "다음 / 이전 탭": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Next / Previous Tab"
+          }
+        }
+      }
+    },
+    "다음 워크스페이스": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Next Workspace"
+          }
+        }
+      }
+    },
+    "다음 찾기": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Find Next"
+          }
+        }
+      }
+    },
+    "다음 찾기 (⌘G)": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Find Next (⌘G)"
+          }
+        }
+      }
+    },
+    "다음 탭": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Next Tab"
+          }
+        }
+      }
+    },
+    "다음 탭 (⌃Tab)": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Next Tab (⌃Tab)"
+          }
+        }
+      }
+    },
+    "다크": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dark"
+          }
+        }
+      }
+    },
+    "단축키": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Shortcuts"
+          }
+        }
+      }
+    },
+    "단축키 보기": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Keyboard Shortcuts"
+          }
+        }
+      }
+    },
+    "단축키 칸을 클릭하고 새 조합을 누르세요. Esc는 취소, ⌫는 기본값입니다. 다른 앱이나 시스템(Mission Control 등)이 쓰는 조합은 여기서 바꿔 피할 수 있습니다. 탭 1–8(⌃숫자)과 워크스페이스 1–8(⌘숫자)은 고정입니다.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Click a shortcut and press the new combination. Esc cancels and ⌫ restores the default. Use this to avoid combinations already taken by other apps or the system (such as Mission Control). Tab 1–8 (⌃number) and Workspace 1–8 (⌘number) are fixed."
+          }
+        }
+      }
+    },
+    "단축키 표": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Keyboard Shortcuts"
+          }
+        }
+      }
+    },
+    "닫기": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Close"
+          }
+        }
+      }
+    },
+    "닫기 (Esc)": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Close (Esc)"
+          }
+        }
+      }
+    },
+    "닫은 탭 다시 열기": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reopen Closed Tab"
+          }
+        }
+      }
+    },
+    "대소문자 구분": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Match Case"
+          }
+        }
+      }
+    },
+    "대용량 문서": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Large Documents"
+          }
+        }
+      }
+    },
+    "동작": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Behavior"
+          }
+        }
+      }
+    },
+    "뒤로": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Back"
+          }
+        }
+      }
+    },
+    "뒤로 / 앞으로": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Back / Forward"
+          }
+        }
+      }
+    },
+    "디바이더 균등 분할": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Equalize Split"
+          }
+        }
+      }
+    },
+    "디바이더 더블클릭": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Double-click the divider"
+          }
+        }
+      }
+    },
+    "라이트": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Light"
+          }
+        }
+      }
+    },
+    "레이아웃": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Layout"
+          }
+        }
+      }
+    },
+    "렌더 통계 표시": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Show Render Stats"
+          }
+        }
+      }
+    },
+    "렌더링": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rendering"
+          }
+        }
+      }
+    },
+    "루트 폴더 없음": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No root folder"
+          }
+        }
+      }
+    },
+    "링크 ⌘클릭 / ⌥클릭": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "⌘-click / ⌥-click a link"
+          }
+        }
+      }
+    },
+    "마지막 워크스페이스": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Last Workspace"
+          }
+        }
+      }
+    },
+    "마크다운 파일이 없습니다.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No Markdown files."
+          }
+        }
+      }
+    },
+    "마크다운 확장자": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Markdown extensions"
+          }
+        }
+      }
+    },
+    "모든 단축키를 기본값으로": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reset All Shortcuts"
+          }
+        }
+      }
+    },
+    "무시할 폴더 이름": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ignored folder names"
+          }
+        }
+      }
+    },
+    "문서": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Document"
+          }
+        }
+      }
+    },
+    "문서 안 마크다운 링크를 새 탭으로 열기 (기본은 같은 탭)": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Open Markdown links in a new tab (default: same tab)"
+          }
+        }
+      }
+    },
+    "보기·기타": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "View & Other"
+          }
+        }
+      }
+    },
+    "본문 폭": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Content width"
+          }
+        }
+      }
+    },
+    "빠른 열기 / 새 탭": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Quick Open / New Tab"
+          }
+        }
+      }
+    },
+    "빠른 열기…": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Quick Open…"
+          }
+        }
+      }
+    },
+    "사이드바 보기": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Show Sidebar"
+          }
+        }
+      }
+    },
+    "사이드바 숨기기": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hide Sidebar"
+          }
+        }
+      }
+    },
+    "사이드바 토글": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Toggle Sidebar"
+          }
+        }
+      }
+    },
+    "새 워크스페이스": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "New Workspace"
+          }
+        }
+      }
+    },
+    "새 워크스페이스…": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "New Workspace…"
+          }
+        }
+      }
+    },
+    "새 탭": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "New Tab"
+          }
+        }
+      }
+    },
+    "새 탭 (⌘T)": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "New Tab (⌘T)"
+          }
+        }
+      }
+    },
+    "새 탭 / 오른쪽 분할": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "New tab / Split right"
+          }
+        }
+      }
+    },
+    "새 탭 기본 배율": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Default zoom for new tabs"
+          }
+        }
+      }
+    },
+    "새 탭…": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "New Tab…"
+          }
+        }
+      }
+    },
+    "새 탭으로 열기": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Open in New Tab"
+          }
+        }
+      }
+    },
+    "색인 중…": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Indexing…"
+          }
+        }
+      }
+    },
+    "설정": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Settings"
+          }
+        }
+      }
+    },
+    "세션": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Session"
+          }
+        }
+      }
+    },
+    "수식 (KaTeX)": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Math (KaTeX)"
+          }
+        }
+      }
+    },
+    "숨김 파일 표시": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Show Hidden Files"
+          }
+        }
+      }
+    },
+    "스마트 문장부호 (따옴표·대시 변환)": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Smart punctuation (curly quotes and dashes)"
+          }
+        }
+      }
+    },
+    "시스템": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "System"
+          }
+        }
+      }
+    },
+    "시작": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Untitled"
+          }
+        }
+      }
+    },
+    "시작할 때 워크스페이스와 탭 복원": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Restore workspaces and tabs at launch"
+          }
+        }
+      }
+    },
+    "실제 크기": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Actual Size"
+          }
+        }
+      }
+    },
+    "심볼릭 링크 따라가기": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Follow symbolic links"
+          }
+        }
+      }
+    },
+    "아래 분할로 열기": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Open in Split Below"
+          }
+        }
+      }
+    },
+    "아래 패인": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Focus Pane Below"
+          }
+        }
+      }
+    },
+    "아래로 분할": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Split Down"
+          }
+        }
+      }
+    },
+    "아래로 분할 (⌘⇧D)": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Split Down (⌘⇧D)"
+          }
+        }
+      }
+    },
+    "아웃라인": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Outline"
+          }
+        }
+      }
+    },
+    "아웃라인 (⌘⇧O)": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Outline (⌘⇧O)"
+          }
+        }
+      }
+    },
+    "아웃라인 닫기 (⌘⇧O)": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hide Outline (⌘⇧O)"
+          }
+        }
+      }
+    },
+    "아웃라인 토글": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Toggle Outline"
+          }
+        }
+      }
+    },
+    "앞부분만 표시: %lld MB 초과": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Show only the beginning above %lld MB"
+          }
+        }
+      }
+    },
+    "앞으로": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Forward"
+          }
+        }
+      }
+    },
+    "없음": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Not found"
+          }
+        }
+      }
+    },
+    "열 수 없습니다": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Can't Open"
+          }
+        }
+      }
+    },
+    "열기": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Opening"
+          }
+        }
+      }
+    },
+    "열기…": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Open…"
+          }
+        }
+      }
+    },
+    "열기… (⌘O)": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Open… (⌘O)"
+          }
+        }
+      }
+    },
+    "열린 문서가 없습니다.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No document is open."
+          }
+        }
+      }
+    },
+    "오른쪽 / 아래 분할": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Split Right / Down"
+          }
+        }
+      }
+    },
+    "오른쪽 분할로 열기": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Open in Split Right"
+          }
+        }
+      }
+    },
+    "오른쪽 패인": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Focus Right Pane"
+          }
+        }
+      }
+    },
+    "오른쪽으로 분할": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Split Right"
+          }
+        }
+      }
+    },
+    "오른쪽으로 분할 (⌘D)": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Split Right (⌘D)"
+          }
+        }
+      }
+    },
+    "외부 편집기로 열기": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Open in External Editor"
+          }
+        }
+      }
+    },
+    "외형": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Appearance"
+          }
+        }
+      }
+    },
+    "왼쪽 패인": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Focus Left Pane"
+          }
+        }
+      }
+    },
+    "워크스페이스": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Workspaces"
+          }
+        }
+      }
+    },
+    "워크스페이스 1–8 / 마지막": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Workspace 1–8 / Last"
+          }
+        }
+      }
+    },
+    "워크스페이스 고정": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pin Workspace"
+          }
+        }
+      }
+    },
+    "워크스페이스 닫기": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Close Workspace"
+          }
+        }
+      }
+    },
+    "워크스페이스 닫기 / 이름 변경": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Close / Rename Workspace"
+          }
+        }
+      }
+    },
+    "워크스페이스 이름 변경": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rename Workspace"
+          }
+        }
+      }
+    },
+    "워크스페이스 추가": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Add Workspace"
+          }
+        }
+      }
+    },
+    "워크스페이스로 열 폴더를 선택하세요": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choose a folder to open as a workspace"
+          }
+        }
+      }
+    },
+    "웹 링크(http, https)는 항상 기본 브라우저에서 열립니다. ⌘클릭은 새 탭, ⌥클릭은 오른쪽 분할입니다.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Web links (http, https) always open in your default browser. ⌘-click opens a new tab; ⌥-click opens a split to the right."
+          }
+        }
+      }
+    },
+    "위 패인": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Focus Pane Above"
+          }
+        }
+      }
+    },
+    "이 폴더를 워크스페이스로": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Open as Workspace"
+          }
+        }
+      }
+    },
+    "이 표": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "This table"
+          }
+        }
+      }
+    },
+    "이름": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Name"
+          }
+        }
+      }
+    },
+    "이름 변경": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rename"
+          }
+        }
+      }
+    },
+    "이름 변경…": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rename…"
+          }
+        }
+      }
+    },
+    "이모지 숏코드 (:smile:)": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Emoji shortcodes (:smile:)"
+          }
+        }
+      }
+    },
+    "이전 워크스페이스": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Previous Workspace"
+          }
+        }
+      }
+    },
+    "이전 찾기": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Find Previous"
+          }
+        }
+      }
+    },
+    "이전 찾기 (⌘⇧G)": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Find Previous (⌘⇧G)"
+          }
+        }
+      }
+    },
+    "이전 탭": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Previous Tab"
+          }
+        }
+      }
+    },
+    "이전 탭 (⌃⇧Tab)": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Previous Tab (⌃⇧Tab)"
+          }
+        }
+      }
+    },
+    "인쇄": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Print"
+          }
+        }
+      }
+    },
+    "인쇄 / PDF 내보내기": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Print / Export as PDF"
+          }
+        }
+      }
+    },
+    "인쇄…": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Print…"
+          }
+        }
+      }
+    },
+    "일치하는 파일이 없습니다.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No matching files."
+          }
+        }
+      }
+    },
+    "임시 워크스페이스. 마지막 탭을 닫거나 종료하면 사라집니다.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Temporary workspace. It is removed when its last tab closes or the app quits."
+          }
+        }
+      }
+    },
+    "임시 워크스페이스는 마지막 탭을 닫으면 자동으로 정리": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Remove temporary workspaces when their last tab closes"
+          }
+        }
+      }
+    },
+    "임시 워크스페이스로 전환": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Make Workspace Temporary"
+          }
+        }
+      }
+    },
+    "임시로 전환": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Make Temporary"
+          }
+        }
+      }
+    },
+    "줄 바꿈을 그대로 반영 (hard breaks)": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Treat line breaks as hard breaks"
+          }
+        }
+      }
+    },
+    "지정되지 않았습니다.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Not set."
+          }
+        }
+      }
+    },
+    "창 닫기": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Close Window"
+          }
+        }
+      }
+    },
+    "창 폭 전체": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Full window width"
+          }
+        }
+      }
+    },
+    "찾기": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Find"
+          }
+        }
+      }
+    },
+    "찾기 / 다음 / 이전": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Find / Next / Previous"
+          }
+        }
+      }
+    },
+    "찾기…": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Find…"
+          }
+        }
+      }
+    },
+    "최근 파일": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Recent files"
+          }
+        }
+      }
+    },
+    "최근에 연 파일이 없습니다.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No recent files."
+          }
+        }
+      }
+    },
+    "축소": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Zoom Out"
+          }
+        }
+      }
+    },
+    "클릭한 뒤 새 조합을 누르세요. Esc 취소, ⌫ 기본값": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Click, then press a new combination. Esc cancels, ⌫ restores the default."
+          }
+        }
+      }
+    },
+    "키를 누르세요…": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Press keys…"
+          }
+        }
+      }
+    },
+    "탭": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tabs"
+          }
+        }
+      }
+    },
+    "탭 %lld": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tab %lld"
+          }
+        }
+      }
+    },
+    "탭 1–8": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tab 1–8"
+          }
+        }
+      }
+    },
+    "탭 고정": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pin Tab"
+          }
+        }
+      }
+    },
+    "탭 닫기": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Close Tab"
+          }
+        }
+      }
+    },
+    "탭 닫기 (⌘W)": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Close Tab (⌘W)"
+          }
+        }
+      }
+    },
+    "탭 닫기 (탭 → 패인 → 창)": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Close Tab (tab → pane → window)"
+          }
+        }
+      }
+    },
+    "테마": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Appearance"
+          }
+        }
+      }
+    },
+    "테마 순환": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cycle Appearance"
+          }
+        }
+      }
+    },
+    "파서": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Parser"
+          }
+        }
+      }
+    },
+    "파일": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Files"
+          }
+        }
+      }
+    },
+    "파일 열기": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Open File"
+          }
+        }
+      }
+    },
+    "파일 이름이나 경로 일부": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "File name or part of a path"
+          }
+        }
+      }
+    },
+    "파일 트리 단일 클릭은 미리보기 탭으로 열기 (더블클릭은 고정)": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Single-click in the file tree opens a preview tab (double-click keeps it)"
+          }
+        }
+      }
+    },
+    "파일 트리와 빠른 열기 색인에서 건너뜁니다.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Skipped by the file tree and the Quick Open index."
+          }
+        }
+      }
+    },
+    "파일·탭": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Files & Tabs"
+          }
+        }
+      }
+    },
+    "파일을 찾을 수 없습니다.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "File not found."
+          }
+        }
+      }
+    },
+    "파일이 바뀌면 자동으로 다시 렌더링 (라이브 리로드)": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reload automatically when the file changes (live reload)"
+          }
+        }
+      }
+    },
+    "파일이 삭제되거나 이동되었습니다. 같은 경로에 다시 나타나면 자동으로 갱신됩니다.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "This file was deleted or moved. It will reload automatically if it reappears at the same path."
+          }
+        }
+      }
+    },
+    "패인": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Panes"
+          }
+        }
+      }
+    },
+    "패인 낮추기": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Make Pane Shorter"
+          }
+        }
+      }
+    },
+    "패인 넓히기": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Make Pane Wider"
+          }
+        }
+      }
+    },
+    "패인 높이기": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Make Pane Taller"
+          }
+        }
+      }
+    },
+    "패인 좁히기": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Make Pane Narrower"
+          }
+        }
+      }
+    },
+    "패인 크기 조정": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Resize Pane"
+          }
+        }
+      }
+    },
+    "패인 포커스 이동": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Focus Pane"
+          }
+        }
+      }
+    },
+    "패인 확대 토글": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Toggle Pane Zoom"
+          }
+        }
+      }
+    },
+    "폴더 보기": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Show Folder"
+          }
+        }
+      }
+    },
+    "폴더에 Markdown 파일이 없습니다.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The folder contains no Markdown files."
+          }
+        }
+      }
+    },
+    "프런트매터를 접힌 블록으로 표시": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Show front matter as a collapsed block"
+          }
+        }
+      }
+    },
+    "하이라이팅·수식·다이어그램 생략: %lld MB 초과": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Skip highlighting, math and diagrams above %lld MB"
+          }
+        }
+      }
+    },
+    "헤딩이 없습니다.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No headings."
+          }
+        }
+      }
+    },
+    "확대": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Zoom In"
+          }
+        }
+      }
+    },
+    "확대 / 축소 / 실제 크기": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Zoom In / Out / Actual Size"
+          }
+        }
+      }
+    },
+    "확장": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Extensions"
+          }
+        }
+      }
+    }
   },
-  "version" : "1.0"
+  "version": "1.0"
 }

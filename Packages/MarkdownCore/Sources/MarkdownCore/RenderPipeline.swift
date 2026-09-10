@@ -74,7 +74,7 @@ public actor RenderPipeline {
             bodyHTML = HTMLTemplate.frontMatterHTML(frontMatter) + bodyHTML
         }
         if isLarge {
-            bodyHTML = HTMLTemplate.largeDocumentBanner(byteCount: input.data.count, truncatedTo: truncatedTo) + bodyHTML
+            bodyHTML = HTMLTemplate.largeDocumentBanner(byteCount: input.data.count, truncatedTo: truncatedTo, language: settings.language) + bodyHTML
         }
 
         let title = input.url.lastPathComponent

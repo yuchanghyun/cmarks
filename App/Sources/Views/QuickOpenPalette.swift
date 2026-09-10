@@ -12,7 +12,7 @@ struct QuickOpenPalette: View {
             HStack(spacing: 8) {
                 Image(systemName: "magnifyingglass")
                     .foregroundStyle(.secondary)
-                TextField(model.workspace.rootURL == nil ? "최근 파일" : "파일 이름이나 경로 일부", text: $quickOpen.query)
+                TextField(model.workspace.rootURL == nil ? LocalizedStringKey("최근 파일") : LocalizedStringKey("파일 이름이나 경로 일부"), text: $quickOpen.query)
                     .textFieldStyle(.plain)
                     .font(.title3)
                     .focused($focused)
@@ -33,10 +33,18 @@ struct QuickOpenPalette: View {
             .padding(.vertical, 10)
             Divider()
             if quickOpen.results.isEmpty {
-                Text(quickOpen.query.isEmpty ? "최근에 연 파일이 없습니다." : (quickOpen.isIndexing ? "색인 중…" : "일치하는 파일이 없습니다."))
-                    .font(.callout)
-                    .foregroundStyle(.secondary)
-                    .padding(16)
+                Group {
+                    if quickOpen.query.isEmpty {
+                        Text("최근에 연 파일이 없습니다.")
+                    } else if quickOpen.isIndexing {
+                        Text("색인 중…")
+                    } else {
+                        Text("일치하는 파일이 없습니다.")
+                    }
+                }
+                .font(.callout)
+                .foregroundStyle(.secondary)
+                .padding(16)
             } else {
                 VStack(spacing: 0) {
                     ForEach(Array(quickOpen.results.enumerated()), id: \.element.id) { index, result in

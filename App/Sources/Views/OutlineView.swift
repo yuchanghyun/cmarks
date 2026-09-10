@@ -28,10 +28,16 @@ struct OutlineView: View {
             .padding(.vertical, 6)
             Divider()
             if items.isEmpty {
-                Text(viewer?.currentURL == nil ? "열린 문서가 없습니다." : "헤딩이 없습니다.")
-                    .font(.callout)
-                    .foregroundStyle(.secondary)
-                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                Group {
+                    if viewer?.currentURL == nil {
+                        Text("열린 문서가 없습니다.")
+                    } else {
+                        Text("헤딩이 없습니다.")
+                    }
+                }
+                .font(.callout)
+                .foregroundStyle(.secondary)
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
             } else {
                 ScrollViewReader { proxy in
                     List(items) { item in

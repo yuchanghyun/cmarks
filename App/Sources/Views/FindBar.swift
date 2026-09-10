@@ -51,7 +51,7 @@ struct FindBar: View {
 
     private var countLabel: String {
         if viewer.findQuery.isEmpty { return "" }
-        if viewer.findCount == 0 { return "없음" }
+        if viewer.findCount == 0 { return String(localized: "없음") }
         return "\(viewer.findIndex + 1) / \(viewer.findCount)"
     }
 }

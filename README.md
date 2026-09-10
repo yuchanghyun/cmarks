@@ -2,7 +2,7 @@
 
 macOS용 네이티브 Markdown 뷰어. GitHub에서 보는 것과 같은 모양으로 문서를 열고, 워크스페이스·탭·분할 화면으로 여러 문서를 나란히 읽습니다.
 
-> **cmarks** is a native macOS Markdown viewer. It renders documents the way GitHub does and keeps them open in workspaces, tabs and split panes, so a preview never disappears when you click another file. The UI is currently Korean only.
+> **cmarks** is a native macOS Markdown viewer. It renders documents the way GitHub does and keeps them open in workspaces, tabs and split panes, so a preview never disappears when you click another file. English README: [README.en.md](README.en.md)
 
 ## 왜 만들었나
 
@@ -64,7 +64,7 @@ make install  # Release 빌드를 /Applications에 설치하고 .md 기본 앱�
 | 찾기 · 다음 · 이전 | ⌘F · ⌘G · ⌘⇧G |
 | 확대 · 축소 · 실제 크기 | ⌘= · ⌘- · ⌘0 |
 | 사이드바 · 아웃라인 · 테마 순환 | ⌘B · ⌘⇧O · ⌥⌘T |
-| Finder에서 보기 · 기본 편집기로 열기 | ⌥⌘R · ⌘⇧E |
+| Finder에서 보기 · 외부 편집기로 열기 | ⌥⌘R · ⌘⇧E |
 | 인쇄 · PDF 내보내기 | ⌥⌘P · ⌥⌘⇧P |
 
 다른 앱이나 시스템이 이미 쓰는 조합은 설정 ▸ 단축키에서 바꿀 수 있습니다.
@@ -73,7 +73,7 @@ make install  # Release 빌드를 /Applications에 설치하고 .md 기본 앱�
 
 - 웹 링크(http, https)는 항상 기본 브라우저에서 열립니다.
 - 창은 하나만 지원합니다.
-- UI는 한국어만 제공합니다.
+- UI는 한국어와 영어를 제공하며 macOS 시스템 언어를 따릅니다. 앱만 다른 언어로 쓰려면 시스템 설정 ▸ 일반 ▸ 언어 및 지역 ▸ 응용 프로그램에서 cmarks를 추가합니다.
 - 한 문단에 `$`가 두 번 나오면(예: `$5와 $10`) 수식으로 오인될 수 있습니다. 설정에서 수식을 끌 수 있습니다.
 
 변경 내역은 [docs/RELEASE-NOTES.md](docs/RELEASE-NOTES.md)에 있습니다.

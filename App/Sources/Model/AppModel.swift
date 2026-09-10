@@ -73,7 +73,7 @@ final class AppModel {
         isOutlineVisible = defaults.object(forKey: "outlineVisible") as? Bool ?? true
         showHiddenFiles = defaults.bool(forKey: "showHiddenFiles")
         recentFiles = (defaults.stringArray(forKey: "recentFiles") ?? []).map { URL(fileURLWithPath: $0) }
-        let initial = Workspace.single(name: "시작")
+        let initial = Workspace.single(name: String(localized: "시작"))
         workspaces = [initial]
         activeWorkspaceID = initial.id
         NSApp.appearance = appearance.nsAppearance
@@ -190,12 +190,12 @@ final class AppModel {
         let url = url.standardizedFileURL
         var isDirectory: ObjCBool = false
         guard FileManager.default.fileExists(atPath: url.path(percentEncoded: false), isDirectory: &isDirectory) else {
-            viewers[pane ?? focusedPaneID]?.showFailure(url, message: "파일을 찾을 수 없습니다.")
+            viewers[pane ?? focusedPaneID]?.showFailure(url, message: String(localized: "파일을 찾을 수 없습니다."))
             return
         }
         if isDirectory.boolValue {
             guard let first = Self.firstMarkdownFile(in: url) else {
-                viewers[pane ?? focusedPaneID]?.showFailure(url, message: "폴더에 Markdown 파일이 없습니다.")
+                viewers[pane ?? focusedPaneID]?.showFailure(url, message: String(localized: "폴더에 Markdown 파일이 없습니다."))
                 return
             }
             open(first, in: pane, preview: preview)
@@ -243,7 +243,7 @@ final class AppModel {
         panel.canChooseDirectories = true
         panel.allowsMultipleSelection = true
         panel.allowedContentTypes = [UTType("net.daringfireball.markdown"), .plainText, .folder].compactMap { $0 }
-        panel.message = "Markdown 파일이나 폴더를 선택하세요"
+        panel.message = String(localized: "Markdown 파일이나 폴더를 선택하세요")
         guard panel.runModal() == .OK else { return }
         open(panel.urls, in: pane)
     }
@@ -300,8 +300,8 @@ final class AppModel {
         panel.canChooseFiles = false
         panel.canChooseDirectories = true
         panel.allowsMultipleSelection = false
-        panel.message = "워크스페이스로 열 폴더를 선택하세요"
-        panel.prompt = "워크스페이스 추가"
+        panel.message = String(localized: "워크스페이스로 열 폴더를 선택하세요")
+        panel.prompt = String(localized: "워크스페이스 추가")
         guard panel.runModal() == .OK, let url = panel.url else { return }
         addWorkspace(root: url, ephemeral: false)
     }
@@ -344,7 +344,7 @@ final class AppModel {
         }
         workspaces.remove(at: index)
         if workspaces.isEmpty {
-            let fresh = Workspace.single(name: "시작")
+            let fresh = Workspace.single(name: String(localized: "시작"))
             workspaces = [fresh]
         }
         if wasActive {
@@ -482,9 +482,14 @@ final class AppModel {
         NSWorkspace.shared.activateFileViewerSelecting([url])
     }
 
-    func openInDefaultEditor() {
-        guard let url = currentDocumentURL else { return }
-        NSWorkspace.shared.open(url)
+    /// 외부 편집기로 열기. .md 기본 앱이 cmarks 자신이면 다른 앱(없으면 TextEdit)을 고른다.
+    func openInDefaultEditor(from pane: PaneID? = nil) {
+        guard let url = pane.flatMap({ workspace.pane($0)?.activeTab?.document.url }) ?? currentDocumentURL else { return }
+        let me = Bundle.main.bundleURL.standardizedFileURL
+        let candidates = NSWorkspace.shared.urlsForApplications(toOpen: url).filter { $0.standardizedFileURL != me }
+        let preferred = NSWorkspace.shared.urlForApplication(toOpen: url).flatMap { $0.standardizedFileURL == me ? nil : $0 }
+        let target = preferred ?? candidates.first ?? URL(fileURLWithPath: "/System/Applications/TextEdit.app")
+        NSWorkspace.shared.open([url], withApplicationAt: target, configuration: NSWorkspace.OpenConfiguration())
     }
 
     func zoom(by delta: CGFloat) {
@@ -601,6 +606,7 @@ final class AppModel {
         viewer.onNavigate = { [weak self] ref, intent in self?.navigate(ref, intent: intent, from: pane) }
         viewer.onFocus = { [weak self] in self?.focus(pane) }
         viewer.onDropURLs = { [weak self] urls in self?.open(urls, in: pane) }
+        viewer.onOpenInEditor = { [weak self] in self?.openInDefaultEditor(from: pane) }
         viewers[pane] = viewer
         return viewer
     }

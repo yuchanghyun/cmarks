@@ -25,7 +25,11 @@ struct SidebarView: View {
                     }
                 } header: {
                     HStack {
-                        Text(model.workspace.rootURL?.lastPathComponent ?? "파일")
+                        if let root = model.workspace.rootURL {
+                            Text(root.lastPathComponent)
+                        } else {
+                            Text("파일")
+                        }
                         Spacer()
                         if let root = model.workspace.rootURL {
                             Button {
@@ -108,10 +112,14 @@ private struct WorkspaceRow: View {
         .listRowInsets(EdgeInsets())
         .listRowBackground(isActive ? Color.accentColor.opacity(0.12) : nil)
         .onTapGesture { let id = workspace.id; Task { @MainActor in model.activateWorkspace(id) } }
-        .help(workspace.rootURL?.path(percentEncoded: false).abbreviatingWithTilde ?? "루트 폴더 없음")
+        .help(workspace.rootURL?.path(percentEncoded: false).abbreviatingWithTilde ?? String(localized: "루트 폴더 없음"))
         .contextMenu {
             Button("이름 변경") { model.renamingWorkspaceID = workspace.id }
-            Button(workspace.isEphemeral ? "고정" : "임시로 전환") { model.togglePinWorkspace(workspace.id) }
+            if workspace.isEphemeral {
+                Button("고정") { model.togglePinWorkspace(workspace.id) }
+            } else {
+                Button("임시로 전환") { model.togglePinWorkspace(workspace.id) }
+            }
             if let root = workspace.rootURL {
                 Button("Finder에서 보기") { NSWorkspace.shared.activateFileViewerSelecting([root]) }
             }

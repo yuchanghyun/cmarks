@@ -162,17 +162,21 @@ private struct DefaultAppRow: View {
     var body: some View {
         HStack {
             VStack(alignment: .leading, spacing: 2) {
-                Text(isDefault ? "cmarks가 .md 파일의 기본 앱입니다." : "cmarks를 .md 파일의 기본 앱으로 지정")
+                if isDefault {
+                    Text("cmarks가 .md 파일의 기본 앱입니다.")
+                } else {
+                    Text("cmarks를 .md 파일의 기본 앱으로 지정")
+                }
                 if let message {
                     Text(message).font(.caption).foregroundStyle(.secondary)
                 }
             }
             Spacer()
-            Button(isDefault ? "다시 지정" : "기본 앱으로 지정") {
+            Button(isDefault ? LocalizedStringKey("다시 지정") : LocalizedStringKey("기본 앱으로 지정")) {
                 DefaultAppRegistrar.register { error in
                     Task { @MainActor in
                         isDefault = DefaultAppRegistrar.isDefault
-                        message = error?.localizedDescription ?? (isDefault ? "Finder에서 .md를 열면 cmarks로 열립니다." : "지정되지 않았습니다.")
+                        message = error?.localizedDescription ?? (isDefault ? String(localized: "Finder에서 .md를 열면 cmarks로 열립니다.") : String(localized: "지정되지 않았습니다."))
                     }
                 }
             }

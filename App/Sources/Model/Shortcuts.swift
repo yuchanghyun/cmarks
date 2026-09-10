@@ -19,58 +19,58 @@ enum ShortcutAction: String, CaseIterable, Identifiable {
 
     var group: String {
         switch self {
-        case .newWorkspace, .quickOpen, .openFile, .reopenClosedTab, .closeTab: "파일·탭"
-        case .nextTab, .previousTab: "파일·탭"
+        case .newWorkspace, .quickOpen, .openFile, .reopenClosedTab, .closeTab: String(localized: "파일·탭")
+        case .nextTab, .previousTab: String(localized: "파일·탭")
         case .splitRight, .splitDown, .toggleZoomPane, .focusLeft, .focusRight, .focusUp, .focusDown,
-             .resizeLeft, .resizeRight, .resizeUp, .resizeDown: "패인"
-        case .closeWorkspace, .renameWorkspace, .nextWorkspace, .previousWorkspace, .lastWorkspace: "워크스페이스"
-        case .back, .forward, .reload, .find, .findNext, .findPrevious, .zoomIn, .zoomOut, .zoomReset: "문서"
-        case .toggleSidebar, .toggleOutline, .cycleAppearance, .print, .exportPDF, .revealInFinder, .openInEditor, .shortcutHelp: "보기·기타"
+             .resizeLeft, .resizeRight, .resizeUp, .resizeDown: String(localized: "패인")
+        case .closeWorkspace, .renameWorkspace, .nextWorkspace, .previousWorkspace, .lastWorkspace: String(localized: "워크스페이스")
+        case .back, .forward, .reload, .find, .findNext, .findPrevious, .zoomIn, .zoomOut, .zoomReset: String(localized: "문서")
+        case .toggleSidebar, .toggleOutline, .cycleAppearance, .print, .exportPDF, .revealInFinder, .openInEditor, .shortcutHelp: String(localized: "보기·기타")
         }
     }
 
     var title: String {
         switch self {
-        case .newWorkspace: "새 워크스페이스"
-        case .quickOpen: "빠른 열기 / 새 탭"
-        case .openFile: "파일 열기"
-        case .reopenClosedTab: "닫은 탭 다시 열기"
-        case .closeTab: "탭 닫기"
-        case .nextTab: "다음 탭"
-        case .previousTab: "이전 탭"
-        case .splitRight: "오른쪽으로 분할"
-        case .splitDown: "아래로 분할"
-        case .toggleZoomPane: "패인 확대 토글"
-        case .focusLeft: "왼쪽 패인"
-        case .focusRight: "오른쪽 패인"
-        case .focusUp: "위 패인"
-        case .focusDown: "아래 패인"
-        case .resizeLeft: "패인 좁히기"
-        case .resizeRight: "패인 넓히기"
-        case .resizeUp: "패인 낮추기"
-        case .resizeDown: "패인 높이기"
-        case .closeWorkspace: "워크스페이스 닫기"
-        case .renameWorkspace: "워크스페이스 이름 변경"
-        case .nextWorkspace: "다음 워크스페이스"
-        case .previousWorkspace: "이전 워크스페이스"
-        case .lastWorkspace: "마지막 워크스페이스"
-        case .back: "뒤로"
-        case .forward: "앞으로"
-        case .reload: "다시 렌더링"
-        case .find: "찾기"
-        case .findNext: "다음 찾기"
-        case .findPrevious: "이전 찾기"
-        case .zoomIn: "확대"
-        case .zoomOut: "축소"
-        case .zoomReset: "실제 크기"
-        case .toggleSidebar: "사이드바 토글"
-        case .toggleOutline: "아웃라인 토글"
-        case .cycleAppearance: "테마 순환"
-        case .print: "인쇄"
-        case .exportPDF: "PDF로 내보내기"
-        case .revealInFinder: "Finder에서 보기"
-        case .openInEditor: "기본 편집기로 열기"
-        case .shortcutHelp: "단축키 표"
+        case .newWorkspace: String(localized: "새 워크스페이스")
+        case .quickOpen: String(localized: "빠른 열기 / 새 탭")
+        case .openFile: String(localized: "파일 열기")
+        case .reopenClosedTab: String(localized: "닫은 탭 다시 열기")
+        case .closeTab: String(localized: "탭 닫기")
+        case .nextTab: String(localized: "다음 탭")
+        case .previousTab: String(localized: "이전 탭")
+        case .splitRight: String(localized: "오른쪽으로 분할")
+        case .splitDown: String(localized: "아래로 분할")
+        case .toggleZoomPane: String(localized: "패인 확대 토글")
+        case .focusLeft: String(localized: "왼쪽 패인")
+        case .focusRight: String(localized: "오른쪽 패인")
+        case .focusUp: String(localized: "위 패인")
+        case .focusDown: String(localized: "아래 패인")
+        case .resizeLeft: String(localized: "패인 좁히기")
+        case .resizeRight: String(localized: "패인 넓히기")
+        case .resizeUp: String(localized: "패인 낮추기")
+        case .resizeDown: String(localized: "패인 높이기")
+        case .closeWorkspace: String(localized: "워크스페이스 닫기")
+        case .renameWorkspace: String(localized: "워크스페이스 이름 변경")
+        case .nextWorkspace: String(localized: "다음 워크스페이스")
+        case .previousWorkspace: String(localized: "이전 워크스페이스")
+        case .lastWorkspace: String(localized: "마지막 워크스페이스")
+        case .back: String(localized: "뒤로")
+        case .forward: String(localized: "앞으로")
+        case .reload: String(localized: "다시 렌더링")
+        case .find: String(localized: "찾기")
+        case .findNext: String(localized: "다음 찾기")
+        case .findPrevious: String(localized: "이전 찾기")
+        case .zoomIn: String(localized: "확대")
+        case .zoomOut: String(localized: "축소")
+        case .zoomReset: String(localized: "실제 크기")
+        case .toggleSidebar: String(localized: "사이드바 토글")
+        case .toggleOutline: String(localized: "아웃라인 토글")
+        case .cycleAppearance: String(localized: "테마 순환")
+        case .print: String(localized: "인쇄")
+        case .exportPDF: String(localized: "PDF로 내보내기")
+        case .revealInFinder: String(localized: "Finder에서 보기")
+        case .openInEditor: String(localized: "외부 편집기로 열기")
+        case .shortcutHelp: String(localized: "단축키 표")
         }
     }
 
@@ -120,7 +120,7 @@ enum ShortcutAction: String, CaseIterable, Identifiable {
         }
     }
 
-    static var groups: [String] { ["파일·탭", "패인", "워크스페이스", "문서", "보기·기타"] }
+    static var groups: [String] { [String(localized: "파일·탭"), String(localized: "패인"), String(localized: "워크스페이스"), String(localized: "문서"), String(localized: "보기·기타")] }
 }
 
 /// 키 하나 + 수정키. `key`는 한 글자("d", "[") 또는 특수키 이름("left", "return" 등).

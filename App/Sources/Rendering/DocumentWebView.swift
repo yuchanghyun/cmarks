@@ -29,7 +29,7 @@ final class DocumentWebView: WKWebView {
         }
         while let first = menu.items.first, first.isSeparatorItem { menu.removeItem(first) }
         if !menu.items.isEmpty { menu.addItem(.separator()) }
-        for (title, action) in [("Finder에서 보기", #selector(contextRevealInFinder(_:))), ("Markdown 소스 복사", #selector(contextCopySource(_:))), ("기본 편집기로 열기", #selector(contextOpenInEditor(_:)))] {
+        for (title, action) in [(String(localized: "Finder에서 보기"), #selector(contextRevealInFinder(_:))), (String(localized: "Markdown 소스 복사"), #selector(contextCopySource(_:))), (String(localized: "외부 편집기로 열기"), #selector(contextOpenInEditor(_:)))] {
             let item = NSMenuItem(title: title, action: action, keyEquivalent: "")
             item.target = self
             menu.addItem(item)

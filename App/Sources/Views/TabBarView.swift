@@ -145,7 +145,11 @@ private struct TabItemView: View {
             Button("탭 닫기") { model.closeTab(tab.id, in: paneID) }
             Button("다른 탭 모두 닫기") { model.closeOtherTabs(keeping: tab.id, in: paneID) }
             Divider()
-            Button(tab.isPinned ? "고정 해제" : "탭 고정") { model.togglePin(tab.id, in: paneID) }
+            if tab.isPinned {
+                Button("고정 해제") { model.togglePin(tab.id, in: paneID) }
+            } else {
+                Button("탭 고정") { model.togglePin(tab.id, in: paneID) }
+            }
             Divider()
             Button("Finder에서 보기") { NSWorkspace.shared.activateFileViewerSelecting([tab.document.url]) }
             Button("경로 복사") {

@@ -24,6 +24,8 @@ public struct RenderSettings: Hashable, Codable, Sendable {
     public var hugeDocumentBytes = 5 << 20
     /// 앞부분만 보여 줄 때의 글자 수.
     public var truncatedCharacterCount = 1_000_000
+    /// 페이지 안 안내 문구와 <html lang>의 언어. "ko" 또는 "en".
+    public var language = "ko"
 
     public init() {}
 

@@ -35,7 +35,7 @@ struct ShortcutRecorderButton: View {
                     }
                 }
             } label: {
-                Text(recorder.isRecording ? "키를 누르세요…" : combo.display)
+                (recorder.isRecording ? Text("키를 누르세요…") : Text(combo.display))
                     .font(.body.monospaced())
                     .frame(minWidth: 110)
             }

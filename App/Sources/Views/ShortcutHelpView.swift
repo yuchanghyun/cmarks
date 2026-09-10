@@ -19,7 +19,7 @@ struct ShortcutHelpView: View {
         ]),
         ("문서", [
             ("뒤로 / 앞으로", "⌘[ / ⌘]"), ("다시 렌더링", "⌘R"), ("찾기 / 다음 / 이전", "⌘F / ⌘G / ⌘⇧G"),
-            ("확대 / 축소 / 실제 크기", "⌘= / ⌘- / ⌘0"), ("Finder에서 보기", "⌥⌘R"), ("기본 편집기로 열기", "⌘⇧E"),
+            ("확대 / 축소 / 실제 크기", "⌘= / ⌘- / ⌘0"), ("Finder에서 보기", "⌥⌘R"), ("외부 편집기로 열기", "⌘⇧E"),
             ("인쇄 / PDF 내보내기", "⌥⌘P / ⌥⌘⇧P"), ("링크 ⌘클릭 / ⌥클릭", "새 탭 / 오른쪽 분할"),
         ]),
         ("기타", [("테마 순환", "⌥⌘T"), ("설정", "⌘,"), ("이 표", "⌘/")]),
@@ -38,12 +38,12 @@ struct ShortcutHelpView: View {
                 VStack(alignment: .leading, spacing: 18) {
                     ForEach(Self.groups, id: \.0) { group in
                         VStack(alignment: .leading, spacing: 6) {
-                            Text(group.0).font(.headline)
+                            Text(LocalizedStringKey(group.0)).font(.headline)
                             ForEach(group.1, id: \.0) { row in
                                 HStack {
-                                    Text(row.0)
+                                    Text(LocalizedStringKey(row.0))
                                     Spacer()
-                                    Text(row.1).font(.body.monospaced()).foregroundStyle(.secondary)
+                                    Text(LocalizedStringKey(row.1)).font(.body.monospaced()).foregroundStyle(.secondary)
                                 }
                             }
                         }
