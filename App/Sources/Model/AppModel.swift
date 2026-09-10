@@ -152,7 +152,7 @@ final class AppModel {
 
     // MARK: - 열기
 
-    /// 앱 밖(Finder, CLI, 딥링크, Dock 드롭)에서 온 요청(PLAN.md §4.8).
+    /// 앱 밖(Finder, CLI, 딥링크, Dock 드롭)에서 온 요청(설계 문서 §4.8).
     /// 폴더는 워크스페이스로 추가. 파일은 포함하는 워크스페이스가 있으면 거기서, 없으면 부모 폴더의 임시 워크스페이스에서 연다.
     func openFromOutside(_ urls: [URL]) {
         for raw in urls {

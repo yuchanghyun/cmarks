@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 // web/node_modules → App/Resources/web/vendor 복사. 실행: make assets (또는 cd web && pnpm vendor)
-// 번들 대상과 이유는 docs/PLAN.md §4.3, §6 참고.
+// 번들 대상과 이유는 설계 문서 §4.3, §6 참고.
 import { cpSync, existsSync, mkdirSync, readFileSync, readdirSync, rmSync, statSync, writeFileSync } from 'node:fs';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';

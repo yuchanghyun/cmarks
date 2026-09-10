@@ -1,6 +1,6 @@
 import SwiftUI
 
-/// ⌘/ 단축키 표(PLAN.md §5.2).
+/// ⌘/ 단축키 표(설계 문서 §5.2).
 struct ShortcutHelpView: View {
     @Environment(\.dismiss) private var dismiss
 

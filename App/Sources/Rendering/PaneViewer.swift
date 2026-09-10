@@ -33,14 +33,14 @@ struct RenderStats: Equatable {
     }
 }
 
-/// 링크 클릭의 의도. ⌘클릭은 새 탭, ⌥클릭은 새 분할(PLAN.md §4.5).
+/// 링크 클릭의 의도. ⌘클릭은 새 탭, ⌥클릭은 새 분할(설계 문서 §4.5).
 enum NavigationIntent: Equatable {
     case sameTab
     case newTab
     case newSplit(SplitDirection)
 }
 
-/// 패인 하나의 웹뷰와 문서 상태(PLAN.md §4.6). 패인마다 하나씩 있다.
+/// 패인 하나의 웹뷰와 문서 상태(설계 문서 §4.6). 패인마다 하나씩 있다.
 /// 문서 열기, 파일 감시와 제자리 갱신, 스크롤 기억, 찾기, 인쇄를 맡는다. 모델 변경은 콜백으로 AppModel에 넘긴다.
 @MainActor
 @Observable
@@ -255,7 +255,7 @@ final class PaneViewer {
         }
     }
 
-    // MARK: - 파일 감시(PLAN.md §4.7)
+    // MARK: - 파일 감시(설계 문서 §4.7)
 
     private func startWatching(_ url: URL) {
         watcher?.stop()
@@ -464,7 +464,7 @@ final class PaneViewer {
         }
     }
 
-    // MARK: - 내비게이션 정책(PLAN.md §4.5 링크 표)
+    // MARK: - 내비게이션 정책(설계 문서 §4.5 링크 표)
 
     fileprivate func policy(for action: WKNavigationAction) -> WKNavigationActionPolicy {
         guard let url = action.request.url else { return .cancel }
@@ -480,7 +480,7 @@ final class PaneViewer {
         return .cancel
     }
 
-    /// 링크 분류(PLAN.md §4.5 표). 마크다운은 앱 안에서, 다른 로컬 파일은 기본 앱, 웹은 브라우저.
+    /// 링크 분류(설계 문서 §4.5 표). 마크다운은 앱 안에서, 다른 로컬 파일은 기본 앱, 웹은 브라우저.
     fileprivate func handleLink(_ url: URL, intent: NavigationIntent) {
         logger.notice("link \(url.absoluteString, privacy: .public) intent=\(String(describing: intent), privacy: .public)")
         // cmark는 한글 앵커를 퍼센트 인코딩해 둔다. 디코딩해 두어야 문서 URL을 만들 때 두 번 인코딩되지 않는다.

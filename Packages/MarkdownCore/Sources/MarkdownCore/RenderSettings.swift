@@ -1,6 +1,6 @@
 import Foundation
 
-/// 렌더링 옵션(PLAN.md §5.3 렌더링 항목). 캐시 키의 일부이므로 Hashable.
+/// 렌더링 옵션(설계 문서 §5.3 렌더링 항목). 캐시 키의 일부이므로 Hashable.
 public struct RenderSettings: Hashable, Codable, Sendable {
     public enum FrontMatterDisplay: String, Codable, Sendable {
         case hidden
@@ -18,7 +18,7 @@ public struct RenderSettings: Hashable, Codable, Sendable {
     public var frontMatter: FrontMatterDisplay = .collapsed
     /// nil이면 창 폭 전체. GitHub 파일 뷰는 980px.
     public var contentMaxWidth: Int? = 980
-    /// 이 크기를 넘는 문서는 하이라이팅·수식·다이어그램을 건너뛴다(PLAN.md Phase 5 대용량 정책).
+    /// 이 크기를 넘는 문서는 하이라이팅·수식·다이어그램을 건너뛴다(설계 문서 Phase 5 대용량 정책).
     public var largeDocumentBytes = 2 << 20
     /// 이 크기를 넘는 문서는 앞부분만 보여 주고 "전체 표시" 버튼을 둔다.
     public var hugeDocumentBytes = 5 << 20

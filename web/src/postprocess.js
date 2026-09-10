@@ -1,4 +1,4 @@
-// cmark-gfm이 만든 DOM을 GitHub 마크업에 맞춘다(PLAN.md §4.3 후처리 1~4).
+// cmark-gfm이 만든 DOM을 GitHub 마크업에 맞춘다(설계 문서 §4.3 후처리 1~4).
 // 모두 멱등이어야 한다: 라이브 리로드(morph) 후 같은 루트에 다시 실행된다.
 import { Slugger } from './slugger.js';
 import octicons from './generated/octicons.js';

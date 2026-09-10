@@ -1,6 +1,6 @@
 import AppKit
 
-/// 테마 설정(PLAN.md §5.3). NSApp.appearance를 바꾸면 웹뷰의 prefers-color-scheme도 따라간다.
+/// 테마 설정(설계 문서 §5.3). NSApp.appearance를 바꾸면 웹뷰의 prefers-color-scheme도 따라간다.
 enum AppearanceSetting: String, CaseIterable, Identifiable {
     case system
     case light

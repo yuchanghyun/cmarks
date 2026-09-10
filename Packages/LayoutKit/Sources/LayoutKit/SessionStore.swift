@@ -1,6 +1,6 @@
 import Foundation
 
-/// 워크스페이스·탭·스크롤을 JSON 하나로 저장한다(PLAN.md §4.8). 원자적으로 쓰고, 스키마 버전으로 이전 형식을 거른다.
+/// 워크스페이스·탭·스크롤을 JSON 하나로 저장한다(설계 문서 §4.8). 원자적으로 쓰고, 스키마 버전으로 이전 형식을 거른다.
 public struct Session: Codable, Equatable, Sendable {
     public static let currentSchemaVersion = 1
 

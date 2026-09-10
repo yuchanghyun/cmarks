@@ -4,7 +4,7 @@ import MarkdownCore
 import OSLog
 import Synchronization
 
-/// 렌더 파이프라인과 결과 저장소. 스킴 핸들러가 경로로 렌더 결과를 조회한다(PLAN.md §4.4, §4.6).
+/// 렌더 파이프라인과 결과 저장소. 스킴 핸들러가 경로로 렌더 결과를 조회한다(설계 문서 §4.4, §4.6).
 @MainActor
 @Observable
 final class DocumentService {

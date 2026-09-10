@@ -36,6 +36,10 @@ AuthKey_*.p8
 # 개발 중 작성한 비공개 문서(계획, 체크포인트, 배포 메모)
 docs-private/
 
+# 테스트 중 내보낸 산출물
+fixtures/*.pdf
+fixtures/**/*.pdf
+
 # 로그·임시
 *.log
 *.orig

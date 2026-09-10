@@ -11,7 +11,7 @@ public struct DocumentRef: Hashable, Codable, Sendable {
     }
 }
 
-/// 패인 안의 탭 하나 = 문서 하나(PLAN.md §4.2).
+/// 패인 안의 탭 하나 = 문서 하나(설계 문서 §4.2).
 public struct Tab: Identifiable, Codable, Equatable, Sendable {
     public let id: UUID
     public var document: DocumentRef

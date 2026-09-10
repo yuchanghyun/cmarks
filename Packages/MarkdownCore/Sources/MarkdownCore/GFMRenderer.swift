@@ -2,7 +2,7 @@ import Foundation
 import cmark_gfm
 import cmark_gfm_extensions
 
-/// cmark-gfm으로 Markdown을 HTML 조각으로 바꾼다. GitHub 파일 뷰와 같은 확장/옵션 조합(PLAN.md §4.3).
+/// cmark-gfm으로 Markdown을 HTML 조각으로 바꾼다. GitHub 파일 뷰와 같은 확장/옵션 조합(설계 문서 §4.3).
 /// 헤딩 앵커, 알림, 이모지 등 DOM 후처리는 web/app.js가 맡는다.
 public struct GFMRenderer: Sendable {
     /// GitHub이 켜는 확장. `tagfilter`는 raw HTML을 허용하면서 script/iframe 등 위험 태그만 이스케이프한다.

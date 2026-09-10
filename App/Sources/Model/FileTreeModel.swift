@@ -2,7 +2,7 @@ import FileKit
 import Foundation
 import OSLog
 
-/// 사이드바 파일 트리. 펼친 디렉터리만 읽고, FSEvents로 바뀐 디렉터리만 다시 읽는다(PLAN.md §4.7).
+/// 사이드바 파일 트리. 펼친 디렉터리만 읽고, FSEvents로 바뀐 디렉터리만 다시 읽는다(설계 문서 §4.7).
 @MainActor
 @Observable
 final class FileTreeModel {

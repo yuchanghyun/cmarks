@@ -65,7 +65,7 @@ public struct LayoutFrames: Equatable, Sendable {
     }
 }
 
-/// 패인 트리 연산(PLAN.md §4.2 표). 모두 순수 함수이며 새 트리를 돌려준다.
+/// 패인 트리 연산(설계 문서 §4.2 표). 모두 순수 함수이며 새 트리를 돌려준다.
 public extension LayoutNode {
     func contains(_ pane: PaneID) -> Bool {
         paneIDs.contains(pane)

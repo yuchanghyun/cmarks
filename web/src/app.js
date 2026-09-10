@@ -1,4 +1,4 @@
-// 렌더된 문서 안에서 도는 진입점. Swift와의 브릿지는 PLAN.md §4.5.
+// 렌더된 문서 안에서 도는 진입점. Swift와의 브릿지는 설계 문서 §4.5.
 import { collectStats } from './postprocess.js';
 import { ensureEmoji, highlightCode, renderMath, renderMermaid } from './loaders.js';
 import { morphArticle, prepareArticle, restoreAnchor, viewportAnchor } from './reload.js';

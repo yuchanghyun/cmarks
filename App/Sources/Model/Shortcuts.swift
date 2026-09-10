@@ -74,7 +74,7 @@ enum ShortcutAction: String, CaseIterable, Identifiable {
         }
     }
 
-    /// cmux 호환 기본값(PLAN.md §5.2).
+    /// cmux 호환 기본값(설계 문서 §5.2).
     var defaultCombo: KeyCombo {
         switch self {
         case .newWorkspace: KeyCombo("n", command: true)

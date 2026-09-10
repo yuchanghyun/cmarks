@@ -13,7 +13,7 @@ public struct FileContents: Sendable {
     }
 }
 
-/// 파일 시스템 접근 경계(PLAN.md ADR-5).
+/// 파일 시스템 접근 경계(설계 문서 ADR-5).
 /// v1은 샌드박스가 꺼져 있어 DirectFileAccess가 그대로 읽는다.
 /// 샌드박스를 켤 때는 보안 범위 북마크를 다루는 구현을 이 프로토콜 뒤에 끼운다.
 public protocol FileAccess: Sendable {

@@ -3,7 +3,7 @@ import Foundation
 import MarkdownCore
 import SwiftUI
 
-/// 설정 창 항목(PLAN.md §5.3). UserDefaults에 저장하고, 바뀌면 AppModel이 렌더·트리·뷰어에 반영한다.
+/// 설정 창 항목(설계 문서 §5.3). UserDefaults에 저장하고, 바뀌면 AppModel이 렌더·트리·뷰어에 반영한다.
 @MainActor
 @Observable
 final class AppSettings {

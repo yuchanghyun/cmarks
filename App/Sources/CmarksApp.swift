@@ -21,7 +21,7 @@ struct CmarksApp: App {
     }
 }
 
-/// 메뉴. 단축키는 설정 ▸ 단축키의 값을 따른다(기본값은 PLAN.md §5.2, cmux 호환).
+/// 메뉴. 단축키는 설정 ▸ 단축키의 값을 따른다(기본값은 설계 문서 §5.2, cmux 호환).
 struct AppCommands: Commands {
     @Bindable private var model = AppModel.shared
 

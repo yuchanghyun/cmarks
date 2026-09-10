@@ -1,6 +1,6 @@
 import Foundation
 
-/// 렌더된 본문을 전체 페이지로 감싼다. CSS/JS는 앱 번들에서 커스텀 스킴으로 서빙된다(PLAN.md §4.4).
+/// 렌더된 본문을 전체 페이지로 감싼다. CSS/JS는 앱 번들에서 커스텀 스킴으로 서빙된다(설계 문서 §4.4).
 public struct HTMLTemplate: Sendable {
     public var assetsBaseURL: URL
 

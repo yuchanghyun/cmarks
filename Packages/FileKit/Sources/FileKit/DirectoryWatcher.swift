@@ -1,7 +1,7 @@
 import CoreServices
 import Foundation
 
-/// FSEvents로 디렉터리 트리 변경을 감시한다(PLAN.md §4.7). 바뀐 경로들을 latency 동안 모아서 한 번에 알린다.
+/// FSEvents로 디렉터리 트리 변경을 감시한다(설계 문서 §4.7). 바뀐 경로들을 latency 동안 모아서 한 번에 알린다.
 public final class DirectoryWatcher: @unchecked Sendable {
     public typealias Handler = @Sendable ([String]) -> Void
 

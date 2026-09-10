@@ -3,7 +3,7 @@ import UniformTypeIdentifiers
 import WebKit
 
 /// `cmarks-local://assets/...` 은 앱 번들의 web 폴더, `cmarks-local://doc/<abs path>` 는 렌더된 문서(마크다운) 또는 로컬 파일(이미지 등).
-/// 폰트 로딩을 위해 assets 응답에는 CORS 헤더를 붙인다(PLAN.md §4.4).
+/// 폰트 로딩을 위해 assets 응답에는 CORS 헤더를 붙인다(설계 문서 §4.4).
 @MainActor
 final class LocalSchemeHandler: NSObject, WKURLSchemeHandler {
     private let documents: DocumentService

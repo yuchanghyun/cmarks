@@ -12,7 +12,7 @@ public enum SplitAxis: String, Codable, Sendable {
     case vertical
 }
 
-/// 패인 트리(PLAN.md §4.2). leaf가 패인, split이 분할 컨테이너.
+/// 패인 트리(설계 문서 §4.2). leaf가 패인, split이 분할 컨테이너.
 public indirect enum LayoutNode: Codable, Equatable, Sendable {
     case leaf(PaneID)
     case split(SplitNode)

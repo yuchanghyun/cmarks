@@ -1,6 +1,6 @@
 import SwiftUI
 
-/// 설정 창(⌘,). 항목은 PLAN.md §5.3.
+/// 설정 창(⌘,). 항목은 설계 문서 §5.3.
 struct SettingsView: View {
     var body: some View {
         TabView {

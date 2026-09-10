@@ -17,7 +17,7 @@ public struct FileTreeNode: Identifiable, Hashable, Sendable {
     }
 }
 
-/// 트리·인덱스 공통 필터(PLAN.md §4.7 무시 패턴, §5.3 파일 설정).
+/// 트리·인덱스 공통 필터(설계 문서 §4.7 무시 패턴, §5.3 파일 설정).
 public struct FileFilter: Sendable, Hashable {
     public var markdownExtensions: Set<String>
     public var ignoredDirectoryNames: Set<String>

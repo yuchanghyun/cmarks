@@ -1,6 +1,6 @@
 import Foundation
 
-/// 파일 하나의 변경을 감시한다(PLAN.md §4.7).
+/// 파일 하나의 변경을 감시한다(설계 문서 §4.7).
 /// 편집기의 원자적 저장(임시 파일 → rename)이나 백업 저장(원본 rename → 새 파일)으로 vnode가 바뀌어도
 /// 같은 경로를 다시 열어 감시를 이어 간다. 이벤트는 내부 직렬 큐에서 전달된다.
 public final class FileWatcher: @unchecked Sendable {
