@@ -25,6 +25,12 @@ else
   echo "Developer ID 인증서가 없어 ad-hoc 서명으로 빌드한다. (Xcode ▸ Settings ▸ Accounts ▸ Manage Certificates ▸ + ▸ Developer ID Application)"
 fi
 
+if [ -n "${CMARKS_NOTARY_PROFILE:-}" ] && ! xcrun notarytool history --keychain-profile "$CMARKS_NOTARY_PROFILE" >/dev/null 2>&1; then
+  echo "공증 프로파일 '$CMARKS_NOTARY_PROFILE'을(를) 키체인에서 찾을 수 없다. 먼저 다음을 실행한다:" >&2
+  echo "  xcrun notarytool store-credentials $CMARKS_NOTARY_PROFILE --apple-id <Apple ID> --team-id <TEAM> --password <앱 암호>" >&2
+  exit 1
+fi
+
 make gen >/dev/null
 if [ -n "$IDENTITY" ]; then
   xcodebuild -project cmarks.xcodeproj -scheme cmarks -configuration Release -archivePath "$ARCHIVE" archive -quiet \
