@@ -1,0 +1,30 @@
+{
+  "name": "cmarks-web",
+  "private": true,
+  "type": "module",
+  "description": "cmarks 렌더링 뷰의 웹 자산. scripts/vendor-web.mjs가 App/Resources/web/vendor로 복사한다.",
+  "scripts": {
+    "vendor": "node ../scripts/vendor-web.mjs",
+    "build": "esbuild src/app.js --bundle --format=iife --target=safari17 --outfile=../App/Resources/web/app.js",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@highlightjs/cdn-assets": "^11.0.0",
+    "@primer/octicons": "^19.34.0",
+    "gemoji": "^8.0.0",
+    "github-markdown-css": "^5.0.0",
+    "katex": "^0.16.0",
+    "mermaid": "^11.0.0",
+    "morphdom": "^2.7.0"
+  },
+  "devDependencies": {
+    "esbuild": "^0.28.2",
+    "jsdom": "^26.0.0",
+    "vitest": "^3.0.0"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "esbuild"
+    ]
+  }
+}

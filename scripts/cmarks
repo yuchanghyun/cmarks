@@ -1,0 +1,9 @@
+#!/bin/sh
+# cmarks CLI: 파일이나 폴더를 cmarks.app으로 연다.
+#   cmarks README.md docs/    # 여러 개 가능. 폴더는 워크스페이스로 추가된다.
+#   cmarks                    # 앱만 실행
+BUNDLE_ID="com.changhyunyoo.cmarks"
+if [ "$#" -eq 0 ]; then
+  exec open -b "$BUNDLE_ID"
+fi
+exec open -b "$BUNDLE_ID" "$@"

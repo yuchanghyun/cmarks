@@ -1,0 +1,42 @@
+# Xcode (project.yml에서 XcodeGen이 생성)
+*.xcodeproj
+*.xcworkspace
+xcuserdata/
+*.xcuserstate
+*.xcscmblueprint
+DerivedData/
+build/
+*.xcresult
+*.xcarchive
+App/Info.plist
+App/cmarks.entitlements
+
+# 로컬 서명 설정(팀 ID, 인증서 이름). 예시 파일만 커밋한다.
+Config/Local.xcconfig
+
+# SwiftPM
+.build/
+.swiftpm/
+
+# Node
+node_modules/
+
+# 비밀·자격 증명·인증서
+.env
+.env.*
+*.p12
+*.pem
+*.key
+*.mobileprovision
+*.provisionprofile
+*.cer
+*.certSigningRequest
+AuthKey_*.p8
+
+# 로그·임시
+*.log
+*.orig
+*.tmp
+
+# macOS
+.DS_Store

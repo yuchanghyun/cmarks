@@ -1,0 +1,39 @@
+# 푸시·PR마다 순수 Swift 패키지와 JS 테스트를 돈다. 앱 타겟(Xcode 26 필요)은 GitHub 러너의 Xcode 버전이 따라오면 추가한다.
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  packages:
+    runs-on: macos-15
+    steps:
+      - uses: actions/checkout@v4
+      - name: Swift version
+        run: swift --version
+      - name: Package tests
+        run: |
+          for p in Packages/MarkdownCore Packages/LayoutKit Packages/FileKit; do
+            echo "== $p"; (cd "$p" && swift test)
+          done
+
+  web:
+    runs-on: macos-15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+          cache-dependency-path: web/pnpm-lock.yaml
+      - name: JS tests
+        working-directory: web
+        run: |
+          pnpm install --frozen-lockfile
+          pnpm test
+          pnpm build

@@ -1,0 +1,25 @@
+{
+  "single": [
+    { "in": "Hello World", "out": "hello-world" },
+    { "in": "Hello, World!", "out": "hello-world" },
+    { "in": "1. Install", "out": "1-install" },
+    { "in": "C# & F#", "out": "c--f" },
+    { "in": "snake_case and kebab-case", "out": "snake_case-and-kebab-case" },
+    { "in": "a-b--c", "out": "a-b--c" },
+    { "in": "user's guide", "out": "users-guide" },
+    { "in": "50% off", "out": "50-off" },
+    { "in": "a/b", "out": "ab" },
+    { "in": "한글 제목", "out": "한글-제목" },
+    { "in": "Über ÉCOLE", "out": "über-école" },
+    { "in": "🚀 Getting Started", "out": "-getting-started" },
+    { "in": "code `snippet` here", "out": "code-snippet-here" },
+    { "in": "日本語のタイトル", "out": "日本語のタイトル" },
+    { "in": "tab\there", "out": "tabhere" },
+    { "in": "", "out": "" }
+  ],
+  "sequence": [
+    { "in": ["Foo", "Foo", "foo", "Foo-1"], "out": ["foo", "foo-1", "foo-2", "foo-1-1"] },
+    { "in": ["헤딩", "헤딩", "헤딩"], "out": ["헤딩", "헤딩-1", "헤딩-2"] },
+    { "in": ["A", "B", "A"], "out": ["a", "b", "a-1"] }
+  ]
+}

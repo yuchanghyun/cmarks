@@ -1,0 +1,135 @@
+# XcodeGen 정의. `make gen`이 cmarks.xcodeproj를 생성한다. 결정 근거는 docs/PLAN.md §3, §6.
+name: cmarks
+options:
+  bundleIdPrefix: com.changhyunyoo
+  deploymentTarget:
+    macOS: "15.0"
+  developmentLanguage: ko
+  createIntermediateGroups: true
+  generateEmptyDirectories: true
+
+settings:
+  base:
+    SWIFT_VERSION: "6.0"
+    SWIFT_STRICT_CONCURRENCY: complete
+    SWIFT_APPROACHABLE_CONCURRENCY: YES
+    SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY: YES
+    SWIFT_EMIT_LOC_STRINGS: YES
+    LOCALIZATION_PREFERS_STRING_CATALOGS: YES
+    ENABLE_USER_SCRIPT_SANDBOXING: YES
+    DEAD_CODE_STRIPPING: YES
+    # 로컬 실행용 ad-hoc 서명. 팀 계정이 있으면 DEVELOPMENT_TEAM을 넣고 CODE_SIGN_IDENTITY 줄을 지운다.
+    CODE_SIGN_STYLE: Automatic
+    CODE_SIGN_IDENTITY: "-"
+
+packages:
+  MarkdownCore:
+    path: Packages/MarkdownCore
+  LayoutKit:
+    path: Packages/LayoutKit
+  FileKit:
+    path: Packages/FileKit
+
+targets:
+  cmarks:
+    type: application
+    platform: macOS
+    sources:
+      - path: App/Sources
+      - path: App/Resources
+        excludes:
+          - web
+          - "web/**"
+      - path: App/Resources/web      # 폴더 참조: 번들의 Resources/web 으로 그대로 복사
+        type: folder
+        buildPhase: resources
+      - path: scripts/cmarks         # CLI 스크립트를 번들에 함께 넣는다(Homebrew cask binary, 수동 설치용)
+        buildPhase: resources
+    dependencies:
+      - package: MarkdownCore
+      - package: LayoutKit
+      - package: FileKit
+    configFiles:
+      Debug: Config/Local.xcconfig
+      Release: Config/Local.xcconfig
+    settings:
+      base:
+        PRODUCT_NAME: cmarks
+        PRODUCT_BUNDLE_IDENTIFIER: com.changhyunyoo.cmarks
+        MARKETING_VERSION: 1.0.0
+        CURRENT_PROJECT_VERSION: 1
+        ENABLE_HARDENED_RUNTIME: YES
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        SWIFT_DEFAULT_ACTOR_ISOLATION: MainActor
+        GENERATE_INFOPLIST_FILE: NO
+    info:
+      path: App/Info.plist
+      properties:
+        CFBundleName: cmarks
+        CFBundleDisplayName: cmarks
+        CFBundleShortVersionString: $(MARKETING_VERSION)
+        CFBundleVersion: $(CURRENT_PROJECT_VERSION)
+        CFBundleDevelopmentRegion: $(DEVELOPMENT_LANGUAGE)
+        LSMinimumSystemVersion: $(MACOSX_DEPLOYMENT_TARGET)
+        LSApplicationCategoryType: public.app-category.productivity
+        NSPrincipalClass: NSApplication
+        NSHumanReadableCopyright: "© 2026 Changhyun Yoo"
+        # Finder "다음으로 열기" / 드래그&드롭 대상. Alternate = 사용자가 기본 앱으로 지정할 때만 기본.
+        CFBundleDocumentTypes:
+          - CFBundleTypeName: Markdown Document
+            CFBundleTypeRole: Viewer
+            LSHandlerRank: Alternate
+            LSItemContentTypes:
+              - net.daringfireball.markdown
+          - CFBundleTypeName: Folder
+            CFBundleTypeRole: Viewer
+            LSHandlerRank: None
+            LSItemContentTypes:
+              - public.folder
+        UTImportedTypeDeclarations:
+          - UTTypeIdentifier: net.daringfireball.markdown
+            UTTypeDescription: Markdown Document
+            UTTypeConformsTo:
+              - public.plain-text
+            UTTypeTagSpecification:
+              public.filename-extension: [md, markdown, mdown, mkd, mkdn, mdtxt, mdtext, mdx, qmd, rmd]
+              public.mime-type: [text/markdown, text/x-markdown]
+        # 탭 드래그(Transferable) 전용 타입
+        UTExportedTypeDeclarations:
+          - UTTypeIdentifier: com.changhyunyoo.cmarks.tab
+            UTTypeDescription: cmarks tab reference
+            UTTypeConformsTo:
+              - public.data
+        # 딥링크: cmarks://open?path=/abs/or/~path
+        CFBundleURLTypes:
+          - CFBundleURLName: com.changhyunyoo.cmarks
+            CFBundleURLSchemes: [cmarks]
+            CFBundleTypeRole: Viewer
+        # 서비스 메뉴. NSMessage는 ServicesProvider의 셀렉터 이름과 일치해야 한다.
+        NSServices:
+          - NSMenuItem:
+              default: cmarks로 열기
+            NSMessage: openInCmarks
+            NSPortName: cmarks
+            NSSendFileTypes:
+              - net.daringfireball.markdown
+              - public.folder
+    entitlements:
+      path: App/cmarks.entitlements
+      properties:
+        com.apple.security.app-sandbox: false   # ADR-5: v1은 샌드박스 끔
+    scheme:
+      testTargets:
+        - cmarksTests
+
+  cmarksTests:
+    type: bundle.unit-test
+    platform: macOS
+    sources:
+      - path: AppTests
+    dependencies:
+      - target: cmarks
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.changhyunyoo.cmarksTests
+        GENERATE_INFOPLIST_FILE: YES

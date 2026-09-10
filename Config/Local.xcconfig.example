@@ -1,0 +1,7 @@
+// 로컬 서명 설정. 이 파일을 Config/Local.xcconfig 로 복사해 채운다(커밋되지 않음).
+// 비어 있으면 로컬 실행용 ad-hoc 서명(-)으로 빌드된다.
+//
+// Apple Developer Program 팀 ID (10자). Xcode ▸ Settings ▸ Accounts 에서 확인.
+// DEVELOPMENT_TEAM = ABCDE12345
+//
+// 배포 서명은 scripts/release.sh 가 키체인의 "Developer ID Application" 인증서를 자동으로 찾아 쓴다.

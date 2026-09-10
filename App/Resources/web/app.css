@@ -1,0 +1,67 @@
+/* GitHub 파일 뷰와 같은 컬럼 폭. 색상 변수는 vendor/github-markdown.css가 .markdown-body에 정의한다. */
+body {
+  margin: 0;
+  background: #ffffff;
+}
+@media (prefers-color-scheme: dark) {
+  body { background: #0d1117; }
+}
+.markdown-body {
+  box-sizing: border-box;
+  min-width: 200px;
+  max-width: 980px;
+  margin: 0 auto;
+  padding: 45px;
+}
+@media (max-width: 767px) {
+  .markdown-body { padding: 15px; }
+}
+
+/* 찾기(⌘F) 표시. CSS Custom Highlight API라 DOM을 바꾸지 않는다. */
+::highlight(cmarks-find) {
+  background-color: #fff3a3;
+  color: #1f2328;
+}
+::highlight(cmarks-find-current) {
+  background-color: #ffb454;
+  color: #1f2328;
+}
+@media (prefers-color-scheme: dark) {
+  ::highlight(cmarks-find) { background-color: #7a5a00; color: #f0f6fc; }
+  ::highlight(cmarks-find-current) { background-color: #d29922; color: #0d1117; }
+}
+.cmarks-math-block {
+  overflow-x: auto;
+}
+
+/* 대용량 문서 안내 배너 */
+.markdown-body .cmarks-banner {
+  margin: 0 0 16px;
+  padding: 8px 12px;
+  border: 1px solid var(--borderColor-attention-muted, #d4a72c66);
+  background: var(--bgColor-attention-muted, #fff8c5);
+  border-radius: 6px;
+  font-size: 14px;
+}
+.markdown-body .cmarks-banner button {
+  margin-left: 8px;
+  padding: 2px 10px;
+  font: inherit;
+  font-size: 13px;
+  border: 1px solid var(--borderColor-default, #d1d9e0);
+  border-radius: 6px;
+  background: var(--bgColor-default, #fff);
+  color: var(--fgColor-default, #1f2328);
+  cursor: pointer;
+}
+
+@media print {
+  .markdown-body { max-width: none; padding: 0; }
+  .cmarks-banner { display: none; }
+}
+
+/* 큰 문서(대용량 정책): 화면 밖 최상위 블록의 레이아웃·페인트를 건너뛰어 스크롤을 부드럽게 한다. */
+.markdown-body.cmarks-large > * {
+  content-visibility: auto;
+  contain-intrinsic-block-size: auto 48px;
+}
