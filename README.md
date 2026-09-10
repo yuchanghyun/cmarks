@@ -1,7 +1,7 @@
 # cmarks
 
 macOS 전용 네이티브 Markdown 뷰어(읽기 전용). GitHub 스타일 렌더링, cmux식 워크스페이스·탭·스플릿 레이아웃.
-Quick Look 미리보기가 선택을 바꾸면 사라지는 문제를 대신한다. 전체 설계와 단계별 계획은 [docs/PLAN.md](docs/PLAN.md).
+Quick Look 미리보기가 선택을 바꾸면 사라지는 문제를 대신한다.
 
 ## 설치
 
@@ -14,7 +14,7 @@ Quick Look 미리보기가 선택을 바꾸면 사라지는 문제를 대신한�
 ## 요구 사항
 
 - macOS 15 이상(실행), Xcode 26.x(빌드)
-- 배포 절차는 [docs/DISTRIBUTION.md](docs/DISTRIBUTION.md), 변경 내역은 [docs/RELEASE-NOTES.md](docs/RELEASE-NOTES.md)
+- 변경 내역은 [docs/RELEASE-NOTES.md](docs/RELEASE-NOTES.md)
 - `brew install xcodegen node pnpm`
 
 ## 빌드와 실행

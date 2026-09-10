@@ -33,6 +33,9 @@ node_modules/
 *.certSigningRequest
 AuthKey_*.p8
 
+# 개발 중 작성한 비공개 문서(계획, 체크포인트, 배포 메모)
+docs-private/
+
 # 로그·임시
 *.log
 *.orig

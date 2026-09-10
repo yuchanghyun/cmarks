@@ -1,4 +1,4 @@
-# XcodeGen 정의. `make gen`이 cmarks.xcodeproj를 생성한다. 결정 근거는 docs/PLAN.md §3, §6.
+# XcodeGen 정의. `make gen`이 cmarks.xcodeproj를 생성한다.
 name: cmarks
 options:
   bundleIdPrefix: com.changhyunyoo

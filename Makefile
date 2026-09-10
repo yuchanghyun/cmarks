@@ -1,4 +1,4 @@
-# cmarks 개발용 Makefile. 흐름은 docs/PLAN.md §6 참고.
+# cmarks 개발용 Makefile.
 SCHEME   := cmarks
 CONFIG   ?= Debug
 DERIVED  := build
