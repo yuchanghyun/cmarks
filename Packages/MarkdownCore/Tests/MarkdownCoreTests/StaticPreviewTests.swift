@@ -79,6 +79,20 @@ struct StaticPreviewTests {
         #expect(page.html.contains("Mermaid diagram"))
     }
 
+    @Test func convertsAlertsAndTaskLists() async throws {
+        try #require(Self.hasAssets)
+        let page = try await Self.render("> [!TIP]\n> Press ⌘P.\n\n> [!WARNING]\n> Careful\n>\n> > nested quote\n\n> plain quote\n\n- [x] done\n- [ ] todo\n")
+        #expect(page.html.contains("<div class=\"markdown-alert markdown-alert-tip\""))
+        #expect(page.html.contains("<p class=\"markdown-alert-title\" dir=\"auto\"><svg class=\"octicon octicon-light-bulb"))
+        #expect(page.html.contains("Tip</p><p>Press ⌘P.</p>"))
+        #expect(page.html.contains("markdown-alert-warning"))
+        #expect(page.html.contains("<blockquote>\n<p>nested quote</p>"), "중첩 인용은 그대로")
+        #expect(page.html.contains("<blockquote>\n<p>plain quote</p>"), "마커 없는 인용은 그대로")
+        #expect(!page.html.contains("[!TIP]"))
+        #expect(page.html.contains("<ul class=\"contains-task-list\">"))
+        #expect(page.html.contains("<li class=\"task-list-item\"><input class=\"task-list-item-checkbox\" type=\"checkbox\""))
+    }
+
     @Test func unescapesEntities() {
         #expect(StaticPreviewBuilder.unescapeEntities("a &lt; b &amp;&amp; c &quot;d&quot; &#39;e&#39; &#x41;&#66;") == "a < b && c \"d\" 'e' AB")
     }

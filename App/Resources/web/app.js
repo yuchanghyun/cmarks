@@ -908,6 +908,13 @@
     prev() {
       return this.step(-1);
     }
+    goTo(index) {
+      if (!this.ranges.length) return this.result();
+      this.index = Math.min(Math.max(0, index | 0), this.ranges.length - 1);
+      this.apply();
+      this.reveal();
+      return this.result();
+    }
     step(delta) {
       if (!this.ranges.length) return this.result();
       this.index = (this.index + delta + this.ranges.length) % this.ranges.length;
@@ -1057,6 +1064,7 @@
       search: (query, options) => finder.search(query, options),
       next: () => finder.next(),
       prev: () => finder.prev(),
+      goTo: (index) => finder.goTo(index),
       clear: () => finder.clear()
     }
   };
