@@ -65,6 +65,16 @@ private struct AppearanceSettingsTab: View {
                 Text(settings.defaultZoom.formatted(.percent.precision(.fractionLength(0)))).monospacedDigit().frame(width: 48, alignment: .trailing)
             }
             Toggle("렌더 통계 표시", isOn: $model.showRenderStats)
+            Section {
+                TextEditor(text: $settings.customCSS)
+                    .font(.system(.body, design: .monospaced))
+                    .frame(minHeight: 110)
+            } header: {
+                Text("사용자 CSS")
+            } footer: {
+                Text("모든 문서에 추가로 적용합니다. 예: .markdown-body { font-size: 18px; font-family: serif }")
+                    .font(.caption).foregroundStyle(.secondary)
+            }
         }
         .formStyle(.grouped)
     }

@@ -27,6 +27,8 @@ final class AppModel {
     private(set) var fileTree: FileTreeModel?
     let quickOpen = QuickOpenModel()
     let search = WorkspaceSearchModel()
+    let finderFollower = FinderFollower()
+    let scrollMemory: ScrollMemory
     let settings: AppSettings
     let documents: DocumentService
     var isShortcutHelpPresented = false
@@ -76,6 +78,7 @@ final class AppModel {
     init(sessionStore: SessionStore = .standard(appName: "cmarks"), defaults: UserDefaults = .standard) {
         self.sessionStore = sessionStore
         self.defaults = defaults
+        scrollMemory = ScrollMemory(defaults: defaults)
         settings = AppSettings(defaults: defaults)
         documents = DocumentService()
         showRenderStats = defaults.bool(forKey: "showRenderStats")
@@ -98,6 +101,8 @@ final class AppModel {
         rebuildFileTree()
         syncViewers()
         settings.onChange = { [weak self] in self?.applySettings() }
+        finderFollower.isMarkdown = { DocumentService.isMarkdown($0) }
+        finderFollower.onSelect = { [weak self] url in self?.open(url, preview: true) }
     }
 
     /// 설정이 바뀌면 렌더 설정·파일 필터를 갱신한다. 본문 폭만 바뀌면 페이지 스타일만 바꾸고, 렌더 결과가 달라지는 설정이면 스크롤을 유지한 채 다시 렌더한다.
@@ -268,6 +273,18 @@ final class AppModel {
     }
 
     /// 빠른 열기에서 고른 파일. ⏎ 새 탭, ⌘⏎ 오른쪽 분할, ⌘⇧⏎ 아래 분할.
+    var isFollowingFinder: Bool {
+        get { finderFollower.isEnabled }
+        set { finderFollower.isEnabled = newValue }
+    }
+
+    func clearRecentFiles() {
+        recentFiles = []
+        defaults.removeObject(forKey: "recentFiles")
+        quickOpen.recents = []
+        NSDocumentController.shared.clearRecentDocuments(nil)
+    }
+
     func presentWorkspaceSearch() {
         quickOpen.dismiss()
         search.present(root: workspace.rootURL)
@@ -653,6 +670,7 @@ final class AppModel {
         viewer.onFocus = { [weak self] in self?.focus(pane) }
         viewer.onDropURLs = { [weak self] urls in self?.open(urls, in: pane) }
         viewer.onOpenInEditor = { [weak self] in self?.openInDefaultEditor(from: pane) }
+        viewer.scrollMemory = scrollMemory
         viewers[pane] = viewer
         return viewer
     }

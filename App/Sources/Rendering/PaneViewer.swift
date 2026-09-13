@@ -110,6 +110,8 @@ final class PaneViewer {
     private var pendingFragment: String?
     private var pendingScrollY: Double?
     private var scrollPositions: [URL: Double] = [:]
+    /// 앱 전체(패인 공유, 재실행 유지) 스크롤 기억. AppModel이 넣는다.
+    var scrollMemory: ScrollMemory?
     private var userScrolledSinceLoad = false
 
     init(paneID: PaneID, documents: DocumentService) {
@@ -162,7 +164,7 @@ final class PaneViewer {
         currentURL = fileURL
         pendingFragment = fragment
         pendingScrollY = scrollY
-        currentScrollY = scrollY ?? scrollPositions[fileURL] ?? 0
+        currentScrollY = scrollY ?? scrollPositions[fileURL] ?? scrollMemory?.position(for: fileURL) ?? 0
         isPageReady = false
         userScrolledSinceLoad = false
         isFileMissing = false
@@ -443,6 +445,7 @@ final class PaneViewer {
                 scrollPositions[url] = y
                 currentScrollY = y
                 userScrolledSinceLoad = true
+                scrollMemory?.remember(y, for: url)
             }
             activeHeadingID = message["heading"] as? String
         case "loadFull":
@@ -466,7 +469,7 @@ final class PaneViewer {
     /// 앵커 없이 열린 문서는 마지막 스크롤 위치로 돌아간다(뒤로/앞으로, 탭 전환).
     private func restoreScrollIfNeeded() {
         guard pendingFragment == nil, let url = currentURL else { return }
-        guard let y = pendingScrollY ?? scrollPositions[url], y > 0 else { return }
+        guard let y = pendingScrollY ?? scrollPositions[url] ?? scrollMemory?.position(for: url), y > 0 else { return }
         Task {
             _ = try? await webView.callAsyncJavaScript("window.cmarks.scrollTo({ y: y });", arguments: ["y": y], contentWorld: .page)
         }

@@ -33,6 +33,16 @@
       },
       "shouldTranslate": false
     },
+    "Finder 선택 따라가기": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Follow Finder Selection"
+          }
+        }
+      }
+    },
     "Finder에서 .md를 열면 cmarks로 열립니다.": {
       "localizations": {
         "en": {
@@ -160,6 +170,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "cmarks is the default app for Markdown files."
+          }
+        }
+      }
+    },
+    "cmarks가 Finder의 선택 항목을 읽을 권한이 없습니다. 시스템 설정 ▸ 개인정보 보호 및 보안 ▸ 자동화에서 cmarks 아래의 Finder를 켠 뒤 다시 시도해 주세요.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "cmarks isn't allowed to read the Finder selection. Turn on Finder under cmarks in System Settings ▸ Privacy & Security ▸ Automation, then try again."
           }
         }
       }
@@ -727,6 +747,26 @@
         }
       }
     },
+    "모든 문서에 추가로 적용합니다. 예: .markdown-body { font-size: 18px; font-family: serif }": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Applied to every document on top of the GitHub styles. Example: .markdown-body { font-size: 18px; font-family: serif }"
+          }
+        }
+      }
+    },
+    "목록 지우기": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Clear Menu"
+          }
+        }
+      }
+    },
     "무시할 폴더 이름": {
       "localizations": {
         "en": {
@@ -813,6 +853,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Quick Open…"
+          }
+        }
+      }
+    },
+    "사용자 CSS": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Custom CSS"
           }
         }
       }
@@ -1737,6 +1787,16 @@
         }
       }
     },
+    "최근 파일 열기": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Open Recent"
+          }
+        }
+      }
+    },
     "최근에 연 파일이 없습니다.": {
       "localizations": {
         "en": {
@@ -2133,6 +2193,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Zoom In / Out / Actual Size"
+          }
+        }
+      }
+    },
+    "확인": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "OK"
           }
         }
       }

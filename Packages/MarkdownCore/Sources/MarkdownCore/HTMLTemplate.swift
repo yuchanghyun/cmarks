@@ -25,6 +25,7 @@ public struct HTMLTemplate: Sendable {
 
         let config = Self.jsonString(settings.webConfig(isLarge: isLarge))
         let widthStyle = settings.contentMaxWidth.map { "<style>.markdown-body{max-width:\($0)px}</style>" } ?? "<style>.markdown-body{max-width:none}</style>"
+        let userStyle = settings.customCSS.isEmpty ? "" : "<style id=\"cmarks-user-css\">\(Self.escapeCSS(settings.customCSS))</style>"
 
         return """
         <!doctype html>
@@ -39,6 +40,7 @@ public struct HTMLTemplate: Sendable {
         <link rel="stylesheet" href="\(assets)vendor/hljs/github-dark.min.css" media="(prefers-color-scheme: dark)">
         <link rel="stylesheet" href="\(assets)app.css">
         \(widthStyle)
+        \(userStyle)
         </head>
         <body>
         <article class="markdown-body\(isLarge ? " cmarks-large" : "")" id="doc" data-document-path="\(Self.escapeAttribute(documentPath))">
@@ -98,6 +100,11 @@ public struct HTMLTemplate: Sendable {
             }
         }
         return out
+    }
+
+    /// 사용자 CSS 안의 `</style>`가 스타일 블록을 끊지 못하게 한다.
+    public static func escapeCSS(_ css: String) -> String {
+        css.replacingOccurrences(of: "</", with: "<\\/")
     }
 
     public static func escapeAttribute(_ text: String) -> String {

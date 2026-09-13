@@ -26,6 +26,8 @@ public struct RenderSettings: Hashable, Codable, Sendable {
     public var truncatedCharacterCount = 1_000_000
     /// 페이지 안 안내 문구와 <html lang>의 언어. "ko" 또는 "en".
     public var language = "ko"
+    /// 문서마다 추가로 적용할 사용자 CSS(설정 ▸ 외형).
+    public var customCSS = ""
 
     public init() {}
 

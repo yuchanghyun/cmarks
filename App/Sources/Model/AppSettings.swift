@@ -12,6 +12,7 @@ final class AppSettings {
     // 외형
     var useGitHubWidth: Bool { didSet { store(useGitHubWidth, "useGitHubWidth") } }
     var defaultZoom: Double { didSet { store(defaultZoom, "defaultZoom") } }
+    var customCSS: String { didSet { store(customCSS, "customCSS") } }
 
     // 렌더링
     var math: Bool { didSet { store(math, "math") } }
@@ -61,6 +62,7 @@ final class AppSettings {
 
         useGitHubWidth = bool("useGitHubWidth", true)
         defaultZoom = double("defaultZoom", 1.0)
+        customCSS = string("customCSS", "")
         math = bool("math", true)
         mermaid = bool("mermaid", true)
         emoji = bool("emoji", true)
@@ -107,6 +109,7 @@ final class AppSettings {
         settings.smartPunctuation = smartPunctuation
         settings.frontMatter = showFrontMatter ? .collapsed : .hidden
         settings.contentMaxWidth = useGitHubWidth ? 980 : nil
+        settings.customCSS = customCSS.trimmingCharacters(in: .whitespacesAndNewlines)
         settings.largeDocumentBytes = max(1, largeDocumentMB) << 20
         settings.hugeDocumentBytes = max(largeDocumentMB + 1, hugeDocumentMB) << 20
         settings.language = Bundle.main.preferredLocalizations.first ?? "ko"
@@ -118,6 +121,7 @@ final class AppSettings {
     }
 
     func resetToDefaults() {
+        customCSS = ""
         useGitHubWidth = true
         defaultZoom = 1.0
         math = true

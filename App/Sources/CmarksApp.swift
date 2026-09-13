@@ -45,6 +45,14 @@ struct AppCommands: Commands {
                     .keyboardShortcut(key(.quickOpen))
                 Button("열기…") { model.presentOpenPanel() }
                     .keyboardShortcut(key(.openFile))
+                Menu("최근 파일 열기") {
+                    ForEach(model.recentFiles.prefix(15), id: \.self) { url in
+                        Button(url.lastPathComponent) { model.open(url) }
+                    }
+                    if !model.recentFiles.isEmpty { Divider() }
+                    Button("목록 지우기") { model.clearRecentFiles() }
+                        .disabled(model.recentFiles.isEmpty)
+                }
                 Button("닫은 탭 다시 열기") { model.reopenLastClosedTab() }
                     .keyboardShortcut(key(.reopenClosedTab))
                     .disabled(!model.canReopenClosedTab)
@@ -99,6 +107,8 @@ struct AppCommands: Commands {
             Toggle("아웃라인", isOn: $model.isOutlineVisible)
                 .keyboardShortcut(key(.toggleOutline))
             Toggle("숨김 파일 표시", isOn: $model.showHiddenFiles)
+            Divider()
+            Toggle("Finder 선택 따라가기", isOn: $model.isFollowingFinder)
         }
         CommandGroup(after: .toolbar) {
             Button("뒤로") { model.goBack() }
