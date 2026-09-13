@@ -1,5 +1,23 @@
 # 릴리스 노트
 
+## 1.2.0
+
+- **Finder Quick Look 미리보기.** cmarks를 설치하면 Finder에서 마크다운 파일을 선택하고 스페이스바를 눌렀을 때 cmarks와 같은 GitHub 스타일로 보입니다. 코드 하이라이팅, 수식(KaTeX), 알림, 태스크 리스트, 이모지, 문서 옆 이미지까지 표시합니다. Mermaid 다이어그램은 Quick Look의 제약으로 코드로 보이며 앱에서 열면 그려집니다. QLMarkdown 같은 다른 마크다운 Quick Look 확장이 있으면 시스템 설정 ▸ 일반 ▸ 로그인 항목 및 확장 프로그램 ▸ Quick Look에서 하나만 켜 두세요.
+- **워크스페이스에서 찾기(⌘⇧F).** 워크스페이스의 모든 마크다운 파일 내용을 찾아 파일·줄·문맥을 보여 주고, 고르면 그 파일을 열어 찾기 바를 그 위치로 맞춥니다.
+- **Finder 선택 따라가기(보기 메뉴).** 켜 두면 Finder에서 마크다운 파일을 고를 때마다 cmarks가 미리보기 탭으로 보여 줍니다. 사라지지 않는 Quick Look처럼 씁니다. 처음 켤 때 자동화(Finder) 권한을 묻습니다.
+- **사용자 CSS(설정 ▸ 외형).** 글꼴, 크기, 색 등 원하는 스타일을 모든 문서에 덧입힙니다.
+- **읽던 자리 기억.** 파일별 마지막 스크롤 위치를 기억해 탭을 닫았다 열거나 앱을 다시 켜도 그 자리로 돌아갑니다.
+- **파일 ▸ 최근 파일 열기** 메뉴.
+
+### English
+
+- **Quick Look preview in the Finder.** With cmarks installed, pressing Space on a Markdown file shows the same GitHub-style rendering as the app: syntax highlighting, math (KaTeX), alerts, task lists, emoji and images next to the document. Mermaid diagrams appear as code in Quick Look and render when you open the file in cmarks. If another Markdown Quick Look extension (such as QLMarkdown) is installed, keep only one enabled under System Settings ▸ General ▸ Login Items & Extensions ▸ Quick Look.
+- **Find in Workspace (⌘⇧F).** Searches the text of every Markdown file in the workspace, lists file, line and context, and opens the match with the find bar positioned on it.
+- **Follow Finder Selection (View menu).** While on, selecting a Markdown file in the Finder shows it in cmarks as a preview tab, like a Quick Look that never disappears. macOS asks for Automation (Finder) permission the first time.
+- **Custom CSS (Settings ▸ Appearance).** Add your own font, size or color rules on top of the GitHub styles.
+- **Remembers where you were.** The last scroll position of each file is restored when you reopen it, even after relaunching.
+- **File ▸ Open Recent** menu.
+
 ## 1.1.1
 
 - **도움말 ▸ 문제 신고…** 버전·macOS·설정·이번 실행의 최근 로그를 클립보드에 복사하고, 버전과 설치 방법이 채워진 GitHub 이슈 양식을 엽니다. 문서 내용은 포함되지 않습니다.

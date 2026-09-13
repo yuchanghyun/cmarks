@@ -27,13 +27,17 @@ cmarks keeps documents open. Open a project folder as a workspace, read its docu
 - **Renders like GitHub.** Uses GitHub's own Markdown engine (cmark-gfm) and stylesheet: tables, task lists, strikethrough, footnotes, alerts (Note, Tip, Important, Warning, Caution), syntax highlighting, emoji shortcodes, math (KaTeX), Mermaid diagrams, heading anchors and front matter. Light and dark appearance follow the system.
 - **Workspaces, tabs and splits.** Folder-based workspaces, tabs per pane, split right or down, drag to resize, pane zoom and session restore. Keyboard layout matches [cmux](https://github.com/manaflow-ai/cmux).
 - **Sidebar.** A file tree that follows file system changes, a document outline that highlights the current heading, and Quick Open (⌘P) with fuzzy matching.
+- **Find in Workspace (⌘⇧F).** Full-text search across every Markdown file in the workspace, with file, line and context; open a match with the find bar on it.
 - **Live reload.** Saving a file updates only the blocks that changed. Deleted or moved files are detected and picked up again when they reappear.
 
   <img src="docs/images/live-reload.gif" alt="A task list updating in place while another app edits the file" width="960">
 - **Reading tools.** Find, back and forward, zoom, print and export as PDF. ⌘-click a link to open it in a new tab, ⌥-click for a split.
 - **Settings.** Toggle rendering extensions, choose the content width, define Markdown extensions and ignored folders, adjust behavior, and remap every keyboard shortcut.
 - **Large documents.** Heavy post-processing is skipped above 2 MB. Above 5 MB only the beginning is shown until you choose Show All.
-- **Integration.** Finder "Open With", drag and drop, a `cmarks` command-line tool and `cmarks://open?path=` links. The installer can make cmarks the default app for `.md` files.
+- **Quick Look.** Press Space on a Markdown file in the Finder and it renders the same way as in the app: highlighting, math, alerts, task lists, emoji and local images. (Mermaid diagrams show as code in Quick Look.)
+- **Follow Finder Selection.** Turn it on in the View menu and cmarks shows whichever Markdown file you select in the Finder, like a Quick Look that never disappears.
+- **Custom CSS** in Settings ▸ Appearance, and cmarks remembers where you were in each file.
+- **Integration.** Finder "Open With", drag and drop, a `cmarks` command-line tool, `cmarks://open?path=` links and File ▸ Open Recent. The installer can make cmarks the default app for `.md` files.
 - **English and Korean UI**, following the macOS system language.
 
 ## Install
@@ -79,6 +83,7 @@ make install   # copy to /Applications, install the cmarks CLI, offer to set cma
 | Focus pane · Resize pane | ⌥⌘ arrows · ⌃⌥⌘ arrows |
 | Back · Forward · Reload | ⌘[ · ⌘] · ⌘R |
 | Find · Find Next · Find Previous | ⌘F · ⌘G · ⌘⇧G |
+| Find in Workspace | ⌘⇧F |
 | Zoom In · Zoom Out · Actual Size | ⌘= · ⌘- · ⌘0 |
 | Sidebar · Outline · Cycle appearance | ⌘B · ⌘⇧O · ⌥⌘T |
 | Show in Finder · Open in External Editor | ⌥⌘R · ⌘⇧E |
@@ -94,6 +99,7 @@ The interface is available in English and Korean and follows the macOS system la
 
 - Web links (http, https) always open in the default browser.
 - Single window.
+- Quick Look shows Mermaid diagrams as code. If another Markdown Quick Look extension is installed (for example QLMarkdown), macOS uses only one of them; choose under System Settings ▸ General ▸ Login Items & Extensions ▸ Quick Look.
 - Two `$` signs in one paragraph (for example `$5 and $10`) can be mistaken for math. Math can be turned off in Settings.
 
 Changes are listed in [docs/RELEASE-NOTES.md](docs/RELEASE-NOTES.md) and on the [Releases](https://github.com/yuchanghyun/cmarks/releases) page.
