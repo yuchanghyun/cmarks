@@ -107,7 +107,7 @@ if [ "$NOTARIZED" = 1 ] && [ -n "$PUBKEY" ] && [ -n "$SPARKLE_BIN" ] && [ -z "${
     --signature "$SIGNATURE" --notes docs/RELEASE-NOTES.md \
     --release-page "https://github.com/yuchanghyun/cmarks/releases/tag/v$VERSION"
 else
-  echo "appcast 갱신 건너뜀 (공증=$NOTARIZED, 공개 키=${PUBKEY:+있음}${PUBKEY:-없음}, Sparkle 도구=${SPARKLE_BIN:-없음})"
+  echo "appcast 갱신 건너뜀 (공증=$NOTARIZED, 공개 키=$([ -n "$PUBKEY" ] && echo 있음 || echo 없음), Sparkle 도구=${SPARKLE_BIN:-없음})"
 fi
 ZIP_SHA=$(grep 'zip' "$OUT/checksums.txt" | cut -d' ' -f1)
 mkdir -p Casks
