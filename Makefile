@@ -36,7 +36,7 @@ test-web:           ## JS 후처리 테스트 (vitest)
 icon:               ## 앱 아이콘 생성 (cmux처럼 밝은 바탕 + 파란 그라데이션 c)
 	swift scripts/make-icon.swift App/Resources/Assets.xcassets/AppIcon.appiconset
 
-install:            ## Release 빌드를 /Applications에 설치
+install:            ## /Applications에 설치 (공증본이 있으면 그것을, 없으면 Release 빌드를 재서명해서)
 	bash scripts/install.sh
 
 release:            ## 직접 배포용 zip·DMG (Developer ID + 공증 설정이 있으면 공증까지)
