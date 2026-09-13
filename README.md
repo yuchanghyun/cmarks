@@ -1,33 +1,39 @@
 # cmarks
 
-macOS용 네이티브 Markdown 뷰어. GitHub에서 보는 것과 같은 모양으로 문서를 열고, 워크스페이스·탭·분할 화면으로 여러 문서를 나란히 읽습니다.
+**A GitHub-accurate Markdown reader for macOS with workspaces, tabs and splits. It reads, it never edits.**
 
-> **cmarks** is a native macOS Markdown viewer. It renders documents the way GitHub does and keeps them open in workspaces, tabs and split panes, so a preview never disappears when you click another file. English README: [README.en.md](README.en.md)
+[![Release](https://img.shields.io/github/v/release/yuchanghyun/cmarks?label=release)](https://github.com/yuchanghyun/cmarks/releases/latest)
+[![CI](https://github.com/yuchanghyun/cmarks/actions/workflows/ci.yml/badge.svg)](https://github.com/yuchanghyun/cmarks/actions/workflows/ci.yml)
+[![macOS 15+](https://img.shields.io/badge/macOS-15%2B-blue)](#install)
+[![License: MIT](https://img.shields.io/badge/license-MIT-green)](LICENSE)
 
-## 왜 만들었나
+[한국어 README](README.ko.md)
 
-Finder에서 스페이스바(Quick Look)로 Markdown을 보다가 다른 파일이나 폴더를 클릭하면 미리보기가 사라집니다. Quick Look은 "지금 선택한 것"만 보여 주는 도구라 어쩔 수 없는 한계입니다.
+## Why
 
-cmarks는 문서를 탭으로 붙잡아 두는 뷰어입니다. 프로젝트 폴더를 워크스페이스로 열어 여러 문서를 오가며 읽고, 두 문서를 나란히 놓고 비교하고, 편집기나 AI 도구가 파일을 고치면 스크롤을 유지한 채 바로 갱신됩니다. 편집 기능은 없습니다. 읽기에 집중합니다.
+Press Space on a Markdown file in the Finder and Quick Look shows it. Click another file or folder and the preview is gone. Quick Look only ever shows what is selected right now.
 
-## 기능
+cmarks keeps documents open. Open a project folder as a workspace, read its documents in tabs, put two side by side, and when an editor or an AI coding tool rewrites a file, the view updates in place without losing your scroll position. There is no editing mode. It is built for reading.
 
-- **GitHub와 같은 렌더링**: GitHub의 Markdown 엔진(cmark-gfm)과 스타일시트를 그대로 씁니다. 표, 태스크 리스트, 취소선, 각주, 알림(Note·Tip·Important·Warning·Caution), 코드 하이라이팅, 이모지 숏코드, 수식(KaTeX), Mermaid 다이어그램, 헤딩 앵커, 프런트매터. 라이트·다크 자동 전환.
-- **워크스페이스·탭·분할**: 폴더 단위 워크스페이스, 패인마다 탭, 오른쪽·아래 분할, 드래그로 크기 조정, 패인 확대. 앱을 다시 켜면 그대로 복원됩니다. 단축키 배치는 [cmux](https://github.com/manaflow-ai/cmux)와 같습니다.
-- **사이드바**: 파일 트리(파일 시스템 변경을 자동 반영), 문서 아웃라인(현재 위치 강조), 빠른 열기(⌘P, 흐린 검색).
-- **라이브 리로드**: 파일을 저장하면 바뀐 부분만 제자리에서 갱신됩니다. 삭제·이동을 감지하고 파일이 돌아오면 자동 복구합니다.
-- **문서 도구**: 찾기, 뒤로·앞으로, 확대·축소, 인쇄, PDF 내보내기. 링크는 ⌘클릭으로 새 탭, ⌥클릭으로 분할 화면에 열립니다.
-- **설정**: 렌더링 확장 켜고 끄기, 본문 폭, 마크다운 확장자와 무시할 폴더, 동작 방식. 모든 단축키를 원하는 조합으로 바꿀 수 있습니다.
-- **대용량 문서**: 2MB가 넘으면 무거운 후처리를 생략하고, 5MB가 넘으면 앞부분만 먼저 보여 준 뒤 "전체 표시"로 이어 봅니다.
-- **연동**: Finder "다음으로 열기", 드래그&드롭, `cmarks` 명령줄 도구, `cmarks://open?path=` 딥링크. 설치 시 `.md` 기본 앱으로 지정할 수 있습니다.
+## Features
 
-## 설치
+- **Renders like GitHub.** Uses GitHub's own Markdown engine (cmark-gfm) and stylesheet: tables, task lists, strikethrough, footnotes, alerts (Note, Tip, Important, Warning, Caution), syntax highlighting, emoji shortcodes, math (KaTeX), Mermaid diagrams, heading anchors and front matter. Light and dark appearance follow the system.
+- **Workspaces, tabs and splits.** Folder-based workspaces, tabs per pane, split right or down, drag to resize, pane zoom and session restore. Keyboard layout matches [cmux](https://github.com/manaflow-ai/cmux).
+- **Sidebar.** A file tree that follows file system changes, a document outline that highlights the current heading, and Quick Open (⌘P) with fuzzy matching.
+- **Live reload.** Saving a file updates only the blocks that changed. Deleted or moved files are detected and picked up again when they reappear.
+- **Reading tools.** Find, back and forward, zoom, print and export as PDF. ⌘-click a link to open it in a new tab, ⌥-click for a split.
+- **Settings.** Toggle rendering extensions, choose the content width, define Markdown extensions and ignored folders, adjust behavior, and remap every keyboard shortcut.
+- **Large documents.** Heavy post-processing is skipped above 2 MB. Above 5 MB only the beginning is shown until you choose Show All.
+- **Integration.** Finder "Open With", drag and drop, a `cmarks` command-line tool and `cmarks://open?path=` links. The installer can make cmarks the default app for `.md` files.
+- **English and Korean UI**, following the macOS system language.
 
-macOS 15 Sequoia 이상, Apple silicon과 Intel 모두 지원합니다.
+## Install
 
-**DMG**: [Releases](https://github.com/yuchanghyun/cmarks/releases)에서 `cmarks-<버전>.dmg`를 받아 Applications 폴더로 끌어 넣습니다. Developer ID로 서명하고 Apple 공증을 마친 빌드라 경고 없이 실행됩니다.
+Requires macOS 15 Sequoia or later. Universal binary for Apple silicon and Intel. Builds are signed with a Developer ID and notarized by Apple.
 
-**Homebrew**:
+**DMG**: download `cmarks-<version>.dmg` from [Releases](https://github.com/yuchanghyun/cmarks/releases/latest) and drag cmarks to Applications.
+
+**Homebrew** (this repository is the tap):
 
 ```sh
 brew tap yuchanghyun/cmarks https://github.com/yuchanghyun/cmarks
@@ -35,53 +41,56 @@ brew trust yuchanghyun/cmarks
 brew install --cask cmarks
 ```
 
-**소스에서 빌드**: Xcode 26 이상과 `brew install xcodegen node pnpm`이 필요합니다.
+**From source**: Xcode 26 or later and `brew install xcodegen node pnpm`, then:
 
 ```sh
-make assets   # 웹 자산(GitHub CSS, highlight.js, KaTeX, Mermaid) 준비
-make run      # 빌드 후 실행
-make install  # Release 빌드를 /Applications에 설치하고 .md 기본 앱으로 지정
+make assets    # bundle the web post-processing once
+make run       # build and launch
+make test      # Swift packages, web tests and app integration tests
+make install   # copy to /Applications, install the cmarks CLI, offer to set cmarks as the .md default app
 ```
 
-## 사용법
+## Usage
 
-- **워크스페이스**: ⌘N으로 폴더를 열거나 사이드바에 폴더를 끌어다 놓습니다. Finder에서 Markdown 파일을 cmarks로 열면 그 폴더의 임시 워크스페이스가 생기고, 마지막 탭을 닫으면 사라집니다. 계속 쓰려면 사이드바에서 "고정"합니다.
-- **문서 열기**: 파일 트리를 한 번 클릭하면 미리보기 탭에 열리고(다음 클릭이 내용을 바꿈), 두 번 클릭하면 탭이 고정됩니다. ⌘P로 파일 이름을 입력해 바로 열 수도 있습니다.
-- **분할**: ⌘D는 오른쪽, ⌘⇧D는 아래로 나눕니다. 패인 사이의 선을 끌어 크기를 바꾸고, 두 번 클릭하면 균등하게 나눕니다. 탭을 다른 패인으로 끌어 옮길 수 있습니다.
-- **찾기와 이동**: ⌘F로 문서 안을 찾고, ⌘[ ⌘]로 링크 이동 기록을 오갑니다.
-- **설정**: ⌘,. 전체 단축키 표는 ⌘/ 에서 봅니다.
+- Open a file or folder with ⌘O, drag it onto the window, or run `cmarks README.md docs/` from a terminal. Folders become workspaces.
+- Clicking a file in the tree opens a preview tab; double-click pins it. ⌘P opens any file in the workspace by fuzzy name.
+- Split with ⌘D (right) or ⌘⇧D (down). Drag the divider to resize, double-click it to equalize.
+- ⌘/ shows the full shortcut table inside the app.
 
-### 기본 단축키
+### Default shortcuts
 
-| 동작 | 단축키 |
+| Action | Shortcut |
 |---|---|
-| 새 워크스페이스 · 워크스페이스 1–8 · 마지막 | ⌘N · ⌘1–8 · ⌘9 |
-| 빠른 열기 · 파일 열기 · 탭 닫기 · 닫은 탭 다시 열기 | ⌘P · ⌘O · ⌘W · ⌘⇧T |
-| 다음 · 이전 탭 | ⌘⇧] · ⌘⇧[ (⌃Tab · ⌃⇧Tab) |
-| 오른쪽 · 아래 분할 · 패인 확대 | ⌘D · ⌘⇧D · ⌘⇧↩ |
-| 패인 포커스 이동 · 크기 조정 | ⌥⌘ 화살표 · ⌃⌥⌘ 화살표 |
-| 뒤로 · 앞으로 · 다시 렌더링 | ⌘[ · ⌘] · ⌘R |
-| 찾기 · 다음 · 이전 | ⌘F · ⌘G · ⌘⇧G |
-| 확대 · 축소 · 실제 크기 | ⌘= · ⌘- · ⌘0 |
-| 사이드바 · 아웃라인 · 테마 순환 | ⌘B · ⌘⇧O · ⌥⌘T |
-| Finder에서 보기 · 외부 편집기로 열기 | ⌥⌘R · ⌘⇧E |
-| 인쇄 · PDF 내보내기 | ⌥⌘P · ⌥⌘⇧P |
+| New workspace · Workspace 1–8 · Last | ⌘N · ⌘1–8 · ⌘9 |
+| Quick Open · Open · Close Tab · Reopen Closed Tab | ⌘P · ⌘O · ⌘W · ⌘⇧T |
+| Next · Previous tab | ⌘⇧] · ⌘⇧[ (⌃Tab · ⌃⇧Tab) |
+| Split right · Split down · Toggle pane zoom | ⌘D · ⌘⇧D · ⌘⇧↩ |
+| Focus pane · Resize pane | ⌥⌘ arrows · ⌃⌥⌘ arrows |
+| Back · Forward · Reload | ⌘[ · ⌘] · ⌘R |
+| Find · Find Next · Find Previous | ⌘F · ⌘G · ⌘⇧G |
+| Zoom In · Zoom Out · Actual Size | ⌘= · ⌘- · ⌘0 |
+| Sidebar · Outline · Cycle appearance | ⌘B · ⌘⇧O · ⌥⌘T |
+| Show in Finder · Open in External Editor | ⌥⌘R · ⌘⇧E |
+| Print · Export as PDF | ⌥⌘P · ⌥⌘⇧P |
 
-다른 앱이나 시스템이 이미 쓰는 조합은 설정 ▸ 단축키에서 바꿀 수 있습니다.
+Every shortcut can be changed in Settings ▸ Shortcuts.
 
-## 알려진 한계
+## Language
 
-- 웹 링크(http, https)는 항상 기본 브라우저에서 열립니다.
-- 창은 하나만 지원합니다.
-- UI는 한국어와 영어를 제공하며 macOS 시스템 언어를 따릅니다. 앱만 다른 언어로 쓰려면 시스템 설정 ▸ 일반 ▸ 언어 및 지역 ▸ 응용 프로그램에서 cmarks를 추가합니다.
-- 한 문단에 `$`가 두 번 나오면(예: `$5와 $10`) 수식으로 오인될 수 있습니다. 설정에서 수식을 끌 수 있습니다.
+The interface is available in English and Korean and follows the macOS system language. To use a different language for cmarks only, add it under System Settings ▸ General ▸ Language & Region ▸ Applications.
 
-변경 내역은 [docs/RELEASE-NOTES.md](docs/RELEASE-NOTES.md)에 있습니다.
+## Known limitations
 
-## 개발
+- Web links (http, https) always open in the default browser.
+- Single window.
+- Two `$` signs in one paragraph (for example `$5 and $10`) can be mistaken for math. Math can be turned off in Settings.
 
-Swift 6 / SwiftUI 앱과 SwiftPM 패키지 세 개(렌더링, 레이아웃, 파일), esbuild로 묶은 웹 후처리로 이루어져 있습니다. `make test`가 Swift·JS·앱 통합 테스트를 모두 돌립니다. 이슈와 PR을 환영합니다.
+Changes are listed in [docs/RELEASE-NOTES.md](docs/RELEASE-NOTES.md) and on the [Releases](https://github.com/yuchanghyun/cmarks/releases) page.
 
-## 라이선스
+## Development
 
-[MIT](LICENSE). 번들된 서드파티 라이브러리의 라이선스는 [THIRD_PARTY_LICENSES.md](THIRD_PARTY_LICENSES.md)에 있습니다.
+A Swift 6 / SwiftUI app with three SwiftPM packages (rendering, layout, files) and an esbuild bundle for the in-page post-processing. The project file is generated with XcodeGen from `project.yml`. `make test` runs the Swift package tests, the web tests and the in-process app integration tests. Issues and pull requests are welcome.
+
+## License
+
+[MIT](LICENSE). Licenses of bundled third-party libraries are listed in [THIRD_PARTY_LICENSES.md](THIRD_PARTY_LICENSES.md).
