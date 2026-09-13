@@ -21,6 +21,13 @@ struct ContentView: View {
                             QuickOpenPalette(quickOpen: model.quickOpen)
                                 .padding(.top, 48)
                         }
+                    } else if model.search.isPresented {
+                        ZStack(alignment: .top) {
+                            Color.black.opacity(0.001)
+                                .onTapGesture { model.search.dismiss() }
+                            WorkspaceSearchPalette(search: model.search)
+                                .padding(.top, 48)
+                        }
                     }
                 }
                 .navigationTitle(model.currentDocumentURL?.lastPathComponent ?? "cmarks")

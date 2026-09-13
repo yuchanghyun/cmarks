@@ -133,6 +133,7 @@ window.cmarks = {
     search: (query, options) => finder.search(query, options),
     next: () => finder.next(),
     prev: () => finder.prev(),
+    goTo: (index) => finder.goTo(index),
     clear: () => finder.clear(),
   },
 };

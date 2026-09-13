@@ -84,6 +84,9 @@ struct AppCommands: Commands {
             Button("이전 찾기") { Task { await model.focusedViewer?.findPrevious() } }
                 .keyboardShortcut(key(.findPrevious))
                 .disabled(!model.hasDocument)
+            Button("워크스페이스에서 찾기…") { model.presentWorkspaceSearch() }
+                .keyboardShortcut(key(.searchWorkspace))
+                .disabled(model.workspace.rootURL == nil)
         }
         CommandGroup(after: .sidebar) {
             if model.columnVisibility == .detailOnly {
@@ -161,7 +164,7 @@ struct AppCommands: Commands {
             // 빠른 열기 팔레트가 떠 있을 때는 ⌘⇧↩(아래 분할로 열기)를 팔레트가 받아야 한다.
             Button("패인 확대 토글") { model.toggleZoom() }
                 .keyboardShortcut(key(.toggleZoomPane))
-                .disabled(model.workspace.panes.count < 2 || model.quickOpen.isPresented)
+                .disabled(model.workspace.panes.count < 2 || model.quickOpen.isPresented || model.search.isPresented)
             Divider()
             Button("왼쪽 패인") { model.focusNeighbor(.left) }
                 .keyboardShortcut(key(.focusLeft))

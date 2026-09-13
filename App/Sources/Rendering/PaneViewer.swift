@@ -338,6 +338,12 @@ final class PaneViewer {
         applyFindResult(try? await webView.callAsyncJavaScript("return window.cmarks.find.next();", contentWorld: .page))
     }
 
+    /// n번째 일치(0부터)로 이동. 범위를 넘으면 마지막 일치로.
+    func findGoTo(_ index: Int) async {
+        guard findCount > 0 else { return }
+        applyFindResult(try? await webView.callAsyncJavaScript("return window.cmarks.find.goTo(index);", arguments: ["index": min(index, findCount - 1)], contentWorld: .page))
+    }
+
     func findPrevious() async {
         guard findCount > 0 else { await performFind(); return }
         applyFindResult(try? await webView.callAsyncJavaScript("return window.cmarks.find.prev();", contentWorld: .page))

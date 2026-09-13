@@ -10,7 +10,7 @@ enum ShortcutAction: String, CaseIterable, Identifiable {
     case focusLeft, focusRight, focusUp, focusDown
     case resizeLeft, resizeRight, resizeUp, resizeDown
     case closeWorkspace, renameWorkspace, nextWorkspace, previousWorkspace, lastWorkspace
-    case back, forward, reload, find, findNext, findPrevious
+    case back, forward, reload, find, findNext, findPrevious, searchWorkspace
     case zoomIn, zoomOut, zoomReset
     case toggleSidebar, toggleOutline, cycleAppearance
     case print, exportPDF, revealInFinder, openInEditor, shortcutHelp
@@ -24,7 +24,7 @@ enum ShortcutAction: String, CaseIterable, Identifiable {
         case .splitRight, .splitDown, .toggleZoomPane, .focusLeft, .focusRight, .focusUp, .focusDown,
              .resizeLeft, .resizeRight, .resizeUp, .resizeDown: String(localized: "패인")
         case .closeWorkspace, .renameWorkspace, .nextWorkspace, .previousWorkspace, .lastWorkspace: String(localized: "워크스페이스")
-        case .back, .forward, .reload, .find, .findNext, .findPrevious, .zoomIn, .zoomOut, .zoomReset: String(localized: "문서")
+        case .back, .forward, .reload, .find, .findNext, .findPrevious, .searchWorkspace, .zoomIn, .zoomOut, .zoomReset: String(localized: "문서")
         case .toggleSidebar, .toggleOutline, .cycleAppearance, .print, .exportPDF, .revealInFinder, .openInEditor, .shortcutHelp: String(localized: "보기·기타")
         }
     }
@@ -60,6 +60,7 @@ enum ShortcutAction: String, CaseIterable, Identifiable {
         case .find: String(localized: "찾기")
         case .findNext: String(localized: "다음 찾기")
         case .findPrevious: String(localized: "이전 찾기")
+        case .searchWorkspace: String(localized: "워크스페이스에서 찾기")
         case .zoomIn: String(localized: "확대")
         case .zoomOut: String(localized: "축소")
         case .zoomReset: String(localized: "실제 크기")
@@ -106,6 +107,7 @@ enum ShortcutAction: String, CaseIterable, Identifiable {
         case .find: KeyCombo("f", command: true)
         case .findNext: KeyCombo("g", command: true)
         case .findPrevious: KeyCombo("g", command: true, shift: true)
+        case .searchWorkspace: KeyCombo("f", command: true, shift: true)
         case .zoomIn: KeyCombo("=", command: true)
         case .zoomOut: KeyCombo("-", command: true)
         case .zoomReset: KeyCombo("0", command: true)

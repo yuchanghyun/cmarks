@@ -12,6 +12,16 @@
       },
       "shouldTranslate": false
     },
+    "%lld개 파일에서 %lld개 일치": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld matches in %lld files"
+          }
+        }
+      }
+    },
     "Aa": {
       "localizations": {
         "en": {
@@ -243,6 +253,26 @@
           "stringUnit": {
             "state": "translated",
             "value": "Also assigned to: %@"
+          }
+        }
+      }
+    },
+    "검색 중…": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Searching…"
+          }
+        }
+      }
+    },
+    "검색어 (2자 이상)": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Search text (2 or more characters)"
           }
         }
       }
@@ -1357,6 +1387,36 @@
         }
       }
     },
+    "워크스페이스에서 찾기": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Find in Workspace"
+          }
+        }
+      }
+    },
+    "워크스페이스에서 찾기…": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Find in Workspace…"
+          }
+        }
+      }
+    },
+    "워크스페이스의 마크다운 파일 내용을 찾습니다.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Searches the text of every Markdown file in the workspace."
+          }
+        }
+      }
+    },
     "웹 링크(http, https)는 항상 기본 브라우저에서 열립니다. ⌘클릭은 새 탭, ⌥클릭은 오른쪽 분할입니다.": {
       "localizations": {
         "en": {
@@ -1523,6 +1583,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Print…"
+          }
+        }
+      }
+    },
+    "일치하는 내용이 없습니다.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No matches."
           }
         }
       }

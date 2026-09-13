@@ -26,6 +26,7 @@ final class AppModel {
     private(set) var viewers: [PaneID: PaneViewer] = [:]
     private(set) var fileTree: FileTreeModel?
     let quickOpen = QuickOpenModel()
+    let search = WorkspaceSearchModel()
     let settings: AppSettings
     let documents: DocumentService
     var isShortcutHelpPresented = false
@@ -58,6 +59,8 @@ final class AppModel {
             defaults.set(showHiddenFiles, forKey: "showHiddenFiles")
             fileTree?.filter = fileFilter
             quickOpen.filter = fileFilter
+        search.filter = fileFilter
+            search.filter = fileFilter
             quickOpen.invalidateIndex()
         }
     }
@@ -90,6 +93,7 @@ final class AppModel {
         appliedRenderSettings = settings.renderSettings
         if settings.restoreSession { restoreSession() }
         quickOpen.filter = fileFilter
+        search.filter = fileFilter
         quickOpen.recents = recentFiles
         rebuildFileTree()
         syncViewers()
@@ -103,6 +107,7 @@ final class AppModel {
         documents.settings = next
         fileTree?.filter = fileFilter
         quickOpen.filter = fileFilter
+        search.filter = fileFilter
         quickOpen.invalidateIndex()
 
         var previousBody = appliedRenderSettings
@@ -263,6 +268,39 @@ final class AppModel {
     }
 
     /// 빠른 열기에서 고른 파일. ⏎ 새 탭, ⌘⏎ 오른쪽 분할, ⌘⇧⏎ 아래 분할.
+    func presentWorkspaceSearch() {
+        quickOpen.dismiss()
+        search.present(root: workspace.rootURL)
+    }
+
+    /// 검색 결과를 열고, 페이지가 준비되면 찾기 바를 그 검색어와 일치 위치로 맞춘다.
+    func openSearchSelection(split: SplitDirection? = nil) {
+        guard let hit = search.selected else { return }
+        let query = search.query.trimmingCharacters(in: .whitespaces)
+        search.dismiss()
+        if let split {
+            navigate(DocumentRef(url: hit.url), intent: .newSplit(split), from: focusedPaneID)
+        } else {
+            open(hit.url)
+        }
+        Task { await revealSearchHit(hit, query: query) }
+    }
+
+    private func revealSearchHit(_ hit: WorkspaceSearchModel.Hit, query: String) async {
+        let target = hit.url.standardizedFileURL
+        for _ in 0..<80 {
+            if let viewer = focusedViewer, viewer.currentURL == target, viewer.isPageReady {
+                viewer.findCaseSensitive = false
+                viewer.findQuery = query
+                viewer.showFindBar()
+                await viewer.performFind()
+                await viewer.findGoTo(hit.matchIndex)
+                return
+            }
+            try? await Task.sleep(for: .milliseconds(50))
+        }
+    }
+
     func openQuickOpenSelection(split: SplitDirection? = nil) {
         guard let result = quickOpen.selected else { return }
         quickOpen.dismiss()

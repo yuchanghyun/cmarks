@@ -53,6 +53,7 @@ targets:
       - package: LayoutKit
       - package: FileKit
       - package: Sparkle
+      - target: cmarksQuickLook        # Finder Quick Look 미리보기 확장(PlugIns에 내장)
     configFiles:
       Debug: Config/Local.xcconfig
       Release: Config/Local.xcconfig
@@ -133,6 +134,64 @@ targets:
     scheme:
       testTargets:
         - cmarksTests
+
+  cmarksQuickLook:
+    type: app-extension
+    platform: macOS
+    sources:
+      - path: QuickLook/Sources
+    dependencies:
+      - package: MarkdownCore
+    # 정적 미리보기에 필요한 CSS·하이라이터·KaTeX·이모지 표만 확장 번들에 복사한다(mermaid 등 제외, 약 1MB).
+    postCompileScripts:
+      - name: Copy web assets for static preview
+        script: |
+          set -e
+          DEST="${BUILT_PRODUCTS_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/web"
+          mkdir -p "$DEST"
+          rsync -a --delete --exclude 'vendor/mermaid' --exclude 'vendor/morphdom' --exclude 'app.js' --exclude 'index.html' --exclude 'VERSIONS.json' "${SRCROOT}/App/Resources/web/" "$DEST/"
+        inputFiles:
+          - $(SRCROOT)/App/Resources/web/app.css
+        outputFiles:
+          - $(BUILT_PRODUCTS_DIR)/$(UNLOCALIZED_RESOURCES_FOLDER_PATH)/web/app.css
+    configFiles:
+      Debug: Config/Local.xcconfig
+      Release: Config/Local.xcconfig
+    settings:
+      base:
+        PRODUCT_NAME: cmarksQuickLook
+        PRODUCT_BUNDLE_IDENTIFIER: com.changhyunyoo.cmarks.quicklook
+        MARKETING_VERSION: 1.1.1
+        CURRENT_PROJECT_VERSION: 4
+        ENABLE_HARDENED_RUNTIME: YES
+        SWIFT_DEFAULT_ACTOR_ISOLATION: nonisolated   # QLPreviewProvider는 임의 스레드에서 불린다
+        ENABLE_USER_SCRIPT_SANDBOXING: NO            # web 자산 복사 스크립트가 번들에 써야 한다
+        GENERATE_INFOPLIST_FILE: NO
+        SKIP_INSTALL: YES
+    info:
+      path: QuickLook/Info.plist
+      properties:
+        CFBundleName: cmarksQuickLook
+        CFBundleDisplayName: cmarks Markdown Preview
+        CFBundleShortVersionString: $(MARKETING_VERSION)
+        CFBundleVersion: $(CURRENT_PROJECT_VERSION)
+        CFBundleDevelopmentRegion: $(DEVELOPMENT_LANGUAGE)
+        LSMinimumSystemVersion: $(MACOSX_DEPLOYMENT_TARGET)
+        NSHumanReadableCopyright: "© 2026 Changhyun Yoo"
+        NSExtension:
+          NSExtensionPointIdentifier: com.apple.quicklook.preview
+          NSExtensionPrincipalClass: $(PRODUCT_MODULE_NAME).PreviewProvider
+          NSExtensionAttributes:
+            QLIsDataBasedPreview: true
+            QLSupportedContentTypes:
+              - net.daringfireball.markdown
+            QLSupportsSearchableItems: false
+    entitlements:
+      path: QuickLook/cmarksQuickLook.entitlements
+      properties:
+        com.apple.security.app-sandbox: true
+        com.apple.security.files.user-selected.read-only: true
+        com.apple.security.cs.allow-jit: true          # JavaScriptCore(하이라이팅·KaTeX)
 
   cmarksTests:
     type: bundle.unit-test
