@@ -67,7 +67,7 @@ targets:
         SWIFT_DEFAULT_ACTOR_ISOLATION: MainActor
         GENERATE_INFOPLIST_FILE: NO
         # Sparkle EdDSA 공개 키. `generate_keys`가 출력한 값. 비어 있으면 release.sh가 appcast 생성을 거부한다.
-        SPARKLE_PUBLIC_ED_KEY: ""
+        SPARKLE_PUBLIC_ED_KEY: "StZ0ga0h3/woXQbLX7rYKQbuUN3NuOKwKyQ0yF0vL9o="
     info:
       path: App/Info.plist
       properties:

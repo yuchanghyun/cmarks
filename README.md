@@ -9,6 +9,13 @@
 
 [한국어 README](README.ko.md)
 
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="docs/images/dark.png">
+    <img src="docs/images/light.png" alt="cmarks showing a workspace with a file tree, an outline, two tabs and a split pane" width="960">
+  </picture>
+</p>
+
 ## Why
 
 Press Space on a Markdown file in the Finder and Quick Look shows it. Click another file or folder and the preview is gone. Quick Look only ever shows what is selected right now.
@@ -21,6 +28,8 @@ cmarks keeps documents open. Open a project folder as a workspace, read its docu
 - **Workspaces, tabs and splits.** Folder-based workspaces, tabs per pane, split right or down, drag to resize, pane zoom and session restore. Keyboard layout matches [cmux](https://github.com/manaflow-ai/cmux).
 - **Sidebar.** A file tree that follows file system changes, a document outline that highlights the current heading, and Quick Open (⌘P) with fuzzy matching.
 - **Live reload.** Saving a file updates only the blocks that changed. Deleted or moved files are detected and picked up again when they reappear.
+
+  <img src="docs/images/live-reload.gif" alt="A task list updating in place while another app edits the file" width="960">
 - **Reading tools.** Find, back and forward, zoom, print and export as PDF. ⌘-click a link to open it in a new tab, ⌥-click for a split.
 - **Settings.** Toggle rendering extensions, choose the content width, define Markdown extensions and ignored folders, adjust behavior, and remap every keyboard shortcut.
 - **Large documents.** Heavy post-processing is skipped above 2 MB. Above 5 MB only the beginning is shown until you choose Show All.

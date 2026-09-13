@@ -6,6 +6,7 @@
 set -euo pipefail
 cd "$(dirname "$0")/.."
 APP=${1:-build/Build/Products/Debug/cmarks.app}
+APP="$(cd "$(dirname "$APP")" && pwd)/$(basename "$APP")"   # open -a 는 절대 경로가 필요하다
 OUT=docs/images; mkdir -p "$OUT"
 WORK=$(mktemp -d /tmp/cmarks-shots.XXXXXX)
 DOCS="$WORK/cmarks docs"; SESSION="$WORK/session"; mkdir -p "$DOCS/Guide" "$DOCS/Notes" "$SESSION"
@@ -142,7 +143,7 @@ quit() { kill "$OURPID" 2>/dev/null || true; sleep 1; }
 EXISTING=$(pgrep -x cmarks | tr '\n' ' ' || true)
 launch_ours() { # 기존 pid를 제외하고 새 창을 찾는다
   open -na "$APP" --args -CmarksSessionDirectory "$SESSION" -CmarksDisableUpdater YES -restoreSession 1 -appearance "$1" \
-    -showRenderStats 0 -sidebarVisible 1 -outlineVisible 1 "-NSWindow Frame main" "$FRAME" \
+    -showRenderStats 0 -sidebarVisible 1 -outlineVisible 1 -AppleLanguages "(en)" "-NSWindow Frame main" "$FRAME" \
     "-NSWindow Frame SwiftUI.ModifiedContent<cmarks.ContentView, SwiftUI._EnvironmentKeyWritingModifier<Swift.Optional<cmarks.OpenRequestQueue>>>-1-AppWindow-1" "$FRAME"
   WIN=""
   for _ in $(seq 1 40); do
@@ -154,7 +155,7 @@ launch_ours() { # 기존 pid를 제외하고 새 창을 찾는다
     sleep 0.5
   done
   [ -n "$WIN" ] || { echo "cmarks 창을 찾지 못했다"; exit 1; }
-  WID=$(sed -n 's/.*id=\([0-9]*\).*/\1/p' <<<"$WIN"); OURPID=$(sed -n 's/.*pid=\([0-9]*\).*/\1/p' <<<"$WIN")
+  WID=$(sed -n 's/^id=\([0-9]*\).*/\1/p' <<<"$WIN"); OURPID=$(sed -n 's/.* pid=\([0-9]*\).*/\1/p' <<<"$WIN")
   X=$(sed -n 's/.*x=\([0-9.]*\).*/\1/p' <<<"$WIN"); Y=$(sed -n 's/.*y=\([0-9.]*\).*/\1/p' <<<"$WIN")
   W=$(sed -n 's/.*w=\([0-9.]*\).*/\1/p' <<<"$WIN"); H=$(sed -n 's/.*h=\([0-9.]*\).*/\1/p' <<<"$WIN")
   echo "창 id=$WID pid=$OURPID 프레임=$X,$Y,$W,$H"

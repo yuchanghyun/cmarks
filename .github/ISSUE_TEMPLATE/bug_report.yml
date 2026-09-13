@@ -1,0 +1,45 @@
+name: Bug report
+description: Something renders wrong, crashes, or does not work as described.
+labels: [bug]
+body:
+  - type: input
+    id: version
+    attributes:
+      label: cmarks version
+      description: cmarks ▸ About cmarks, or `brew info --cask cmarks`.
+      placeholder: "1.1.0"
+    validations:
+      required: true
+  - type: input
+    id: macos
+    attributes:
+      label: macOS version and Mac
+      placeholder: "macOS 26.1, MacBook Pro M3"
+    validations:
+      required: true
+  - type: dropdown
+    id: install
+    attributes:
+      label: How did you install cmarks?
+      options: [DMG, Homebrew, Built from source]
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      placeholder: "1. Open a folder as a workspace\n2. …"
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: What you expected, and what happened instead
+    validations:
+      required: true
+  - type: textarea
+    id: sample
+    attributes:
+      label: Sample Markdown (if rendering is involved)
+      description: The smallest document that shows the problem. Paste it in a code block.
+      render: markdown
