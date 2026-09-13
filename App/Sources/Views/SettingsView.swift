@@ -128,6 +128,7 @@ private struct FilesSettingsTab: View {
 
 private struct BehaviorSettingsTab: View {
     @Bindable private var settings = AppModel.shared.settings
+    @Bindable private var updater = UpdaterModel.shared
 
     var body: some View {
         Form {
@@ -149,6 +150,17 @@ private struct BehaviorSettingsTab: View {
             Section("세션") {
                 Toggle("시작할 때 워크스페이스와 탭 복원", isOn: $settings.restoreSession)
                 Toggle("임시 워크스페이스는 마지막 탭을 닫으면 자동으로 정리", isOn: $settings.cleanupEphemeral)
+            }
+            Section {
+                Toggle("업데이트 자동 확인", isOn: $updater.automaticallyChecksForUpdates)
+                    .disabled(!updater.isAvailable)
+                Button("업데이트 확인…") { updater.checkForUpdates() }
+                    .disabled(!updater.canCheckForUpdates)
+            } header: {
+                Text("업데이트")
+            } footer: {
+                Text("하루 한 번 새 버전이 있는지 확인합니다. Homebrew로 설치했다면 brew upgrade --cask cmarks 로도 갱신됩니다.")
+                    .font(.caption).foregroundStyle(.secondary)
             }
         }
         .formStyle(.grouped)

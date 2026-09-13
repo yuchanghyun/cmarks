@@ -1077,6 +1077,36 @@
         }
       }
     },
+    "업데이트": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Updates"
+          }
+        }
+      }
+    },
+    "업데이트 자동 확인": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Check for updates automatically"
+          }
+        }
+      }
+    },
+    "업데이트 확인…": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Check for Updates…"
+          }
+        }
+      }
+    },
     "없음": {
       "localizations": {
         "en": {
@@ -1923,6 +1953,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Show front matter as a collapsed block"
+          }
+        }
+      }
+    },
+    "하루 한 번 새 버전이 있는지 확인합니다. Homebrew로 설치했다면 brew upgrade --cask cmarks 로도 갱신됩니다.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Checks for a new version once a day. If you installed with Homebrew, brew upgrade --cask cmarks also works."
           }
         }
       }

@@ -24,23 +24,31 @@ struct CmarksApp: App {
 /// 메뉴. 단축키는 설정 ▸ 단축키의 값을 따른다(기본값은 설계 문서 §5.2, cmux 호환).
 struct AppCommands: Commands {
     @Bindable private var model = AppModel.shared
+    private var updater = UpdaterModel.shared
 
     private var settings: AppSettings { model.settings }
     private func key(_ action: ShortcutAction) -> KeyboardShortcut? { settings.keyboardShortcut(for: action) }
 
     var body: some Commands {
-        CommandGroup(replacing: .newItem) {
-            Button("새 워크스페이스…") { model.presentNewWorkspacePanel() }
-                .keyboardShortcut(key(.newWorkspace))
-            Button("새 탭…") { model.presentQuickOpen() }
-                .keyboardShortcut("t")
-            Button("빠른 열기…") { model.presentQuickOpen() }
-                .keyboardShortcut(key(.quickOpen))
-            Button("열기…") { model.presentOpenPanel() }
-                .keyboardShortcut(key(.openFile))
-            Button("닫은 탭 다시 열기") { model.reopenLastClosedTab() }
-                .keyboardShortcut(key(.reopenClosedTab))
-                .disabled(!model.canReopenClosedTab)
+        // CommandsBuilder는 최상위 항목이 10개까지라 앞의 두 그룹을 Group으로 묶는다.
+        Group {
+            CommandGroup(after: .appInfo) {
+                Button("업데이트 확인…") { updater.checkForUpdates() }
+                    .disabled(!updater.canCheckForUpdates)
+            }
+            CommandGroup(replacing: .newItem) {
+                Button("새 워크스페이스…") { model.presentNewWorkspacePanel() }
+                    .keyboardShortcut(key(.newWorkspace))
+                Button("새 탭…") { model.presentQuickOpen() }
+                    .keyboardShortcut("t")
+                Button("빠른 열기…") { model.presentQuickOpen() }
+                    .keyboardShortcut(key(.quickOpen))
+                Button("열기…") { model.presentOpenPanel() }
+                    .keyboardShortcut(key(.openFile))
+                Button("닫은 탭 다시 열기") { model.reopenLastClosedTab() }
+                    .keyboardShortcut(key(.reopenClosedTab))
+                    .disabled(!model.canReopenClosedTab)
+            }
         }
         CommandGroup(replacing: .saveItem) {
             Button("탭 닫기") { model.closeActiveTabOrPane() }

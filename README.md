@@ -41,6 +41,8 @@ brew trust yuchanghyun/cmarks
 brew install --cask cmarks
 ```
 
+**Updates**: cmarks checks for a new version once a day and offers to install it (Sparkle). Turn it off in Settings ▸ Behavior ▸ Updates. Homebrew installs can also use `brew upgrade --cask cmarks`.
+
 **From source**: Xcode 26 or later and `brew install xcodegen node pnpm`, then:
 
 ```sh

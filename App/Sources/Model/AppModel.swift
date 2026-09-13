@@ -11,7 +11,15 @@ import UniformTypeIdentifiers
 @MainActor
 @Observable
 final class AppModel {
-    static let shared = AppModel()
+    static let shared = AppModel(sessionStore: launchSessionStore())
+
+    /// `-CmarksSessionDirectory <경로>`로 실행하면 사용자 세션 대신 그 폴더의 session.json을 쓴다(스크린샷·시험용).
+    private static func launchSessionStore() -> SessionStore {
+        if let directory = UserDefaults.standard.string(forKey: "CmarksSessionDirectory"), !directory.isEmpty {
+            return SessionStore(directory: URL(fileURLWithPath: directory, isDirectory: true))
+        }
+        return .standard(appName: "cmarks")
+    }
 
     private(set) var workspaces: [Workspace]
     private(set) var activeWorkspaceID: UUID

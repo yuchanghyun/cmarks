@@ -29,6 +29,9 @@ packages:
     path: Packages/LayoutKit
   FileKit:
     path: Packages/FileKit
+  Sparkle:                          # 자동 업데이트(App Store 밖 배포용). 도구: <DerivedData>/SourcePackages/artifacts/sparkle/Sparkle/bin
+    url: https://github.com/sparkle-project/Sparkle
+    from: "2.9.6"
 
 targets:
   cmarks:
@@ -49,6 +52,7 @@ targets:
       - package: MarkdownCore
       - package: LayoutKit
       - package: FileKit
+      - package: Sparkle
     configFiles:
       Debug: Config/Local.xcconfig
       Release: Config/Local.xcconfig
@@ -56,12 +60,14 @@ targets:
       base:
         PRODUCT_NAME: cmarks
         PRODUCT_BUNDLE_IDENTIFIER: com.changhyunyoo.cmarks
-        MARKETING_VERSION: 1.0.1
-        CURRENT_PROJECT_VERSION: 2
+        MARKETING_VERSION: 1.1.0
+        CURRENT_PROJECT_VERSION: 3
         ENABLE_HARDENED_RUNTIME: YES
         ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
         SWIFT_DEFAULT_ACTOR_ISOLATION: MainActor
         GENERATE_INFOPLIST_FILE: NO
+        # Sparkle EdDSA 공개 키. `generate_keys`가 출력한 값. 비어 있으면 release.sh가 appcast 생성을 거부한다.
+        SPARKLE_PUBLIC_ED_KEY: ""
     info:
       path: App/Info.plist
       properties:
@@ -74,6 +80,12 @@ targets:
         LSApplicationCategoryType: public.app-category.productivity
         NSPrincipalClass: NSApplication
         NSHumanReadableCopyright: "© 2026 Changhyun Yoo"
+        # Sparkle 자동 업데이트. appcast는 main 브랜치의 appcast.xml, 업데이트 zip은 GitHub Releases.
+        SUFeedURL: https://raw.githubusercontent.com/yuchanghyun/cmarks/main/appcast.xml
+        SUPublicEDKey: $(SPARKLE_PUBLIC_ED_KEY)
+        SUEnableAutomaticChecks: true
+        SUScheduledCheckInterval: 86400
+        SUEnableSystemProfiling: false
         # Finder "다음으로 열기" / 드래그&드롭 대상. Alternate = 사용자가 기본 앱으로 지정할 때만 기본.
         CFBundleDocumentTypes:
           - CFBundleTypeName: Markdown Document

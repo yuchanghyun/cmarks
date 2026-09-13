@@ -1,12 +1,12 @@
 // 앱 아이콘 생성. 실행: make icon
-// cmux 아이콘의 파란 계열 그라데이션(하늘색 → 파랑 → 남색)을 쓴 라운드 사각형 위에 둥근 "c"를 그려
+// cmux 아이콘처럼 밝은 유리 바탕 위에 파란 계열 그라데이션(하늘색 → 파랑 → 남색)의 둥근 "c"를 그려
 // AppIcon.appiconset의 PNG 10장을 만든다.
-//   swift scripts/make-icon.swift [출력 폴더] [--variant blue|glass] [--preview 파일.png]
-// blue(기본): 파란 그라데이션 바탕 + 흰 c. glass: cmux처럼 밝은 바탕 + 그라데이션 c.
+//   swift scripts/make-icon.swift [출력 폴더] [--variant glass|blue] [--preview 파일.png]
+// glass(기본): cmux처럼 밝은 바탕 + 그라데이션 c. blue: 파란 그라데이션 바탕 + 흰 c.
 import AppKit
 
 var args = Array(CommandLine.arguments.dropFirst())
-var variant = "blue"
+var variant = "glass"
 var preview: String?
 if let i = args.firstIndex(of: "--variant") { variant = args[i + 1]; args.removeSubrange(i...(i + 1)) }
 if let i = args.firstIndex(of: "--preview") { preview = args[i + 1]; args.removeSubrange(i...(i + 1)) }

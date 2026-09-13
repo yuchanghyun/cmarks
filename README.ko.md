@@ -35,6 +35,8 @@ brew trust yuchanghyun/cmarks
 brew install --cask cmarks
 ```
 
+**업데이트**: 하루 한 번 새 버전을 확인해 바로 설치할 수 있게 안내합니다(Sparkle). 설정 ▸ 동작 ▸ 업데이트에서 끌 수 있고, Homebrew 설치는 `brew upgrade --cask cmarks`도 됩니다.
+
 **소스에서 빌드**: Xcode 26 이상과 `brew install xcodegen node pnpm`이 필요합니다.
 
 ```sh

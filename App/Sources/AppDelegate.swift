@@ -16,7 +16,10 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
                 if let error { NSLog("default handler registration failed: \(error.localizedDescription)") }
                 DispatchQueue.main.async { NSApp.terminate(nil) }
             }
+            return
         }
+        // Sparkle 업데이터 기동(하루 한 번 검사 예약).
+        _ = UpdaterModel.shared
     }
 
     /// Finder "다음으로 열기", Dock 드롭, `open -b`, cmarks:// 딥링크가 모두 여기로 들어온다.

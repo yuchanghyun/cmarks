@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Sparkle 업데이트 피드. scripts/release.sh가 릴리스마다 <item>을 맨 앞에 추가한다(scripts/appcast.py). 손으로 고치지 않는다. -->
+<rss version="2.0" xmlns:sparkle="http://www.andymatuschak.org/xml-namespaces/sparkle" xmlns:dc="http://purl.org/dc/elements/1.1/">
+  <channel>
+    <title>cmarks</title>
+    <link>https://github.com/yuchanghyun/cmarks</link>
+    <description>cmarks updates</description>
+    <language>en</language>
+  </channel>
+</rss>

@@ -31,6 +31,15 @@ if [ -n "${CMARKS_NOTARY_PROFILE:-}" ] && ! xcrun notarytool history --keychain-
   exit 1
 fi
 
+BUILD=$(sed -n 's/^ *CURRENT_PROJECT_VERSION: *//p' project.yml | head -1 | tr -d '"')
+PUBKEY=$(sed -n 's/^ *SPARKLE_PUBLIC_ED_KEY: *//p' project.yml | head -1 | tr -d '"')
+if [ -n "${CMARKS_NOTARY_PROFILE:-}" ] && [ -z "$PUBKEY" ] && [ -z "${CMARKS_SKIP_APPCAST:-}" ]; then
+  echo "project.yml의 SPARKLE_PUBLIC_ED_KEY가 비어 있어 자동 업데이트 피드를 만들 수 없다." >&2
+  echo "  1회: <DerivedData>/SourcePackages/artifacts/sparkle/Sparkle/bin/generate_keys 를 실행해 공개 키를 project.yml에 넣는다." >&2
+  echo "  피드 없이 배포하려면 CMARKS_SKIP_APPCAST=1 로 다시 실행한다." >&2
+  exit 1
+fi
+
 make gen >/dev/null
 if [ -n "$IDENTITY" ]; then
   xcodebuild -project cmarks.xcodeproj -scheme cmarks -configuration Release -archivePath "$ARCHIVE" archive -quiet \
@@ -87,6 +96,19 @@ if [ -n "$IDENTITY" ]; then
 fi
 
 (cd "$OUT" && shasum -a 256 "cmarks-$VERSION.zip" "cmarks-$VERSION.dmg" > checksums.txt)
+
+# Sparkle appcast: 공증된 zip을 EdDSA 개인 키(키체인)로 서명해 appcast.xml 맨 앞에 항목을 넣는다.
+SPARKLE_BIN=$(ls -d build/SourcePackages/artifacts/sparkle/Sparkle/bin "$HOME"/Library/Developer/Xcode/DerivedData/cmarks-*/SourcePackages/artifacts/sparkle/Sparkle/bin 2>/dev/null | head -1 || true)
+if [ "$NOTARIZED" = 1 ] && [ -n "$PUBKEY" ] && [ -n "$SPARKLE_BIN" ] && [ -z "${CMARKS_SKIP_APPCAST:-}" ]; then
+  echo "appcast 서명 중…"
+  SIGNATURE=$("$SPARKLE_BIN/sign_update" "$ZIP")
+  python3 scripts/appcast.py --appcast appcast.xml --version "$VERSION" --build "$BUILD" \
+    --url "https://github.com/yuchanghyun/cmarks/releases/download/v$VERSION/cmarks-$VERSION.zip" \
+    --signature "$SIGNATURE" --notes docs/RELEASE-NOTES.md \
+    --release-page "https://github.com/yuchanghyun/cmarks/releases/tag/v$VERSION"
+else
+  echo "appcast 갱신 건너뜀 (공증=$NOTARIZED, 공개 키=${PUBKEY:+있음}${PUBKEY:-없음}, Sparkle 도구=${SPARKLE_BIN:-없음})"
+fi
 ZIP_SHA=$(grep 'zip' "$OUT/checksums.txt" | cut -d' ' -f1)
 mkdir -p Casks
 cat > Casks/cmarks.rb <<CASK
@@ -114,9 +136,9 @@ end
 CASK
 
 echo
-echo "산출물:"; ls -la "$OUT"/*.zip "$OUT"/*.dmg "$OUT/checksums.txt" Casks/cmarks.rb
+echo "산출물:"; ls -la "$OUT"/*.zip "$OUT"/*.dmg "$OUT/checksums.txt" Casks/cmarks.rb appcast.xml
 if [ "$NOTARIZED" = 1 ]; then
-  echo "Developer ID 서명 + 공증 + 스테이플 완료. GitHub Releases에 올리면 된다."
+  echo "Developer ID 서명 + 공증 + 스테이플 완료. GitHub Releases에 올린 뒤 Casks/cmarks.rb와 appcast.xml을 커밋·푸시한다."
 elif [ -n "$IDENTITY" ]; then
   echo "Developer ID 서명은 됐지만 공증은 건너뛰었다. CMARKS_NOTARY_PROFILE 을 설정하고 다시 실행하면 공증한다."
 else

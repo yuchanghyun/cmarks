@@ -1,5 +1,11 @@
 # 릴리스 노트
 
+## 1.1.0
+
+- **자동 업데이트.** 새 버전이 나오면 앱이 알려 주고 바로 설치할 수 있습니다(Sparkle). 설정 ▸ 동작 ▸ 업데이트에서 끌 수 있고, cmarks 메뉴의 "업데이트 확인…"으로 직접 확인할 수 있습니다. Homebrew 설치는 `brew upgrade --cask cmarks`도 그대로 됩니다.
+- **새 아이콘.** cmux와 같은 계열의 파란 그라데이션.
+- README가 영어 기준으로 바뀌었습니다. 한국어는 README.ko.md에 있습니다.
+
 ## 1.0.1
 
 - **영어 UI 지원.** macOS 시스템 언어가 영어이면 메뉴, 설정, 사이드바, 안내 문구가 영어로 나옵니다. 용어는 macOS 관례를 따릅니다(Show in Finder, Quick Open, Export as PDF, Actual Size 등). 한국어 시스템에서 영어로 쓰려면 시스템 설정 ▸ 일반 ▸ 언어 및 지역 ▸ 응용 프로그램에서 cmarks의 언어를 English로 지정합니다.

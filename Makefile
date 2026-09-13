@@ -33,7 +33,7 @@ assets:             ## 웹 의존성 설치 + vendor 갱신 + app.js 번들
 test-web:           ## JS 후처리 테스트 (vitest)
 	cd web && pnpm test
 
-icon:               ## 앱 아이콘 생성 (cmux 계열 파란 그라데이션)
+icon:               ## 앱 아이콘 생성 (cmux처럼 밝은 바탕 + 파란 그라데이션 c)
 	swift scripts/make-icon.swift App/Resources/Assets.xcassets/AppIcon.appiconset
 
 install:            ## Release 빌드를 /Applications에 설치
