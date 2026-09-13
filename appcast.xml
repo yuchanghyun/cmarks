@@ -7,6 +7,18 @@
     <description>cmarks updates</description>
     <language>en</language>
     <item>
+      <title>cmarks 1.1.1</title>
+      <pubDate>Sun, 13 Sep 2026 11:29:15 +0000</pubDate>
+      <sparkle:version>4</sparkle:version>
+      <sparkle:shortVersionString>1.1.1</sparkle:shortVersionString>
+      <sparkle:minimumSystemVersion>15.0</sparkle:minimumSystemVersion>
+      <link>https://github.com/yuchanghyun/cmarks/releases/tag/v1.1.1</link>
+      <description>
+&lt;ul&gt;&lt;li&gt;&lt;strong&gt;도움말 ▸ 문제 신고…&lt;/strong&gt; 버전·macOS·설정·이번 실행의 최근 로그를 클립보드에 복사하고, 버전과 설치 방법이 채워진 GitHub 이슈 양식을 엽니다. 문서 내용은 포함되지 않습니다.&lt;/li&gt;&lt;li&gt;도움말 메뉴에 "GitHub에서 cmarks 보기"를 추가했습니다.&lt;/li&gt;&lt;li&gt;&lt;code&gt;make install&lt;/code&gt;이 공증본을 우선 설치하고, 로컬 빌드는 재서명합니다(로컬 Release 빌드가 실행 즉시 종료되던 문제).&lt;/li&gt;&lt;/ul&gt;
+</description>
+      <enclosure url="https://github.com/yuchanghyun/cmarks/releases/download/v1.1.1/cmarks-1.1.1.zip" type="application/octet-stream" length="4338662" sparkle:edSignature="s6/z5EJiBcIzm+xNPI2PneteGKnvZCzKKLMeupuxVi2TAicuPtTz02I/98dv9/YhqFDzHqP06Uhbhr/b29bSCA==" />
+    </item>
+    <item>
       <title>cmarks 1.1.0</title>
       <pubDate>Sun, 13 Sep 2026 08:37:59 +0000</pubDate>
       <sparkle:version>3</sparkle:version>
