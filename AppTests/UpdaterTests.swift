@@ -33,11 +33,15 @@ struct UpdaterTests {
             let enclosure = try #require(item.elements(forName: "enclosure").first)
             let url = enclosure.attribute(forName: "url")?.stringValue ?? ""
             #expect(url.hasPrefix("https://github.com/yuchanghyun/cmarks/releases/download/"), "enclosure url: \(url)")
-            #expect(!(enclosure.attribute(forName: "sparkle:edSignature")?.stringValue ?? "").isEmpty)
-            #expect((Int(enclosure.attribute(forName: "length")?.stringValue ?? "") ?? 0) > 0)
+            // `!(… ?? "").isEmpty` 꼴은 #expect 매크로가 잘못 펼치므로 지역 변수로 받는다.
+            let signature = enclosure.attribute(forName: "sparkle:edSignature")?.stringValue ?? ""
+            #expect(Data(base64Encoded: signature)?.count == 64, "EdDSA 서명은 64바이트: \(signature)")
+            let length = Int(enclosure.attribute(forName: "length")?.stringValue ?? "") ?? 0
+            #expect(length > 0)
             builds.append(try #require(Int(item.elements(forName: "sparkle:version").first?.stringValue ?? "")))
             #expect(item.elements(forName: "sparkle:minimumSystemVersion").first?.stringValue == "15.0")
-            #expect(!(item.elements(forName: "description").first?.stringValue ?? "").isEmpty)
+            let description = item.elements(forName: "description").first?.stringValue ?? ""
+            #expect(description.contains("<li>") || description.contains("<p>"), "릴리스 노트 HTML이 비어 있음")
         }
         #expect(builds == builds.sorted(by: >))
     }

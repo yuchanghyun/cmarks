@@ -124,6 +124,9 @@ struct AppCommands: Commands {
         CommandGroup(replacing: .help) {
             Button("단축키 보기") { model.isShortcutHelpPresented = true }
                 .keyboardShortcut(key(.shortcutHelp))
+            Divider()
+            Button("문제 신고…") { ProblemReporter.report(settings: model.settings) }
+            Button("GitHub에서 cmarks 보기") { NSWorkspace.shared.open(URL(string: "https://github.com/yuchanghyun/cmarks")!) }
         }
         CommandMenu("워크스페이스") {
             Button("워크스페이스 닫기") { model.closeActiveWorkspace() }
