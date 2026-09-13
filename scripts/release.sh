@@ -37,10 +37,7 @@ if git ls-remote --tags origin "refs/tags/v$VERSION" 2>/dev/null | grep -q .; th
   echo "v$VERSION 은 이미 GitHub에 게시된 버전이다. project.yml의 MARKETING_VERSION과 CURRENT_PROJECT_VERSION을 올린 뒤 다시 실행한다." >&2
   exit 1
 fi
-if ! grep -q "^## $VERSION\$" docs/RELEASE-NOTES.md; then
-  echo "docs/RELEASE-NOTES.md 에 '## $VERSION' 절이 없다. 릴리스 노트를 먼저 쓴다." >&2
-  exit 1
-fi
+python3 scripts/release_notes.py "$VERSION" --check   # '## 버전' 절과 '### English' 절이 모두 있어야 한다
 if [ -n "${CMARKS_CHECK_ONLY:-}" ]; then echo "사전 점검 통과: v$VERSION (build $BUILD)"; exit 0; fi
 PUBKEY=$(sed -n 's/^ *SPARKLE_PUBLIC_ED_KEY: *//p' project.yml | head -1 | tr -d '"')
 if [ -n "${CMARKS_NOTARY_PROFILE:-}" ] && [ -z "$PUBKEY" ] && [ -z "${CMARKS_SKIP_APPCAST:-}" ]; then

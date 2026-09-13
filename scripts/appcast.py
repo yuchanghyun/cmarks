@@ -8,61 +8,63 @@
 "## <version>" 절을 간단한 HTML(문단·목록·굵게·코드)로 바꿔 <description>에 넣는다.
 """
 import argparse
-import html
 import re
 import sys
 import xml.etree.ElementTree as ET
+from pathlib import Path
+
+sys.dont_write_bytecode = True   # 저장소 안에 __pycache__를 만들지 않는다
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from release_notes import section, to_html  # noqa: E402
 from email.utils import format_datetime
 from datetime import datetime, timezone
 
 SPARKLE = "http://www.andymatuschak.org/xml-namespaces/sparkle"
 DC = "http://purl.org/dc/elements/1.1/"
+XML = "http://www.w3.org/XML/1998/namespace"
 ET.register_namespace("sparkle", SPARKLE)
 ET.register_namespace("dc", DC)
 
 
-def notes_html(path: str, version: str) -> str:
-    text = open(path, encoding="utf-8").read()
-    m = re.search(r"^## " + re.escape(version) + r"\s*\n(.*?)(?=^## |\Z)", text, re.S | re.M)
-    if not m:
-        sys.exit(f"RELEASE-NOTES에 '## {version}' 절이 없다")
-    def inline(s: str) -> str:
-        s = html.escape(s, quote=False)
-        s = re.sub(r"`([^`]+)`", r"<code>\1</code>", s)
-        s = re.sub(r"\*\*([^*]+)\*\*", r"<strong>\1</strong>", s)
-        s = re.sub(r"\[([^\]]+)\]\((https?://[^)]+)\)", r'<a href="\2">\1</a>', s)
-        return s
-    out, items = [], []
-    def flush():
-        nonlocal items
-        if items:
-            out.append("<ul>" + "".join(f"<li>{i}</li>" for i in items) + "</ul>")
-            items = []
-    for line in m.group(1).splitlines():
-        line = line.rstrip()
-        if line.startswith("- "):
-            items.append(inline(line[2:]))
-        elif line.startswith("### "):
-            flush(); out.append(f"<h3>{inline(line[4:])}</h3>")
-        elif line.strip():
-            flush(); out.append(f"<p>{inline(line)}</p>")
-        else:
-            flush()
-    flush()
-    return "\n".join(out)
+def set_descriptions(item: ET.Element, version: str, notes: Path) -> None:
+    """Sparkle은 xml:lang이 사용자 언어와 맞는 <description>을 고르고, 없으면 언어 표시가 없는 것을 쓴다.
+    영어(기본)·한국어·영어(fallback) 순으로 넣는다."""
+    for old in item.findall("description"):
+        item.remove(old)
+    ko, en = section(version, notes)
+    anchor = item.find("enclosure")
+    index = list(item).index(anchor) if anchor is not None else len(item)
+    for lang, md in (("en", en), ("ko", ko), (None, en)):
+        d = ET.Element("description")
+        if lang:
+            d.set(f"{{{XML}}}lang", lang)
+        d.text = "\n" + to_html(md) + "\n"
+        item.insert(index, d); index += 1
 
 
 def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--appcast", required=True)
-    ap.add_argument("--version", required=True)
-    ap.add_argument("--build", required=True)
-    ap.add_argument("--url", required=True)
-    ap.add_argument("--signature", required=True, help="sign_update 출력 한 줄")
     ap.add_argument("--notes", required=True)
+    ap.add_argument("--refresh-notes", action="store_true", help="기존 항목들의 설명만 릴리스 노트에서 다시 만든다")
+    ap.add_argument("--version")
+    ap.add_argument("--build")
+    ap.add_argument("--url")
+    ap.add_argument("--signature", help="sign_update 출력 한 줄")
     ap.add_argument("--min-os", default="15.0")
     ap.add_argument("--release-page")
     a = ap.parse_args()
+
+    if a.refresh_notes:
+        tree = ET.parse(a.appcast)
+        for item in tree.getroot().find("channel").findall("item"):
+            set_descriptions(item, item.findtext(f"{{{SPARKLE}}}shortVersionString"), Path(a.notes))
+        write(tree, a.appcast)
+        print("appcast: 기존 항목 설명 갱신")
+        return
+    for name in ("version", "build", "url", "signature"):
+        if not getattr(a, name):
+            sys.exit(f"--{name} 이 필요하다")
 
     sig = re.search(r'sparkle:edSignature="([^"]+)"', a.signature)
     length = re.search(r'length="(\d+)"', a.signature)
@@ -83,25 +85,28 @@ def main() -> None:
     ET.SubElement(item, f"{{{SPARKLE}}}minimumSystemVersion").text = a.min_os
     if a.release_page:
         ET.SubElement(item, "link").text = a.release_page
-    desc = ET.SubElement(item, "description")
-    desc.text = "\n" + notes_html(a.notes, a.version) + "\n"
     enc = ET.SubElement(item, "enclosure")
     enc.set("url", a.url)
     enc.set("type", "application/octet-stream")
     enc.set("length", length.group(1))
     enc.set(f"{{{SPARKLE}}}edSignature", sig.group(1))
 
+    set_descriptions(item, a.version, Path(a.notes))
     first = channel.find("item")
     index = list(channel).index(first) if first is not None else len(channel)
     channel.insert(index, item)
+    write(tree, a.appcast)
+    print(f"appcast: {a.version} (build {a.build}) 추가")
+
+
+def write(tree: ET.ElementTree, path: str) -> None:
     ET.indent(tree, space="  ")
-    tree.write(a.appcast, encoding="utf-8", xml_declaration=True)
-    lines = open(a.appcast, encoding="utf-8").read().split("\n")
+    tree.write(path, encoding="utf-8", xml_declaration=True)
+    lines = open(path, encoding="utf-8").read().split("\n")
     note = "<!-- Sparkle 업데이트 피드. scripts/release.sh가 릴리스마다 <item>을 맨 앞에 추가한다(scripts/appcast.py). 손으로 고치지 않는다. -->"
     if len(lines) > 1 and not lines[1].startswith("<!--"):
         lines.insert(1, note)
-    open(a.appcast, "w", encoding="utf-8").write("\n".join(lines) + ("" if lines[-1] == "" else "\n"))
-    print(f"appcast: {a.version} (build {a.build}) 추가")
+    open(path, "w", encoding="utf-8").write("\n".join(lines) + ("" if lines[-1] == "" else "\n"))
 
 
 if __name__ == "__main__":

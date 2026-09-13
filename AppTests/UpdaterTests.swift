@@ -40,8 +40,14 @@ struct UpdaterTests {
             #expect(length > 0)
             builds.append(try #require(Int(item.elements(forName: "sparkle:version").first?.stringValue ?? "")))
             #expect(item.elements(forName: "sparkle:minimumSystemVersion").first?.stringValue == "15.0")
-            let description = item.elements(forName: "description").first?.stringValue ?? ""
-            #expect(description.contains("<li>") || description.contains("<p>"), "릴리스 노트 HTML이 비어 있음")
+            // 영어(xml:lang=en)·한국어(ko)·언어 표시 없는 기본(영어) 설명이 모두 있어야 한다
+            let descriptions = item.elements(forName: "description")
+            let langs = descriptions.map { $0.attribute(forName: "xml:lang")?.stringValue ?? "" }
+            #expect(langs == ["en", "ko", ""], "설명 언어 순서: \(langs)")
+            for description in descriptions {
+                let body = description.stringValue ?? ""
+                #expect(body.contains("<li>") || body.contains("<p>"), "릴리스 노트 HTML이 비어 있음")
+            }
         }
         #expect(builds == builds.sorted(by: >))
     }
