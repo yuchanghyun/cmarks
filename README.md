@@ -25,7 +25,7 @@ cmarks keeps documents open. Open a project folder as a workspace, read its docu
 ## Features
 
 - **Renders like GitHub.** Uses GitHub's own Markdown engine (cmark-gfm) and stylesheet: tables, task lists, strikethrough, footnotes, alerts (Note, Tip, Important, Warning, Caution), syntax highlighting, emoji shortcodes, math (KaTeX), Mermaid diagrams, heading anchors and front matter. Light and dark appearance follow the system.
-- **Workspaces, tabs and splits.** Folder-based workspaces, tabs per pane, split right or down, drag to resize, pane zoom and session restore. Keyboard layout matches [cmux](https://github.com/manaflow-ai/cmux).
+- **Workspaces, tabs, splits and windows.** Folder-based workspaces, tabs per pane, split right or down, drag to resize, pane zoom, multiple windows and session restore. Keyboard layout matches [cmux](https://github.com/manaflow-ai/cmux).
 - **Sidebar.** A file tree that follows file system changes, a document outline that highlights the current heading, and Quick Open (⌘P) with fuzzy matching.
 - **Find in Workspace (⌘⇧F).** Full-text search across every Markdown file in the workspace, with file, line and context; open a match with the find bar on it.
 - **Live reload.** Saving a file updates only the blocks that changed. Deleted or moved files are detected and picked up again when they reappear.
@@ -76,7 +76,7 @@ make install   # copy to /Applications, install the cmarks CLI, offer to set cma
 
 | Action | Shortcut |
 |---|---|
-| New workspace · Workspace 1–8 · Last | ⌘N · ⌘1–8 · ⌘9 |
+| New workspace · New window · Workspace 1–8 · Last | ⌘N · ⌥⌘N · ⌘1–8 · ⌘9 |
 | Quick Open · Open · Close Tab · Reopen Closed Tab | ⌘P · ⌘O · ⌘W · ⌘⇧T |
 | Next · Previous tab | ⌘⇧] · ⌘⇧[ (⌃Tab · ⌃⇧Tab) |
 | Split right · Split down · Toggle pane zoom | ⌘D · ⌘⇧D · ⌘⇧↩ |
@@ -98,7 +98,7 @@ The interface is available in English and Korean and follows the macOS system la
 ## Known limitations
 
 - Web links (http, https) always open in the default browser.
-- Single window.
+- Tabs cannot be dragged between windows yet.
 - Quick Look shows Mermaid diagrams as code. If another Markdown Quick Look extension is installed (for example QLMarkdown), macOS uses only one of them; choose under System Settings ▸ General ▸ Login Items & Extensions ▸ Quick Look.
 - Two `$` signs in one paragraph (for example `$5 and $10`) can be mistaken for math. Math can be turned off in Settings.
 
