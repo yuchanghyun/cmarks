@@ -69,7 +69,7 @@ struct ContentView: View {
         .onChange(of: model.windowOpenRequests, initial: true) { _, requests in
             // 어느 창의 ContentView든 먼저 본 쪽이 연다
             for id in requests where model.consumeWindowOpenRequest(id) {
-                openWindow(id: "document", value: id)
+                openWindow(id: "main", value: id)
             }
         }
     }

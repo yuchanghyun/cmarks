@@ -8,13 +8,14 @@ struct CmarksApp: App {
     var body: some Scene {
         // 창마다 다른 워크스페이스를 보여 준다(공유 모델). 값이 없는 첫 창이 기본 창이고, 새 창은 AppModel.openNewWindow가 만든 ID로 연다.
         // 세션 복원은 AppModel이 맡으므로 SwiftUI의 창 복원은 끈다.
-        WindowGroup("cmarks", id: "document", for: UUID.self) { $windowID in
+        WindowGroup("cmarks", id: "main", for: UUID.self) { $windowID in   // id는 1.2.x의 Window("main")와 같아야 AppKit이 남긴 창 상태 복원이 새 창을 막지 않는다
             ContentView(windowID: windowID ?? AppModel.primaryWindowID)
                 .environment(OpenRequestQueue.shared)
                 .environment(AppModel.shared)
         }
         .defaultSize(width: 1100, height: 760)
         .restorationBehavior(.disabled)
+        .defaultLaunchBehavior(.presented)   // 값이 있는 WindowGroup은 이 지정이 없으면 실행 시 창을 열지 않는다
         .commands { AppCommands() }
 
         Settings {
