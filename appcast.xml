@@ -7,6 +7,24 @@
     <description>cmarks updates</description>
     <language>en</language>
     <item>
+      <title>cmarks 1.2.1</title>
+      <pubDate>Mon, 14 Sep 2026 08:50:11 +0000</pubDate>
+      <sparkle:version>6</sparkle:version>
+      <sparkle:shortVersionString>1.2.1</sparkle:shortVersionString>
+      <sparkle:minimumSystemVersion>15.0</sparkle:minimumSystemVersion>
+      <link>https://github.com/yuchanghyun/cmarks/releases/tag/v1.2.1</link>
+      <description xml:lang="en">
+&lt;ul&gt;&lt;li&gt;&lt;strong&gt;Follow Finder Selection was denied without asking for permission.&lt;/strong&gt; The app lacked the Apple Events automation entitlement, so macOS blocked it silently. If you tried it in 1.2.0, run &lt;code&gt;tccutil reset AppleEvents com.changhyunyoo.cmarks&lt;/code&gt; once in Terminal to clear the stale denial, then turn it on again.&lt;/li&gt;&lt;/ul&gt;
+</description>
+      <description xml:lang="ko">
+&lt;ul&gt;&lt;li&gt;&lt;strong&gt;Finder 선택 따라가기가 권한을 묻지 않고 바로 거부되던 문제&lt;/strong&gt;를 고쳤습니다. 앱에 Apple Events 자동화 엔타이틀먼트가 빠져 있어 macOS가 프롬프트 없이 막고 있었습니다. 1.2.0에서 한 번이라도 켜 봤다면 터미널에서 &lt;code&gt;tccutil reset AppleEvents com.changhyunyoo.cmarks&lt;/code&gt;를 실행해 남은 거부 기록을 지운 뒤 다시 켜세요.&lt;/li&gt;&lt;/ul&gt;
+</description>
+      <description>
+&lt;ul&gt;&lt;li&gt;&lt;strong&gt;Follow Finder Selection was denied without asking for permission.&lt;/strong&gt; The app lacked the Apple Events automation entitlement, so macOS blocked it silently. If you tried it in 1.2.0, run &lt;code&gt;tccutil reset AppleEvents com.changhyunyoo.cmarks&lt;/code&gt; once in Terminal to clear the stale denial, then turn it on again.&lt;/li&gt;&lt;/ul&gt;
+</description>
+      <enclosure url="https://github.com/yuchanghyun/cmarks/releases/download/v1.2.1/cmarks-1.2.1.zip" type="application/octet-stream" length="5389798" sparkle:edSignature="kzNLZAabhEx6se2irMbeS2ygEBRIg/BCKZrS1Lww9IZzR/xUclg3iWTTbe607ZlvNZfOF0++GomNpUVY2NpYDg==" />
+    </item>
+    <item>
       <title>cmarks 1.2.0</title>
       <pubDate>Mon, 14 Sep 2026 07:55:23 +0000</pubDate>
       <sparkle:version>5</sparkle:version>
