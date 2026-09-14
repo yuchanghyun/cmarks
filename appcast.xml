@@ -7,6 +7,24 @@
     <description>cmarks updates</description>
     <language>en</language>
     <item>
+      <title>cmarks 1.2.0</title>
+      <pubDate>Mon, 14 Sep 2026 07:55:23 +0000</pubDate>
+      <sparkle:version>5</sparkle:version>
+      <sparkle:shortVersionString>1.2.0</sparkle:shortVersionString>
+      <sparkle:minimumSystemVersion>15.0</sparkle:minimumSystemVersion>
+      <link>https://github.com/yuchanghyun/cmarks/releases/tag/v1.2.0</link>
+      <description xml:lang="en">
+&lt;ul&gt;&lt;li&gt;&lt;strong&gt;Quick Look preview in the Finder.&lt;/strong&gt; With cmarks installed, pressing Space on a Markdown file shows the same GitHub-style rendering as the app: syntax highlighting, math (KaTeX), alerts, task lists, emoji and images next to the document. Mermaid diagrams appear as code in Quick Look and render when you open the file in cmarks. If another Markdown Quick Look extension (such as QLMarkdown) is installed, keep only one enabled under System Settings ▸ General ▸ Login Items &amp;amp; Extensions ▸ Quick Look.&lt;/li&gt;&lt;li&gt;&lt;strong&gt;Find in Workspace (⌘⇧F).&lt;/strong&gt; Searches the text of every Markdown file in the workspace, lists file, line and context, and opens the match with the find bar positioned on it.&lt;/li&gt;&lt;li&gt;&lt;strong&gt;Follow Finder Selection (View menu).&lt;/strong&gt; While on, selecting a Markdown file in the Finder shows it in cmarks as a preview tab, like a Quick Look that never disappears. macOS asks for Automation (Finder) permission the first time.&lt;/li&gt;&lt;li&gt;&lt;strong&gt;Custom CSS (Settings ▸ Appearance).&lt;/strong&gt; Add your own font, size or color rules on top of the GitHub styles.&lt;/li&gt;&lt;li&gt;&lt;strong&gt;Remembers where you were.&lt;/strong&gt; The last scroll position of each file is restored when you reopen it, even after relaunching.&lt;/li&gt;&lt;li&gt;&lt;strong&gt;File ▸ Open Recent&lt;/strong&gt; menu.&lt;/li&gt;&lt;/ul&gt;
+</description>
+      <description xml:lang="ko">
+&lt;ul&gt;&lt;li&gt;&lt;strong&gt;Finder Quick Look 미리보기.&lt;/strong&gt; cmarks를 설치하면 Finder에서 마크다운 파일을 선택하고 스페이스바를 눌렀을 때 cmarks와 같은 GitHub 스타일로 보입니다. 코드 하이라이팅, 수식(KaTeX), 알림, 태스크 리스트, 이모지, 문서 옆 이미지까지 표시합니다. Mermaid 다이어그램은 Quick Look의 제약으로 코드로 보이며 앱에서 열면 그려집니다. QLMarkdown 같은 다른 마크다운 Quick Look 확장이 있으면 시스템 설정 ▸ 일반 ▸ 로그인 항목 및 확장 프로그램 ▸ Quick Look에서 하나만 켜 두세요.&lt;/li&gt;&lt;li&gt;&lt;strong&gt;워크스페이스에서 찾기(⌘⇧F).&lt;/strong&gt; 워크스페이스의 모든 마크다운 파일 내용을 찾아 파일·줄·문맥을 보여 주고, 고르면 그 파일을 열어 찾기 바를 그 위치로 맞춥니다.&lt;/li&gt;&lt;li&gt;&lt;strong&gt;Finder 선택 따라가기(보기 메뉴).&lt;/strong&gt; 켜 두면 Finder에서 마크다운 파일을 고를 때마다 cmarks가 미리보기 탭으로 보여 줍니다. 사라지지 않는 Quick Look처럼 씁니다. 처음 켤 때 자동화(Finder) 권한을 묻습니다.&lt;/li&gt;&lt;li&gt;&lt;strong&gt;사용자 CSS(설정 ▸ 외형).&lt;/strong&gt; 글꼴, 크기, 색 등 원하는 스타일을 모든 문서에 덧입힙니다.&lt;/li&gt;&lt;li&gt;&lt;strong&gt;읽던 자리 기억.&lt;/strong&gt; 파일별 마지막 스크롤 위치를 기억해 탭을 닫았다 열거나 앱을 다시 켜도 그 자리로 돌아갑니다.&lt;/li&gt;&lt;li&gt;&lt;strong&gt;파일 ▸ 최근 파일 열기&lt;/strong&gt; 메뉴.&lt;/li&gt;&lt;/ul&gt;
+</description>
+      <description>
+&lt;ul&gt;&lt;li&gt;&lt;strong&gt;Quick Look preview in the Finder.&lt;/strong&gt; With cmarks installed, pressing Space on a Markdown file shows the same GitHub-style rendering as the app: syntax highlighting, math (KaTeX), alerts, task lists, emoji and images next to the document. Mermaid diagrams appear as code in Quick Look and render when you open the file in cmarks. If another Markdown Quick Look extension (such as QLMarkdown) is installed, keep only one enabled under System Settings ▸ General ▸ Login Items &amp;amp; Extensions ▸ Quick Look.&lt;/li&gt;&lt;li&gt;&lt;strong&gt;Find in Workspace (⌘⇧F).&lt;/strong&gt; Searches the text of every Markdown file in the workspace, lists file, line and context, and opens the match with the find bar positioned on it.&lt;/li&gt;&lt;li&gt;&lt;strong&gt;Follow Finder Selection (View menu).&lt;/strong&gt; While on, selecting a Markdown file in the Finder shows it in cmarks as a preview tab, like a Quick Look that never disappears. macOS asks for Automation (Finder) permission the first time.&lt;/li&gt;&lt;li&gt;&lt;strong&gt;Custom CSS (Settings ▸ Appearance).&lt;/strong&gt; Add your own font, size or color rules on top of the GitHub styles.&lt;/li&gt;&lt;li&gt;&lt;strong&gt;Remembers where you were.&lt;/strong&gt; The last scroll position of each file is restored when you reopen it, even after relaunching.&lt;/li&gt;&lt;li&gt;&lt;strong&gt;File ▸ Open Recent&lt;/strong&gt; menu.&lt;/li&gt;&lt;/ul&gt;
+</description>
+      <enclosure url="https://github.com/yuchanghyun/cmarks/releases/download/v1.2.0/cmarks-1.2.0.zip" type="application/octet-stream" length="5389659" sparkle:edSignature="NEpoy6OhYQCBg+NHqQ+j5p9ECam4y7NATIgX7tBUyCBvJLbofgwB80922FGbpms5nkM7EYNlQSMMhLBPD6gIBA==" />
+    </item>
+    <item>
       <title>cmarks 1.1.1</title>
       <pubDate>Sun, 13 Sep 2026 11:29:15 +0000</pubDate>
       <sparkle:version>4</sparkle:version>
