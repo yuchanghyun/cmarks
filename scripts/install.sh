@@ -21,7 +21,8 @@ else
   IDENTITY=$(security find-identity -v -p codesigning 2>/dev/null | sed -n 's/.*"\(Developer ID Application: [^"]*\)".*/\1/p' | head -1 || true)
   if [ -n "$IDENTITY" ]; then
     echo "Developer ID로 재서명: $IDENTITY"
-    codesign --force --deep --options runtime --timestamp --sign "$IDENTITY" "$SRC"
+    # --preserve-metadata=entitlements: 재서명하면서 Xcode가 넣은 엔타이틀먼트(apple-events 등)를 잃지 않는다
+    codesign --force --deep --options runtime --timestamp --preserve-metadata=entitlements,requirements,flags --sign "$IDENTITY" "$SRC"
   else
     echo "Developer ID 인증서가 없어 ad-hoc으로 재서명한다(라이브러리 검증 해제)."
     ENT=$(mktemp /tmp/cmarks-entitlements.XXXXXX.plist)
@@ -31,6 +32,7 @@ else
 <plist version="1.0"><dict>
   <key>com.apple.security.app-sandbox</key><false/>
   <key>com.apple.security.cs.disable-library-validation</key><true/>
+  <key>com.apple.security.automation.apple-events</key><true/>
 </dict></plist>
 PLIST
     codesign --force --deep --options runtime --entitlements "$ENT" --sign - "$SRC"

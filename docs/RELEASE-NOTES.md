@@ -1,5 +1,13 @@
 # 릴리스 노트
 
+## 1.2.1
+
+- **Finder 선택 따라가기가 권한을 묻지 않고 바로 거부되던 문제**를 고쳤습니다. 앱에 Apple Events 자동화 엔타이틀먼트가 빠져 있어 macOS가 프롬프트 없이 막고 있었습니다. 1.2.0에서 한 번이라도 켜 봤다면 터미널에서 `tccutil reset AppleEvents com.changhyunyoo.cmarks`를 실행해 남은 거부 기록을 지운 뒤 다시 켜세요.
+
+### English
+
+- **Follow Finder Selection was denied without asking for permission.** The app lacked the Apple Events automation entitlement, so macOS blocked it silently. If you tried it in 1.2.0, run `tccutil reset AppleEvents com.changhyunyoo.cmarks` once in Terminal to clear the stale denial, then turn it on again.
+
 ## 1.2.0
 
 - **Finder Quick Look 미리보기.** cmarks를 설치하면 Finder에서 마크다운 파일을 선택하고 스페이스바를 눌렀을 때 cmarks와 같은 GitHub 스타일로 보입니다. 코드 하이라이팅, 수식(KaTeX), 알림, 태스크 리스트, 이모지, 문서 옆 이미지까지 표시합니다. Mermaid 다이어그램은 Quick Look의 제약으로 코드로 보이며 앱에서 열면 그려집니다. QLMarkdown 같은 다른 마크다운 Quick Look 확장이 있으면 시스템 설정 ▸ 일반 ▸ 로그인 항목 및 확장 프로그램 ▸ Quick Look에서 하나만 켜 두세요.
