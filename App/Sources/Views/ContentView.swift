@@ -59,7 +59,12 @@ struct ContentView: View {
         }
         .frame(minWidth: 760, minHeight: 440)
         .environment(\.cmarksWindowID, windowID)
-        .background(WindowAccessor { window in model.registerWindow(window, id: windowID) })
+        .background(WindowAccessor { window in
+            // viewDidMoveToWindow/updateNSView는 AppKit 레이아웃 도중 불린다. 그 안에서 관찰되는 모델 상태를 바꾸면
+            // SwiftUI가 레이아웃 중 재레이아웃을 요구해 AppKit 예외로 종료된다(1.3.0 크래시). 다음 런루프에서 등록한다.
+            guard let window else { return }
+            Task { @MainActor in model.registerWindow(window, id: windowID) }
+        })
         .sheet(isPresented: Binding(get: { isKey && model.isShortcutHelpPresented }, set: { model.isShortcutHelpPresented = $0 })) { ShortcutHelpView() }
         .onAppear {
             model.ensureWindowSlot(windowID)

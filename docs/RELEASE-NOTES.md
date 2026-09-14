@@ -1,5 +1,15 @@
 # 릴리스 노트
 
+## 1.3.1
+
+- **Finder에서 마크다운 파일을 더블클릭해 앱을 실행하면 바로 종료되던 문제**를 고쳤습니다. 창이 만들어지는 레이아웃 도중에 창 상태를 기록하다가 시스템 예외가 났습니다.
+- 새 창 단축키를 ⌘⇧N으로 바꿨습니다(설정 ▸ 단축키에서 변경 가능).
+
+### English
+
+- **Fixed a crash on launch when opening a Markdown file from the Finder.** Window state was recorded during the layout pass that creates the window, which raised a system exception.
+- New Window is now ⌘⇧N (changeable in Settings ▸ Shortcuts).
+
 ## 1.3.0
 
 - **여러 창.** 파일 ▸ 새 창(⌥⌘N)으로 창을 더 열고, 사이드바의 워크스페이스를 오른쪽 클릭해 "새 창에서 열기"를 고르면 그 워크스페이스가 새 창에 뜹니다. 워크스페이스 목록은 모든 창이 공유하고, 한 워크스페이스는 한 창에만 보입니다. 다른 창에 있는 워크스페이스를 고르면 그 창이 앞으로 옵니다. 열려 있던 창은 다음 실행 때 복원됩니다. 창 사이 탭 드래그는 아직 지원하지 않습니다.

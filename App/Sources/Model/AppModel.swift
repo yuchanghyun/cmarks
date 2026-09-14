@@ -262,8 +262,8 @@ final class AppModel {
         if keyWindowID != id {
             quickOpen.dismiss()
             search.dismiss()
+            keyWindowID = id   // 같은 값을 다시 쓰면 관찰자가 깨어나므로 바뀔 때만
         }
-        keyWindowID = id
         guard let target = workspaceID(inWindow: id), target != activeWorkspaceID else { return }
         captureViewerState()
         activeWorkspaceID = target

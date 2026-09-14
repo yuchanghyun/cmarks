@@ -80,7 +80,7 @@ enum ShortcutAction: String, CaseIterable, Identifiable {
     var defaultCombo: KeyCombo {
         switch self {
         case .newWorkspace: KeyCombo("n", command: true)
-        case .newWindow: KeyCombo("n", command: true, option: true)
+        case .newWindow: KeyCombo("n", command: true, shift: true)
         case .quickOpen: KeyCombo("p", command: true)
         case .openFile: KeyCombo("o", command: true)
         case .reopenClosedTab: KeyCombo("t", command: true, shift: true)

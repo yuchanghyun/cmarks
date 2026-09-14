@@ -76,7 +76,7 @@ make install   # copy to /Applications, install the cmarks CLI, offer to set cma
 
 | Action | Shortcut |
 |---|---|
-| New workspace · New window · Workspace 1–8 · Last | ⌘N · ⌥⌘N · ⌘1–8 · ⌘9 |
+| New workspace · New window · Workspace 1–8 · Last | ⌘N · ⌘⇧N · ⌘1–8 · ⌘9 |
 | Quick Open · Open · Close Tab · Reopen Closed Tab | ⌘P · ⌘O · ⌘W · ⌘⇧T |
 | Next · Previous tab | ⌘⇧] · ⌘⇧[ (⌃Tab · ⌃⇧Tab) |
 | Split right · Split down · Toggle pane zoom | ⌘D · ⌘⇧D · ⌘⇧↩ |
