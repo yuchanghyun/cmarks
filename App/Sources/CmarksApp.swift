@@ -6,13 +6,15 @@ struct CmarksApp: App {
     @NSApplicationDelegateAdaptor(AppDelegate.self) private var appDelegate
 
     var body: some Scene {
-        // 창 하나. 패인의 웹뷰는 한 곳에만 붙을 수 있으므로 WindowGroup 대신 단일 Window를 쓴다(다중 창은 백로그).
-        Window("cmarks", id: "main") {
-            ContentView()
+        // 창마다 다른 워크스페이스를 보여 준다(공유 모델). 값이 없는 첫 창이 기본 창이고, 새 창은 AppModel.openNewWindow가 만든 ID로 연다.
+        // 세션 복원은 AppModel이 맡으므로 SwiftUI의 창 복원은 끈다.
+        WindowGroup("cmarks", id: "document", for: UUID.self) { $windowID in
+            ContentView(windowID: windowID ?? AppModel.primaryWindowID)
                 .environment(OpenRequestQueue.shared)
                 .environment(AppModel.shared)
         }
         .defaultSize(width: 1100, height: 760)
+        .restorationBehavior(.disabled)
         .commands { AppCommands() }
 
         Settings {
@@ -39,6 +41,8 @@ struct AppCommands: Commands {
             CommandGroup(replacing: .newItem) {
                 Button("새 워크스페이스…") { model.presentNewWorkspacePanel() }
                     .keyboardShortcut(key(.newWorkspace))
+                Button("새 창") { model.openNewWindow() }
+                    .keyboardShortcut(key(.newWindow))
                 Button("새 탭…") { model.presentQuickOpen() }
                     .keyboardShortcut("t")
                 Button("빠른 열기…") { model.presentQuickOpen() }

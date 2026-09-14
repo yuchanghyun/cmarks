@@ -5,12 +5,14 @@ import SwiftUI
 struct PaneView: View {
     let paneID: PaneID
     @Environment(AppModel.self) private var model
+    @Environment(\.cmarksWindowID) private var windowID
 
     var body: some View {
-        let pane = model.workspace.pane(paneID)
+        let workspace = model.workspace(inWindow: windowID)
+        let pane = workspace?.pane(paneID)
         let viewer = model.viewer(for: paneID)
-        let isFocused = model.workspace.focusedPaneID == paneID
-        let showsFocusRing = isFocused && model.workspace.panes.count > 1
+        let isFocused = workspace?.focusedPaneID == paneID
+        let showsFocusRing = isFocused && (workspace?.panes.count ?? 0) > 1
 
         VStack(spacing: 0) {
             if let pane {

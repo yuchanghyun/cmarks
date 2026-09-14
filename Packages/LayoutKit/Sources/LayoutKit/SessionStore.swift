@@ -1,18 +1,27 @@
 import Foundation
 
 /// 워크스페이스·탭·스크롤을 JSON 하나로 저장한다(설계 문서 §4.8). 원자적으로 쓰고, 스키마 버전으로 이전 형식을 거른다.
+/// 열려 있던 창 하나. 첫 항목이 기본 창이며 activeWorkspaceID와 같다.
+public struct SessionWindow: Codable, Equatable, Sendable {
+    public var workspaceID: UUID
+    public init(workspaceID: UUID) { self.workspaceID = workspaceID }
+}
+
 public struct Session: Codable, Equatable, Sendable {
     public static let currentSchemaVersion = 1
 
     public var schemaVersion: Int
     public var workspaces: [Workspace]
     public var activeWorkspaceID: UUID?
+    /// 열려 있던 창들(1.3.0+). 없으면 창 하나.
+    public var windows: [SessionWindow]?
     public var savedAt: Date
 
-    public init(workspaces: [Workspace], activeWorkspaceID: UUID?, savedAt: Date = .now) {
+    public init(workspaces: [Workspace], activeWorkspaceID: UUID?, windows: [SessionWindow]? = nil, savedAt: Date = .now) {
         self.schemaVersion = Self.currentSchemaVersion
         self.workspaces = workspaces
         self.activeWorkspaceID = activeWorkspaceID
+        self.windows = windows
         self.savedAt = savedAt
     }
 }

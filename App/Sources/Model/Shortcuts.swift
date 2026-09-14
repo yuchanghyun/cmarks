@@ -4,7 +4,7 @@ import SwiftUI
 /// 사용자가 바꿀 수 있는 단축키 동작. 메뉴는 `AppSettings.keyboardShortcut(for:)`를 읽는다.
 /// 탭 1–8(⌃n), 워크스페이스 1–8(⌘n), 창 닫기(⌥⌘W), 설정(⌘,)은 고정이다.
 enum ShortcutAction: String, CaseIterable, Identifiable {
-    case newWorkspace, quickOpen, openFile, reopenClosedTab, closeTab
+    case newWorkspace, newWindow, quickOpen, openFile, reopenClosedTab, closeTab
     case nextTab, previousTab
     case splitRight, splitDown, toggleZoomPane
     case focusLeft, focusRight, focusUp, focusDown
@@ -19,7 +19,7 @@ enum ShortcutAction: String, CaseIterable, Identifiable {
 
     var group: String {
         switch self {
-        case .newWorkspace, .quickOpen, .openFile, .reopenClosedTab, .closeTab: String(localized: "파일·탭")
+        case .newWorkspace, .newWindow, .quickOpen, .openFile, .reopenClosedTab, .closeTab: String(localized: "파일·탭")
         case .nextTab, .previousTab: String(localized: "파일·탭")
         case .splitRight, .splitDown, .toggleZoomPane, .focusLeft, .focusRight, .focusUp, .focusDown,
              .resizeLeft, .resizeRight, .resizeUp, .resizeDown: String(localized: "패인")
@@ -32,6 +32,7 @@ enum ShortcutAction: String, CaseIterable, Identifiable {
     var title: String {
         switch self {
         case .newWorkspace: String(localized: "새 워크스페이스")
+        case .newWindow: String(localized: "새 창")
         case .quickOpen: String(localized: "빠른 열기 / 새 탭")
         case .openFile: String(localized: "파일 열기")
         case .reopenClosedTab: String(localized: "닫은 탭 다시 열기")
@@ -79,6 +80,7 @@ enum ShortcutAction: String, CaseIterable, Identifiable {
     var defaultCombo: KeyCombo {
         switch self {
         case .newWorkspace: KeyCombo("n", command: true)
+        case .newWindow: KeyCombo("n", command: true, option: true)
         case .quickOpen: KeyCombo("p", command: true)
         case .openFile: KeyCombo("o", command: true)
         case .reopenClosedTab: KeyCombo("t", command: true, shift: true)

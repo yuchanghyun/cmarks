@@ -4,9 +4,10 @@ import SwiftUI
 /// 포커스 패인 문서의 헤딩 목록. 클릭하면 그 헤딩으로 스크롤하고, 스크롤 위치의 헤딩이 강조된다.
 struct OutlineView: View {
     @Environment(AppModel.self) private var model
+    @Environment(\.cmarksWindowID) private var windowID
 
     var body: some View {
-        let viewer = model.focusedViewer
+        let viewer = model.focusedViewer(inWindow: windowID)
         let items = viewer?.outline ?? []
         VStack(spacing: 0) {
             HStack {

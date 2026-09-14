@@ -5,18 +5,22 @@ import SwiftUI
 /// 사이드바: 워크스페이스 목록 + 활성 워크스페이스의 파일 트리, 아래에 아웃라인.
 struct SidebarView: View {
     @Environment(AppModel.self) private var model
+    @Environment(\.cmarksWindowID) private var windowID
 
     var body: some View {
+        let shownWorkspaceID = model.workspaceID(inWindow: windowID)
+        let rootURL = model.workspace(inWindow: windowID)?.rootURL
         VSplitView {
             List {
                 Section("워크스페이스") {
                     ForEach(model.workspaces) { workspace in
-                        WorkspaceRow(workspace: workspace, isActive: workspace.id == model.activeWorkspaceID)
+                        WorkspaceRow(workspace: workspace, isActive: workspace.id == shownWorkspaceID,
+                                     isInOtherWindow: workspace.id != shownWorkspaceID && model.windowID(showing: workspace.id) != nil)
                     }
                     .onMove { source, destination in model.moveWorkspaces(from: source, to: destination) }
                 }
                 Section {
-                    if let tree = model.fileTree {
+                    if let tree = model.fileTree(inWindow: windowID) {
                         FileTreeRows(tree: tree, relative: "", depth: 0)
                     } else {
                         Text("⌘N으로 폴더를 열어 워크스페이스를 만드세요.")
@@ -25,13 +29,13 @@ struct SidebarView: View {
                     }
                 } header: {
                     HStack {
-                        if let root = model.workspace.rootURL {
+                        if let root = rootURL {
                             Text(root.lastPathComponent)
                         } else {
                             Text("파일")
                         }
                         Spacer()
-                        if let root = model.workspace.rootURL {
+                        if let root = rootURL {
                             Button {
                                 NSWorkspace.shared.activateFileViewerSelecting([root])
                             } label: {
@@ -73,6 +77,8 @@ struct SidebarView: View {
 private struct WorkspaceRow: View {
     let workspace: Workspace
     let isActive: Bool
+    /// 다른 창에 떠 있는 워크스페이스. 클릭하면 그 창이 앞으로 온다.
+    var isInOtherWindow = false
     @Environment(AppModel.self) private var model
     @State private var draft = ""
     @FocusState private var editing: Bool
@@ -98,6 +104,12 @@ private struct WorkspaceRow: View {
                     .italic(workspace.isEphemeral)
                     .lineLimit(1)
                 Spacer(minLength: 0)
+                if isInOtherWindow {
+                    Image(systemName: "macwindow")
+                        .font(.caption2)
+                        .foregroundStyle(.tertiary)
+                        .help("다른 창에 열려 있습니다.")
+                }
                 if workspace.isEphemeral {
                     Image(systemName: "clock")
                         .font(.caption2)
@@ -114,6 +126,8 @@ private struct WorkspaceRow: View {
         .onTapGesture { let id = workspace.id; Task { @MainActor in model.activateWorkspace(id) } }
         .help(workspace.rootURL?.path(percentEncoded: false).abbreviatingWithTilde ?? String(localized: "루트 폴더 없음"))
         .contextMenu {
+            Button("새 창에서 열기") { model.openInNewWindow(workspace.id) }
+                .disabled(isActive)
             Button("이름 변경") { model.renamingWorkspaceID = workspace.id }
             if workspace.isEphemeral {
                 Button("고정") { model.togglePinWorkspace(workspace.id) }

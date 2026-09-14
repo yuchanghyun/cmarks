@@ -387,6 +387,16 @@
         }
       }
     },
+    "다른 창에 열려 있습니다.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Open in another window."
+          }
+        }
+      }
+    },
     "다른 탭 모두 닫기": {
       "localizations": {
         "en": {
@@ -913,6 +923,26 @@
           "stringUnit": {
             "state": "translated",
             "value": "New Workspace…"
+          }
+        }
+      }
+    },
+    "새 창": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "New Window"
+          }
+        }
+      }
+    },
+    "새 창에서 열기": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Open in New Window"
           }
         }
       }

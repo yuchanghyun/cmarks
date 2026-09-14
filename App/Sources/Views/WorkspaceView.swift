@@ -4,11 +4,13 @@ import SwiftUI
 /// 패인 트리를 평면으로 배치한다. 각 패인은 트리 구조와 무관하게 같은 뷰 정체성을 유지하므로 분할·닫기 때 웹뷰가 재생성되지 않는다.
 struct WorkspaceView: View {
     @Environment(AppModel.self) private var model
+    @Environment(\.cmarksWindowID) private var windowID
 
     var body: some View {
+        let workspaceID = model.workspaceID(inWindow: windowID)
         GeometryReader { geometry in
             let size = geometry.size
-            let frames = model.layoutFrames(in: CGRect(origin: .zero, size: size))
+            let frames = workspaceID.map { model.layoutFrames(in: CGRect(origin: .zero, size: size), workspaceID: $0) } ?? LayoutFrames(panes: [], dividers: [])
             ZStack(alignment: .topLeading) {
                 ForEach(frames.panes, id: \.paneID) { frame in
                     PaneView(paneID: frame.paneID)
@@ -21,7 +23,7 @@ struct WorkspaceView: View {
             }
             .frame(width: size.width, height: size.height, alignment: .topLeading)
             .onChange(of: size, initial: true) { _, newSize in
-                model.viewportSize = newSize
+                if let workspaceID { model.setViewportSize(newSize, workspaceID: workspaceID) }
             }
         }
     }
