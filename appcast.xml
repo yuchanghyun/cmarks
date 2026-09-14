@@ -7,6 +7,24 @@
     <description>cmarks updates</description>
     <language>en</language>
     <item>
+      <title>cmarks 1.3.1</title>
+      <pubDate>Mon, 14 Sep 2026 14:26:05 +0000</pubDate>
+      <sparkle:version>8</sparkle:version>
+      <sparkle:shortVersionString>1.3.1</sparkle:shortVersionString>
+      <sparkle:minimumSystemVersion>15.0</sparkle:minimumSystemVersion>
+      <link>https://github.com/yuchanghyun/cmarks/releases/tag/v1.3.1</link>
+      <description xml:lang="en">
+&lt;ul&gt;&lt;li&gt;&lt;strong&gt;Fixed a crash on launch when opening a Markdown file from the Finder.&lt;/strong&gt; Window state was recorded during the layout pass that creates the window, which raised a system exception.&lt;/li&gt;&lt;li&gt;New Window is now ⌘⇧N (changeable in Settings ▸ Shortcuts).&lt;/li&gt;&lt;/ul&gt;
+</description>
+      <description xml:lang="ko">
+&lt;ul&gt;&lt;li&gt;&lt;strong&gt;Finder에서 마크다운 파일을 더블클릭해 앱을 실행하면 바로 종료되던 문제&lt;/strong&gt;를 고쳤습니다. 창이 만들어지는 레이아웃 도중에 창 상태를 기록하다가 시스템 예외가 났습니다.&lt;/li&gt;&lt;li&gt;새 창 단축키를 ⌘⇧N으로 바꿨습니다(설정 ▸ 단축키에서 변경 가능).&lt;/li&gt;&lt;/ul&gt;
+</description>
+      <description>
+&lt;ul&gt;&lt;li&gt;&lt;strong&gt;Fixed a crash on launch when opening a Markdown file from the Finder.&lt;/strong&gt; Window state was recorded during the layout pass that creates the window, which raised a system exception.&lt;/li&gt;&lt;li&gt;New Window is now ⌘⇧N (changeable in Settings ▸ Shortcuts).&lt;/li&gt;&lt;/ul&gt;
+</description>
+      <enclosure url="https://github.com/yuchanghyun/cmarks/releases/download/v1.3.1/cmarks-1.3.1.zip" type="application/octet-stream" length="5516393" sparkle:edSignature="IOHez+NcOo5ztOMd7RGYjIr1o2kFDXkvLTjxw6sMeTbejfitOfiWLK61x8tPS5Sq/robLjfqswZiBrr0C6yBCg==" />
+    </item>
+    <item>
       <title>cmarks 1.3.0</title>
       <pubDate>Mon, 14 Sep 2026 14:07:58 +0000</pubDate>
       <sparkle:version>7</sparkle:version>
