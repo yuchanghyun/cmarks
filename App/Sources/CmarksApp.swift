@@ -16,6 +16,9 @@ struct CmarksApp: App {
         .defaultSize(width: 1100, height: 760)
         .restorationBehavior(.disabled)
         .defaultLaunchBehavior(.presented)   // 값이 있는 WindowGroup은 이 지정이 없으면 실행 시 창을 열지 않는다
+        // 파일 열기·딥링크는 AppDelegate가 받는다. 비워 두지 않으면 SwiftUI가 그 이벤트마다 기본 창(값 nil)을 하나 더 만들어
+        // 두 창이 같은 슬롯을 그리게 된다(1.3.0의 "모든 창에 같은 탭" 문제).
+        .handlesExternalEvents(matching: [])
         .commands { AppCommands() }
 
         Settings {

@@ -4,7 +4,12 @@ import Foundation
 /// 열려 있던 창 하나. 첫 항목이 기본 창이며 activeWorkspaceID와 같다.
 public struct SessionWindow: Codable, Equatable, Sendable {
     public var workspaceID: UUID
-    public init(workspaceID: UUID) { self.workspaceID = workspaceID }
+    /// NSWindow.frameDescriptor. 창 복원은 앱이 직접 한다(AppKit 창 복원은 끈다).
+    public var frame: String?
+    public init(workspaceID: UUID, frame: String? = nil) {
+        self.workspaceID = workspaceID
+        self.frame = frame
+    }
 }
 
 public struct Session: Codable, Equatable, Sendable {

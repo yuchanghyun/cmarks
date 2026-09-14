@@ -21,6 +21,9 @@ run: build          ## 빌드 후 실행
 
 test: test-packages test-web test-app
 
+e2e: build          ## 다중 창 E2E(실제 창을 띄움, 약 10분)
+	bash scripts/e2e-multiwindow.sh
+
 test-packages:      ## SwiftPM 패키지 테스트 (Xcode 프로젝트 불필요)
 	@for p in $(PACKAGES); do echo "== $$p"; (cd $$p && swift test) || exit 1; done
 

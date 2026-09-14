@@ -15,7 +15,8 @@ struct SidebarView: View {
                 Section("워크스페이스") {
                     ForEach(model.workspaces) { workspace in
                         WorkspaceRow(workspace: workspace, isActive: workspace.id == shownWorkspaceID,
-                                     isInOtherWindow: workspace.id != shownWorkspaceID && model.windowID(showing: workspace.id) != nil)
+                                     isInOtherWindow: workspace.id != shownWorkspaceID && model.windowID(showing: workspace.id) != nil,
+                                     windowID: windowID)
                     }
                     .onMove { source, destination in model.moveWorkspaces(from: source, to: destination) }
                 }
@@ -62,10 +63,10 @@ struct SidebarView: View {
                 var isDirectory: ObjCBool = false
                 guard FileManager.default.fileExists(atPath: url.path(percentEncoded: false), isDirectory: &isDirectory) else { continue }
                 if isDirectory.boolValue {
-                    model.addWorkspace(root: url, ephemeral: false)
+                    model.addWorkspace(root: url, ephemeral: false, inWindow: windowID)
                     handled = true
                 } else if !DocumentWebView.accepted([url]).isEmpty {
-                    model.open(url)
+                    model.open(url, window: windowID)
                     handled = true
                 }
             }
@@ -79,6 +80,8 @@ private struct WorkspaceRow: View {
     let isActive: Bool
     /// 다른 창에 떠 있는 워크스페이스. 클릭하면 그 창이 앞으로 온다.
     var isInOtherWindow = false
+    /// 이 행이 속한 창. 클릭하면 이 창에 표시한다.
+    var windowID = AppModel.primaryWindowID
     @Environment(AppModel.self) private var model
     @State private var draft = ""
     @FocusState private var editing: Bool
@@ -123,7 +126,7 @@ private struct WorkspaceRow: View {
         .contentShape(Rectangle())
         .listRowInsets(EdgeInsets())
         .listRowBackground(isActive ? Color.accentColor.opacity(0.12) : nil)
-        .onTapGesture { let id = workspace.id; Task { @MainActor in model.activateWorkspace(id) } }
+        .onTapGesture { let id = workspace.id; let window = windowID; Task { @MainActor in model.activateWorkspace(id, fromWindow: window) } }
         .help(workspace.rootURL?.path(percentEncoded: false).abbreviatingWithTilde ?? String(localized: "루트 폴더 없음"))
         .contextMenu {
             Button("새 창에서 열기") { model.openInNewWindow(workspace.id) }
@@ -155,6 +158,7 @@ struct FileTreeRows: View {
     let relative: String
     let depth: Int
     @Environment(AppModel.self) private var model
+    @Environment(\.cmarksWindowID) private var windowID
 
     var body: some View {
         if let nodes = tree.nodes(in: relative) {
@@ -189,7 +193,7 @@ struct FileTreeRows: View {
                         }
                         .contextMenu {
                             Button("Finder에서 보기") { NSWorkspace.shared.activateFileViewerSelecting([node.url]) }
-                            Button("이 폴더를 워크스페이스로") { model.addWorkspace(root: node.url, ephemeral: false) }
+                            Button("이 폴더를 워크스페이스로") { model.addWorkspace(root: node.url, ephemeral: false, inWindow: windowID) }
                         }
                     }
                     .listRowInsets(EdgeInsets(top: 0, leading: 6, bottom: 0, trailing: 0))
@@ -212,6 +216,10 @@ private struct FileRow: View {
     let isSelected: Bool
     let select: () -> Void
     @Environment(AppModel.self) private var model
+    @Environment(\.cmarksWindowID) private var windowID
+
+    /// 이 사이드바가 속한 창의 포커스 패인(컨텍스트 메뉴의 새 탭·분할 대상).
+    private var pane: PaneID { model.workspace(inWindow: windowID)?.focusedPaneID ?? model.focusedPaneID }
 
     var body: some View {
         Label {
@@ -227,19 +235,20 @@ private struct FileRow: View {
         .contentShape(Rectangle())
         .listRowInsets(EdgeInsets())
         .listRowBackground(isActive || isSelected ? Color.accentColor.opacity(isActive ? 0.16 : 0.10) : nil)
-        .onTapGesture(count: 2) { let url = node.url; Task { @MainActor in model.open(url, preview: false) } }
+        .onTapGesture(count: 2) { let url = node.url; let window = windowID; Task { @MainActor in model.open(url, preview: false, window: window) } }
         .onTapGesture {
             let url = node.url
+            let window = windowID
             Task { @MainActor in
                 select()
-                model.open(url, preview: model.settings.singleClickPreview)
+                model.open(url, preview: model.settings.singleClickPreview, window: window)
             }
         }
         .help(node.url.path(percentEncoded: false).abbreviatingWithTilde)
         .contextMenu {
-            Button("새 탭으로 열기") { model.navigate(DocumentRef(url: node.url), intent: .newTab, from: model.focusedPaneID) }
-            Button("오른쪽 분할로 열기") { model.navigate(DocumentRef(url: node.url), intent: .newSplit(.right), from: model.focusedPaneID) }
-            Button("아래 분할로 열기") { model.navigate(DocumentRef(url: node.url), intent: .newSplit(.down), from: model.focusedPaneID) }
+            Button("새 탭으로 열기") { model.navigate(DocumentRef(url: node.url), intent: .newTab, from: pane) }
+            Button("오른쪽 분할로 열기") { model.navigate(DocumentRef(url: node.url), intent: .newSplit(.right), from: pane) }
+            Button("아래 분할로 열기") { model.navigate(DocumentRef(url: node.url), intent: .newSplit(.down), from: pane) }
             Divider()
             Button("Finder에서 보기") { NSWorkspace.shared.activateFileViewerSelecting([node.url]) }
             Button("경로 복사") {

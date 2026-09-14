@@ -3,15 +3,23 @@ import SwiftUI
 
 /// 창 내용: 사이드바 + 패인 트리. 빠른 열기 팔레트는 문서 영역 위에 뜬다.
 struct ContentView: View {
-    /// 이 창의 ID. 기본 창은 AppModel.primaryWindowID.
-    let windowID: UUID
+    /// 장면(scene)이 준 창 ID. 기본 창은 nil → AppModel.primaryWindowID.
+    let sceneWindowID: UUID
+    /// SwiftUI가 같은 값으로 창을 하나 더 만들었을 때 모델이 새로 준 ID.
+    @State private var resolvedWindowID: UUID?
     @Environment(OpenRequestQueue.self) private var openRequests
     @Environment(AppModel.self) private var model
     @Environment(\.openWindow) private var openWindow
 
+    init(windowID: UUID) {
+        sceneWindowID = windowID
+    }
+
+    private var windowID: UUID { resolvedWindowID ?? sceneWindowID }
+
     var body: some View {
         @Bindable var model = model
-        let isKey = model.keyWindowID == windowID
+        let isKey = model.paletteWindowID == windowID
         NavigationSplitView(columnVisibility: $model.columnVisibility) {
             SidebarView()
                 .navigationSplitViewColumnWidth(min: 200, ideal: 260, max: 480)
@@ -63,9 +71,13 @@ struct ContentView: View {
             // viewDidMoveToWindow/updateNSView는 AppKit 레이아웃 도중 불린다. 그 안에서 관찰되는 모델 상태를 바꾸면
             // SwiftUI가 레이아웃 중 재레이아웃을 요구해 AppKit 예외로 종료된다(1.3.0 크래시). 다음 런루프에서 등록한다.
             guard let window else { return }
-            Task { @MainActor in model.registerWindow(window, id: windowID) }
+            Task { @MainActor in
+                let id = model.resolveWindowID(preferred: windowID, window: window)
+                if id != windowID { resolvedWindowID = id }
+                model.registerWindow(window, id: id)
+            }
         })
-        .sheet(isPresented: Binding(get: { isKey && model.isShortcutHelpPresented }, set: { model.isShortcutHelpPresented = $0 })) { ShortcutHelpView() }
+        .sheet(isPresented: Binding(get: { model.keyWindowID == windowID && model.isShortcutHelpPresented }, set: { model.isShortcutHelpPresented = $0 })) { ShortcutHelpView() }
         .onAppear {
             model.ensureWindowSlot(windowID)
             model.consume(openRequests)

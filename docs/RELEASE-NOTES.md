@@ -1,5 +1,27 @@
 # 릴리스 노트
 
+## 1.3.2
+
+- **여러 창 관련 버그를 고쳤습니다.**
+  - Finder에서 현재 창에 없는 워크스페이스의 파일을 열면 창이 하나 더 생기고, 그 뒤로 내용이 두 창에 뒤섞이거나 아무 창에도 뜨지 않던 문제. 파일 열기 이벤트마다 시스템이 기본 창을 추가로 만들던 것을 막았습니다.
+  - 사이드바에서 파일이나 워크스페이스를 고르면 다른 창에 열리거나 모든 창이 바뀌던 문제. 사이드바·탭 바·빠른 열기·검색은 이제 그 동작을 한 창, 즉 그 조작을 한 창에만 적용합니다.
+  - 창을 닫은 뒤 그 창에 있던 워크스페이스를 고르면 닫힌 창이 다시 나타나던 문제. 닫힌 창은 완전히 정리됩니다.
+  - 마지막 창을 닫은 뒤 Finder에서 파일을 열면 아무 창도 뜨지 않던 문제.
+  - 강제 종료나 크래시 뒤에 다시 실행하면 창이 하나도 나타나지 않을 수 있던 문제.
+  - Finder에서 연 파일(임시 워크스페이스)만 앞 창에 둔 채 종료하면 다음 실행 때 창이 하나 더 생기던 문제.
+- 창의 위치와 크기를 세션에 함께 저장해 다음 실행 때 그대로 복원합니다.
+
+### English
+
+- **Fixed several multi-window bugs.**
+  - Opening a file from the Finder that belonged to a workspace not shown in the current window created an extra window, after which content could end up in the wrong window or in no window at all. The system was creating an additional default window for every open-file event; that no longer happens.
+  - Choosing a file or workspace in the sidebar could open it in another window, or change every window. The sidebar, tab bar, Quick Open and Search now act only on the window they were used in.
+  - After closing a window, choosing the workspace it had shown could bring the closed window back. Closed windows are now fully cleaned up.
+  - Opening a file from the Finder after closing the last window showed no window at all.
+  - After a force quit or a crash, the next launch could come up without any window.
+  - Quitting while the front window showed only a temporary workspace (a file opened from the Finder) opened an extra window on the next launch.
+- Window position and size are saved with the session and restored on the next launch.
+
 ## 1.3.1
 
 - **Finder에서 마크다운 파일을 더블클릭해 앱을 실행하면 바로 종료되던 문제**를 고쳤습니다. 창이 만들어지는 레이아웃 도중에 창 상태를 기록하다가 시스템 예외가 났습니다.

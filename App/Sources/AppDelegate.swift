@@ -24,9 +24,16 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         }
         // Sparkle 업데이터 기동(하루 한 번 검사 예약).
         _ = UpdaterModel.shared
+        // 강제 종료·크래시 뒤에는 AppKit이 "복원할 상태가 있다"고 보고 SwiftUI가 기본 창을 만들지 않는 경우가 있다
+        // (로그: hasPersistentStateToRestore=1). 잠시 뒤에도 창이 없으면 재열기 이벤트로 기본 창을 띄운다.
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { AppModel.shared.ensureVisibleWindow() }
         // 개발용: `-CmarksDumpWindows YES`로 실행하면 5초 뒤 창·웹뷰 계층을 로그로 남긴다(다중 창 진단).
         if CommandLine.arguments.contains("-CmarksDumpWindows") {
             DispatchQueue.main.asyncAfter(deadline: .now() + 5) { Self.dumpWindows() }
+        }
+        // 개발·검증용: `-CmarksScript <파일>`로 시나리오를 실행한다(ScriptRunner).
+        if let index = CommandLine.arguments.firstIndex(of: "-CmarksScript"), CommandLine.arguments.indices.contains(index + 1) {
+            ScriptRunner.start(path: CommandLine.arguments[index + 1])
         }
     }
 

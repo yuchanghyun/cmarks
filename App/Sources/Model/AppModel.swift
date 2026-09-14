@@ -49,6 +49,8 @@ final class AppModel {
     struct WindowSlot: Identifiable, Equatable {
         let id: UUID
         var workspaceID: UUID
+        /// 세션에서 복원한 창 프레임. 창이 등록될 때 한 번 적용하고 지운다.
+        var frame: String?
     }
     nonisolated static let primaryWindowID = UUID(uuidString: "C0DE0000-0000-4000-8000-000000000001")!
     private(set) var windowSlots: [WindowSlot] = []
@@ -57,9 +59,17 @@ final class AppModel {
     /// ContentView가 SwiftUI openWindow로 열어야 할 창 ID.
     private(set) var windowOpenRequests: [UUID] = []
     private var pendingWindowWorkspaces: [UUID: UUID] = [:]
-    private var restoredExtraWindows: [UUID] = []
+    private var pendingWindowFrames: [UUID: String] = [:]
+    private var restoredExtraWindows: [(workspaceID: UUID, frame: String?)] = []
+    private var restoredPrimaryFrame: String?
+    /// 빠른 열기·찾기 팔레트가 떠 있는(또는 마지막으로 뜬) 창. 선택 결과는 이 창의 워크스페이스에 열린다.
+    private(set) var paletteWindowID: UUID = AppModel.primaryWindowID
     private var windowRefs: [UUID: WeakWindow] = [:]
     private var windowObservers: [UUID: [NSObjectProtocol]] = [:]
+    /// 닫힌 창. SwiftUI는 닫힌 창의 뷰를 한동안 살려 두고 다시 그리므로, 그 창이 WindowAccessor로 재등록되는 것을 막아야 한다.
+    /// (재등록되면 숨은 창이 슬롯을 되살려 숨은 워크스페이스를 가로채고, 사이드바 클릭이 그 숨은 창을 다시 띄운다.)
+    private let closedWindows = NSHashTable<NSWindow>.weakObjects()
+    private let windowLogger = Logger(subsystem: "com.changhyunyoo.cmarks", category: "window")
     /// 키 윈도우의 NSWindow. 설정 창 등 등록되지 않은 창이 키 윈도우일 때 ⌘W가 탭을 닫지 않게 구분한다.
     var documentWindow: NSWindow? {
         get { windowRefs[keyWindowID]?.window }
@@ -123,9 +133,9 @@ final class AppModel {
         quickOpen.filter = fileFilter
         search.filter = fileFilter
         quickOpen.recents = recentFiles
-        windowSlots = [WindowSlot(id: Self.primaryWindowID, workspaceID: activeWorkspaceID)]
+        windowSlots = [WindowSlot(id: Self.primaryWindowID, workspaceID: activeWorkspaceID, frame: restoredPrimaryFrame)]
         syncDisplayed()
-        for workspaceID in restoredExtraWindows { openNewWindow(showing: workspaceID) }
+        for extra in restoredExtraWindows { openNewWindow(showing: extra.workspaceID, frame: extra.frame) }
         settings.onChange = { [weak self] in self?.applySettings() }
         finderFollower.isMarkdown = { DocumentService.isMarkdown($0) }
         finderFollower.onSelect = { [weak self] url in self?.open(url, preview: true) }
@@ -224,7 +234,8 @@ final class AppModel {
         if let candidate = target, displayedWorkspaceIDs.contains(candidate) || workspace(id: candidate) == nil { target = nil }
         if target == nil { target = workspaces.first { !displayedWorkspaceIDs.contains($0.id) }?.id }
         let workspaceID = target ?? makeFreshWorkspace()
-        windowSlots.append(WindowSlot(id: windowID, workspaceID: workspaceID))
+        windowLogger.notice("slot \(windowID.uuidString.prefix(8), privacy: .public) → \(self.workspace(id: workspaceID)?.name ?? "?", privacy: .public)")
+        windowSlots.append(WindowSlot(id: windowID, workspaceID: workspaceID, frame: pendingWindowFrames.removeValue(forKey: windowID)))
         if windowSlots.count == 1 || keyWindowID == windowID {
             keyWindowID = windowID
             activeWorkspaceID = workspaceID
@@ -234,11 +245,34 @@ final class AppModel {
     }
 
     /// WindowAccessor가 NSWindow를 알려 줄 때. 키 윈도우 전환과 닫힘을 관찰한다.
+    /// ContentView가 자기 창 ID를 확정한다. 같은 ID가 이미 살아 있는 다른 창에 등록되어 있으면(SwiftUI가 같은 값으로
+    /// 창을 하나 더 만든 경우) 새 ID를 준다. 두 창이 한 슬롯을 그리는 일을 막는다.
+    func resolveWindowID(preferred: UUID, window: NSWindow) -> UUID {
+        if closedWindows.contains(window) { return preferred }
+        if let existing = windowRefs[preferred]?.window, existing !== window, existing.isVisible { return UUID() }
+        return preferred
+    }
+
+    func window(forSlot id: UUID) -> NSWindow? { windowRefs[id]?.window }
+    func slotID(of window: NSWindow) -> UUID? { windowRefs.first { $0.value.window === window }?.key }
+
     func registerWindow(_ window: NSWindow?, id: UUID) {
         guard let window else { return }
         if windowRefs[id]?.window === window { return }
+        if closedWindows.contains(window) {
+            windowLogger.debug("ignore closed window re-registration for \(id.uuidString.prefix(8), privacy: .public)")
+            return
+        }
         unregisterWindow(id)
+        windowLogger.notice("register window \(id.uuidString.prefix(8), privacy: .public) visible=\(window.isVisible)")
         windowRefs[id] = WeakWindow(window)
+        // 창 복원은 세션(windows)으로 직접 한다. AppKit 복원이 겹치면 창이 중복된다.
+        window.isRestorable = false
+        ensureWindowSlot(id)
+        if let index = windowSlots.firstIndex(where: { $0.id == id }), let frame = windowSlots[index].frame {
+            window.setFrame(from: frame)
+            windowSlots[index].frame = nil
+        }
         let center = NotificationCenter.default
         let key = center.addObserver(forName: NSWindow.didBecomeKeyNotification, object: window, queue: .main) { [weak self] _ in
             MainActor.assumeIsolated { self?.windowDidBecomeKey(id) }
@@ -247,7 +281,6 @@ final class AppModel {
             MainActor.assumeIsolated { self?.windowWillClose(id) }
         }
         windowObservers[id] = [key, close]
-        ensureWindowSlot(id)
         if window.isKeyWindow { windowDidBecomeKey(id) }
     }
 
@@ -273,6 +306,8 @@ final class AppModel {
     }
 
     func windowWillClose(_ id: UUID) {
+        windowLogger.notice("window will close \(id.uuidString.prefix(8), privacy: .public)")
+        if let window = windowRefs[id]?.window { closedWindows.add(window) }
         unregisterWindow(id)
         guard let index = windowSlots.firstIndex(where: { $0.id == id }) else { return }
         let closed = windowSlots.remove(at: index)
@@ -291,10 +326,11 @@ final class AppModel {
 
     /// 새 창. 워크스페이스를 주면 그것을(다른 창에 없을 때), 없으면 새 임시 워크스페이스를 보여 준다.
     @discardableResult
-    func openNewWindow(showing workspaceID: UUID? = nil) -> UUID {
+    func openNewWindow(showing workspaceID: UUID? = nil, frame: String? = nil) -> UUID {
         let windowID = UUID()
         let target = workspaceID.flatMap { workspace(id: $0) != nil && !displayedWorkspaceIDs.contains($0) ? $0 : nil } ?? makeFreshWorkspace()
         pendingWindowWorkspaces[windowID] = target
+        if let frame { pendingWindowFrames[windowID] = frame }
         windowOpenRequests.append(windowID)
         return windowID
     }
@@ -315,8 +351,33 @@ final class AppModel {
         openNewWindow(showing: workspaceID)
     }
 
-    private func focusWindow(_ id: UUID) {
+    /// 보이는 창이 있는가(닫힌 창의 숨은 NSWindow는 세지 않는다).
+    var hasVisibleWindow: Bool {
+        windowSlots.contains { windowRefs[$0.id]?.window?.isVisible == true }
+    }
+
+    /// 보이는 창이 하나도 없으면(마지막 창을 닫은 뒤 Finder에서 파일을 열 때, 또는 강제 종료 뒤 AppKit 복원 상태 때문에
+    /// SwiftUI가 기본 창을 만들지 않았을 때) Dock 아이콘 클릭과 같은 재열기 이벤트를 자신에게 보내 WindowGroup의 기본 창을 다시 만든다.
+    /// 기본 창(primaryWindowID)은 활성 워크스페이스를 맡는다(ensureWindowSlot).
+    func ensureVisibleWindow() {
+        guard !hasVisibleWindow else { return }
+        // 테스트 호스트에서는 창을 만들지 않는다(모델 테스트는 실제 창 없이 돈다)
+        guard ProcessInfo.processInfo.environment["XCTestConfigurationFilePath"] == nil else { return }
+        windowLogger.notice("no visible window; sending reopen event to self")
+        let event = NSAppleEventDescriptor(
+            eventClass: AEEventClass(kCoreEventClass), eventID: AEEventID(kAEReopenApplication),
+            targetDescriptor: .currentProcess(), returnID: AEReturnID(kAutoGenerateReturnID), transactionID: AETransactionID(kAnyTransactionID))
+        do {
+            try event.sendEvent(options: [.noReply], timeout: 1)
+        } catch {
+            windowLogger.error("reopen event failed: \(error.localizedDescription, privacy: .public)")
+        }
+    }
+
+    /// 창을 앞으로 가져와 키로 만든다. AppKit이 키 알림을 주지 못하는 상태(앱 비활성, 화면 잠김)라도 모델의 키 윈도우는 의도대로 따라간다.
+    func focusWindow(_ id: UUID) {
         windowRefs[id]?.window?.makeKeyAndOrderFront(nil)
+        windowDidBecomeKey(id)
     }
 
     private func makeFreshWorkspace() -> UUID {
@@ -347,32 +408,44 @@ final class AppModel {
                 addWorkspace(root: url, ephemeral: false)
                 continue
             }
+            // 파일이 속한 워크스페이스가 어느 창에 떠 있으면 그 창에서, 아니면 키 윈도우에서 연다.
+            let targetWindow: UUID
             if let containing = workspaces.first(where: { $0.contains(url) }) {
-                activateWorkspace(containing.id)
-                open(url, in: containing.focusedPaneID)
-                continue
-            } else if workspace.rootURL == nil, workspace.isEmpty {
-                // 비어 있는 시작 워크스페이스는 임시 워크스페이스로 바꿔 쓴다.
-                let folder = url.deletingLastPathComponent()
-                mutate { ws in
-                    ws.rootURL = folder
-                    ws.name = folder.lastPathComponent
-                    ws.isEphemeral = true
+                if let shown = windowID(showing: containing.id) {
+                    targetWindow = shown
+                    focusWindow(shown)
+                } else {
+                    targetWindow = keyWindowID
+                    activateWorkspace(containing.id, inWindow: targetWindow)
                 }
-                rebuildFileTree(for: activeWorkspaceID)
             } else {
-                addWorkspace(root: url.deletingLastPathComponent(), ephemeral: true)
+                targetWindow = keyWindowID
+                if let current = workspace(inWindow: targetWindow), current.rootURL == nil, current.isEmpty {
+                    // 비어 있는 시작 워크스페이스는 임시 워크스페이스로 바꿔 쓴다.
+                    let folder = url.deletingLastPathComponent()
+                    mutate(in: current.id) { ws in
+                        ws.rootURL = folder
+                        ws.name = folder.lastPathComponent
+                        ws.isEphemeral = true
+                    }
+                    rebuildFileTree(for: current.id)
+                } else {
+                    addWorkspace(root: url.deletingLastPathComponent(), ephemeral: true, inWindow: targetWindow)
+                }
             }
-            open(url)
+            open(url, window: targetWindow)
         }
+        ensureVisibleWindow()
     }
 
     /// 여러 파일은 모두 탭으로 열고 마지막 것을 활성으로(CHECKPOINTS D-2). 폴더는 README 또는 첫 마크다운 파일.
-    func open(_ urls: [URL], in pane: PaneID? = nil) {
-        for url in urls { open(url, in: pane) }
+    func open(_ urls: [URL], in pane: PaneID? = nil, window: UUID? = nil) {
+        for url in urls { open(url, in: pane, window: window) }
     }
 
-    func open(_ url: URL, fragment: String? = nil, in pane: PaneID? = nil, preview: Bool = false) {
+    /// `pane`이 없으면 `window`(창)의 워크스페이스의 포커스 패인, 그것도 없으면 키 윈도우(활성 워크스페이스)에 연다.
+    func open(_ url: URL, fragment: String? = nil, in pane: PaneID? = nil, preview: Bool = false, window: UUID? = nil) {
+        let pane = pane ?? window.flatMap { workspace(inWindow: $0)?.focusedPaneID }
         let url = url.standardizedFileURL
         var isDirectory: ObjCBool = false
         guard FileManager.default.fileExists(atPath: url.path(percentEncoded: false), isDirectory: &isDirectory) else {
@@ -435,9 +508,10 @@ final class AppModel {
     }
 
     /// ⌘P / ⌘T: 빠른 열기 팔레트.
-    func presentQuickOpen() {
+    func presentQuickOpen(inWindow window: UUID? = nil) {
+        paletteWindowID = window ?? keyWindowID
         quickOpen.recents = recentFiles
-        quickOpen.present(root: workspace.rootURL)
+        quickOpen.present(root: workspace(inWindow: paletteWindowID)?.rootURL)
     }
 
     /// 빠른 열기에서 고른 파일. ⏎ 새 탭, ⌘⏎ 오른쪽 분할, ⌘⇧⏎ 아래 분할.
@@ -453,28 +527,30 @@ final class AppModel {
         NSDocumentController.shared.clearRecentDocuments(nil)
     }
 
-    func presentWorkspaceSearch() {
+    func presentWorkspaceSearch(inWindow window: UUID? = nil) {
+        paletteWindowID = window ?? keyWindowID
         quickOpen.dismiss()
-        search.present(root: workspace.rootURL)
+        search.present(root: workspace(inWindow: paletteWindowID)?.rootURL)
     }
 
     /// 검색 결과를 열고, 페이지가 준비되면 찾기 바를 그 검색어와 일치 위치로 맞춘다.
     func openSearchSelection(split: SplitDirection? = nil) {
         guard let hit = search.selected else { return }
         let query = search.query.trimmingCharacters(in: .whitespaces)
+        let window = paletteWindowID
         search.dismiss()
-        if let split {
-            navigate(DocumentRef(url: hit.url), intent: .newSplit(split), from: focusedPaneID)
+        if let split, let pane = workspace(inWindow: window)?.focusedPaneID {
+            navigate(DocumentRef(url: hit.url), intent: .newSplit(split), from: pane)
         } else {
-            open(hit.url)
+            open(hit.url, window: window)
         }
-        Task { await revealSearchHit(hit, query: query) }
+        Task { await revealSearchHit(hit, query: query, window: window) }
     }
 
-    private func revealSearchHit(_ hit: WorkspaceSearchModel.Hit, query: String) async {
+    private func revealSearchHit(_ hit: WorkspaceSearchModel.Hit, query: String, window: UUID) async {
         let target = hit.url.standardizedFileURL
         for _ in 0..<80 {
-            if let viewer = focusedViewer, viewer.currentURL == target, viewer.isPageReady {
+            if let viewer = focusedViewer(inWindow: window), viewer.currentURL == target, viewer.isPageReady {
                 viewer.findCaseSensitive = false
                 viewer.findQuery = query
                 viewer.showFindBar()
@@ -488,11 +564,12 @@ final class AppModel {
 
     func openQuickOpenSelection(split: SplitDirection? = nil) {
         guard let result = quickOpen.selected else { return }
+        let window = paletteWindowID
         quickOpen.dismiss()
-        if let split {
-            navigate(DocumentRef(url: result.url), intent: .newSplit(split), from: focusedPaneID)
+        if let split, let pane = workspace(inWindow: window)?.focusedPaneID {
+            navigate(DocumentRef(url: result.url), intent: .newSplit(split), from: pane)
         } else {
-            open(result.url)
+            open(result.url, window: window)
         }
     }
 
@@ -505,13 +582,13 @@ final class AppModel {
 
     /// 같은 루트의 워크스페이스가 있으면 그것을 활성화한다.
     @discardableResult
-    func addWorkspace(root: URL, ephemeral: Bool, activate: Bool = true) -> UUID {
+    func addWorkspace(root: URL, ephemeral: Bool, activate: Bool = true, inWindow window: UUID? = nil) -> UUID {
         let root = root.standardizedFileURL
         if let existing = workspaces.first(where: { $0.rootURL?.standardizedFileURL == root }) {
             if !ephemeral, existing.isEphemeral {
                 updateWorkspace(existing.id) { $0.isEphemeral = false }
             }
-            if activate { activateWorkspace(existing.id) }
+            if activate { activateWorkspace(existing.id, inWindow: window) }
             return existing.id
         }
         var created = Workspace.single(name: root.lastPathComponent, rootURL: root)
@@ -522,7 +599,7 @@ final class AppModel {
         } else {
             workspaces.insert(created, at: activeWorkspaceIndex + 1)
         }
-        if activate { activateWorkspace(created.id) } else { scheduleSave() }
+        if activate { activateWorkspace(created.id, inWindow: window) } else { scheduleSave() }
         return created.id
     }
 
@@ -537,22 +614,23 @@ final class AppModel {
         addWorkspace(root: url, ephemeral: false)
     }
 
-    /// 키 윈도우에 워크스페이스를 표시한다. 이미 다른 창에 있으면 그 창을 앞으로 가져온다.
-    func activateWorkspace(_ id: UUID) {
+    /// 창(기본은 키 윈도우)에 워크스페이스를 표시한다. 이미 다른 창에 있으면 그 창을 앞으로 가져온다.
+    func activateWorkspace(_ id: UUID, inWindow window: UUID? = nil) {
+        let target = window ?? keyWindowID
         guard workspaces.contains(where: { $0.id == id }) else { return }
-        if let other = windowID(showing: id), other != keyWindowID {
+        if let other = windowID(showing: id), other != target {
             focusWindow(other)
             return
         }
-        guard id != activeWorkspaceID else { return }
+        guard workspaceID(inWindow: target) != id else { return }
         captureViewerState()
-        if let index = windowSlots.firstIndex(where: { $0.id == keyWindowID }) {
+        if let index = windowSlots.firstIndex(where: { $0.id == target }) {
             windowSlots[index].workspaceID = id
         } else {
-            windowSlots.append(WindowSlot(id: keyWindowID, workspaceID: id))
+            windowSlots.append(WindowSlot(id: target, workspaceID: id))
         }
-        activeWorkspaceID = id
-        workspace.lastActiveAt = .now
+        if target == keyWindowID { activeWorkspaceID = id }
+        updateWorkspace(id) { $0.lastActiveAt = .now }
         syncDisplayed()
         quickOpen.invalidateIndex()
         scheduleSave()
@@ -561,6 +639,11 @@ final class AppModel {
     func activateWorkspace(at index: Int) {
         guard workspaces.indices.contains(index) else { return }
         activateWorkspace(workspaces[index].id)
+    }
+
+    /// 사이드바 워크스페이스 클릭. 클릭한 창에 표시한다(그 창이 아직 키 윈도우가 아니어도).
+    func activateWorkspace(_ id: UUID, fromWindow window: UUID) {
+        activateWorkspace(id, inWindow: window)
     }
 
     func activateLastWorkspace() {
@@ -763,13 +846,18 @@ final class AppModel {
             let valid = session.workspaces.filter { $0.validate().isEmpty }
             guard !valid.isEmpty else { return }
             workspaces = valid
-            activeWorkspaceID = valid.first { $0.id == session.activeWorkspaceID }?.id ?? valid[0].id
+            let savedWindows = (session.windows ?? []).filter { record in valid.contains { $0.id == record.workspaceID } }
+            var active = valid.first { $0.id == session.activeWorkspaceID }?.id ?? valid[0].id
+            // 기본 창은 저장된 창 중 하나를 맡는다. 활성 워크스페이스가 어느 창에도 없었다면 첫 창의 것을 활성으로 한다(창이 하나 더 생기지 않도록).
+            if let first = savedWindows.first, !savedWindows.contains(where: { $0.workspaceID == active }) { active = first.workspaceID }
+            activeWorkspaceID = active
             // 기본 창 외의 창들. 활성 워크스페이스와 겹치거나 없는 것은 빼고, 중복도 뺀다.
             var seen: Set<UUID> = [activeWorkspaceID]
-            restoredExtraWindows = (session.windows ?? []).map(\.workspaceID).filter { id in
-                guard valid.contains(where: { $0.id == id }), !seen.contains(id) else { return false }
-                seen.insert(id)
-                return true
+            restoredPrimaryFrame = savedWindows.first { $0.workspaceID == activeWorkspaceID }?.frame
+            restoredExtraWindows = savedWindows.compactMap { record in
+                guard !seen.contains(record.workspaceID) else { return nil }
+                seen.insert(record.workspaceID)
+                return (record.workspaceID, record.frame)
             }
             logger.notice("session restored: \(valid.count) workspaces, \(valid.reduce(0) { $0 + $1.panes.count }) panes, \(valid.reduce(0) { $0 + $1.panes.reduce(0) { $0 + $1.tabs.count } }) tabs")
         } catch {
@@ -790,12 +878,15 @@ final class AppModel {
     func saveNow() {
         captureViewerState()
         let persistent = workspaces.filter { !$0.isEphemeral }
-        let active = persistent.contains { $0.id == activeWorkspaceID } ? activeWorkspaceID : persistent.first?.id
         // 창 목록: 키 윈도우(활성)를 앞에, 임시 워크스페이스만 보여 주는 창은 뺀다
         let ordered = windowSlots.sorted { a, _ in a.id == keyWindowID }
         let windows = ordered.compactMap { slot -> SessionWindow? in
-            persistent.contains { $0.id == slot.workspaceID } ? SessionWindow(workspaceID: slot.workspaceID) : nil
+            guard persistent.contains(where: { $0.id == slot.workspaceID }) else { return nil }
+            return SessionWindow(workspaceID: slot.workspaceID, frame: windowRefs[slot.id]?.window?.frameDescriptor ?? slot.frame)
         }
+        // 다음 실행의 활성 워크스페이스: 저장되는 첫 창의 것. 키 창이 임시 워크스페이스만 보여 주면 다른 창의 것을 쓴다.
+        let active = windows.first?.workspaceID
+            ?? (persistent.contains { $0.id == activeWorkspaceID } ? activeWorkspaceID : persistent.first?.id)
         do {
             try sessionStore.save(Session(workspaces: persistent, activeWorkspaceID: active, windows: windows.isEmpty ? nil : windows))
         } catch {

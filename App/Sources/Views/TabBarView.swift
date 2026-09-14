@@ -19,6 +19,7 @@ struct TabDragItem: Codable, Transferable {
 /// 패인 위의 탭 줄. 클릭 활성화, 드래그로 순서 변경과 다른 패인 이동(놓일 자리에 세로 표시), 컨텍스트 메뉴.
 struct TabBarView: View {
     let pane: Pane
+    @Environment(\.cmarksWindowID) private var windowID
     let isPaneFocused: Bool
     @Environment(AppModel.self) private var model
     @State private var endTargeted = false
@@ -50,7 +51,7 @@ struct TabBarView: View {
                 } isTargeted: { endTargeted = $0 }
             Button {
                 model.focus(pane.id)
-                model.presentQuickOpen()
+                model.presentQuickOpen(inWindow: windowID)
             } label: {
                 Image(systemName: "plus")
             }
