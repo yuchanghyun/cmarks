@@ -351,9 +351,13 @@ final class AppModel {
         openNewWindow(showing: workspaceID)
     }
 
-    /// 보이는 창이 있는가(닫힌 창의 숨은 NSWindow는 세지 않는다).
+    /// 보이는(또는 SwiftUI가 만들고 있는) 창이 있는가. 닫힌 창의 숨은 NSWindow는 세지 않는다.
+    /// 실행 직후 아직 등록되지 않은 기본 창도 세어야 재열기 이벤트로 창이 하나 더 생기지 않는다.
     var hasVisibleWindow: Bool {
-        windowSlots.contains { windowRefs[$0.id]?.window?.isVisible == true }
+        if windowSlots.contains(where: { windowRefs[$0.id]?.window?.isVisible == true }) { return true }
+        return NSApp.windows.contains { window in
+            NSStringFromClass(type(of: window)).contains("AppKitWindow") && !closedWindows.contains(window)
+        }
     }
 
     /// 보이는 창이 하나도 없으면(마지막 창을 닫은 뒤 Finder에서 파일을 열 때, 또는 강제 종료 뒤 AppKit 복원 상태 때문에

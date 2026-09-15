@@ -107,7 +107,7 @@ dump finderOutside
 quit"
 L=$(dumpline "$START" start); echo "  $L"
 expect_contains "$L" "windows=2 unmapped=0" "시작: 창 2개"
-expect_contains "$L" "→A[README.md|active=README.md] win=vK" "기본 창 A가 키"
+expect_contains "$L" "→A[README.md|active=README.md] win=v" "기본 창 A 표시(실행 직후 어느 창이 키인지는 AppKit이 정한다)"
 L=$(dumpline "$START" openInB); echo "  $L"
 expect_contains "$L" "→B[README.md,second.md|active=second.md]" "창 B에서 열면 B에만"
 expect_contains "$L" "→A[README.md|active=README.md]" "A는 그대로"
@@ -228,5 +228,52 @@ exit $FAIL
 
 }
 
-for s in ${SCENARIOS:-s1 s2 s3 s5 s6 s4}; do "$s"; done
+s7() {
+echo "=== S7: 창 두 개를 모두 닫은 뒤 Finder에서 열기, 다시 닫고 또 열기(사용자 보고 흐름) ==="
+T=$(mktemp -d /tmp/cmarks-e2e.XXXX); make_session "$T" A B
+mkdir -p "$T/outside"; printf '# out\n' > "$T/outside/out.md"
+start_app "$T" "sleep 3000
+dump start
+key 1
+sleep 500
+closeWindow 1
+sleep 1500
+dump closedB
+closeWindow 0
+sleep 1500
+dump closedA
+sleep 6000
+dump afterFinderOpen
+sleep 8000
+dump afterOutside
+closeWindow 0
+sleep 1500
+dump closedAgain
+sleep 10000
+dump afterThird
+quit"
+sleep 10
+open -a "$APP" "$T/B/second.md"          # 창이 하나도 없는 상태에서 B 안의 파일(t≈10s, 덤프는 t≈14s)
+sleep 7
+open -a "$APP" "$T/outside/out.md"       # 이어서 어느 워크스페이스에도 없는 파일(t≈17s, 덤프는 t≈22s)
+sleep 11
+open -a "$APP" "$T/A/second.md"          # 다시 닫은 뒤 세 번째 열기(1.3.2에서 무시되던 경로, t≈28s, 덤프는 t≈33s)
+wait_script
+L=$(dumpline "$START" closedA); echo "  $L"
+expect_contains "$L" "slots= | windows=0" "두 창을 모두 닫으면 슬롯·창 없음"
+L=$(dumpline "$START" afterFinderOpen); echo "  $L"
+expect_contains "$L" "windows=1 unmapped=0" "Finder 열기로 창 1개"
+expect_contains "$L" "→B[README.md,second.md|active=second.md] win=vK" "그 창이 B의 second.md를 보여 줌"
+L=$(dumpline "$START" afterOutside); echo "  $L"
+expect_contains "$L" "windows=1 unmapped=0" "밖의 파일도 같은 창에"
+expect_contains "$L" "→outside[out.md|active=out.md] win=vK" "임시 워크스페이스 outside 표시"
+L=$(dumpline "$START" closedAgain); echo "  $L"
+expect_contains "$L" "slots= | windows=0" "다시 닫으면 창 없음"
+L=$(dumpline "$START" afterThird); echo "  $L"
+expect_contains "$L" "windows=1 unmapped=0" "세 번째 열기도 창 1개"
+expect_contains "$L" "→A[README.md,second.md|active=second.md] win=vK" "A의 second.md 표시"
+check_key_agreement "$START"; kill_app; rm -rf "$T"
+}
+
+for s in ${SCENARIOS:-s1 s2 s3 s5 s6 s7 s4}; do "$s"; done
 echo; [ "$FAIL" = 0 ] && echo "ALL PASS" || echo "FAILURES: $FAIL"

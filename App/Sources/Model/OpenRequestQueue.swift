@@ -10,10 +10,16 @@ final class OpenRequestQueue {
 
     private(set) var pending: [URL] = []
 
+    /// 실행이 끝난 뒤 설정된다. 이후의 요청은 UI(ContentView)를 기다리지 않고 바로 소비한다.
+    /// 창을 모두 닫으면 ContentView가 사라져 큐를 비울 주체가 없어지므로(1.3.2에서 마지막 창을 닫은 뒤 Finder 열기가 무시됨)
+    /// 실행 중에는 모델이 직접 소비해야 한다. 실행 시점의 요청은 첫 창이 뜨면 ContentView가 소비한다.
+    var consumer: (() -> Void)?
+
     init() {}
 
     func enqueue(_ urls: [URL]) {
         pending.append(contentsOf: urls.compactMap(Self.fileURL(from:)))
+        consumer?()
     }
 
     func drain() -> [URL] {

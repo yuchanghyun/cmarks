@@ -7,6 +7,7 @@ import WebKit
 final class AppDelegate: NSObject, NSApplicationDelegate {
     private let servicesProvider = ServicesProvider()
     private static let dumpLogger = Logger(subsystem: "com.changhyunyoo.cmarks", category: "dump")
+    private static let openLogger = Logger(subsystem: "com.changhyunyoo.cmarks", category: "open")
 
     func applicationWillFinishLaunching(_ notification: Notification) {
         // 서비스 메뉴("cmarks로 열기")의 수신자. Info.plist의 NSServices와 짝이다.
@@ -24,6 +25,8 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         }
         // Sparkle 업데이터 기동(하루 한 번 검사 예약).
         _ = UpdaterModel.shared
+        // 이제부터 들어오는 열기 요청은 모델이 바로 소비한다(창이 하나도 없어도 동작해야 한다).
+        OpenRequestQueue.shared.consumer = { AppModel.shared.consume(OpenRequestQueue.shared) }
         // 강제 종료·크래시 뒤에는 AppKit이 "복원할 상태가 있다"고 보고 SwiftUI가 기본 창을 만들지 않는 경우가 있다
         // (로그: hasPersistentStateToRestore=1). 잠시 뒤에도 창이 없으면 재열기 이벤트로 기본 창을 띄운다.
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { AppModel.shared.ensureVisibleWindow() }
@@ -77,6 +80,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     /// Finder "다음으로 열기", Dock 드롭, `open -b`, cmarks:// 딥링크가 모두 여기로 들어온다.
     /// 창이 아직 없을 수 있으므로 큐에 넣고 UI가 소비한다.
     func application(_ application: NSApplication, open urls: [URL]) {
+        Self.openLogger.notice("open request: \(urls.count) url(s), windows visible=\(AppModel.shared.hasVisibleWindow)")
         OpenRequestQueue.shared.enqueue(urls)
     }
 

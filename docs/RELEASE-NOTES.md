@@ -1,5 +1,13 @@
 # 릴리스 노트
 
+## 1.3.3
+
+- **창을 모두 닫은 뒤 Finder에서 파일을 열어도 아무 일이 일어나지 않던 문제**를 고쳤습니다. 열기 요청을 창의 화면이 받아 처리하고 있어서, 창이 하나도 없으면 요청이 버려졌습니다(첫 번째는 닫힌 창의 잔상이 처리해 우연히 동작했습니다). 이제 앱이 요청을 직접 처리하고 필요하면 창을 다시 만듭니다.
+
+### English
+
+- **Fixed opening a file from the Finder doing nothing after all windows were closed.** Open requests were handled by the window's view, so with no window left they were dropped (the first attempt happened to work because the closed window's view was still around). The app now handles requests itself and re-creates a window when needed.
+
 ## 1.3.2
 
 - **여러 창 관련 버그를 고쳤습니다.**
