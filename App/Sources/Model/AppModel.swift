@@ -31,6 +31,8 @@ final class AppModel {
     let quickOpen = QuickOpenModel()
     let search = WorkspaceSearchModel()
     let finderFollower = FinderFollower()
+    /// 샌드박스에서 워크스페이스 폴더 접근 권한(보안 범위 북마크). 비샌드박스에서는 무해한 no-op.
+    let folderAccess = FolderAccess()
     let scrollMemory: ScrollMemory
     let settings: AppSettings
     let documents: DocumentService
@@ -601,6 +603,7 @@ final class AppModel {
         }
         var created = Workspace.single(name: root.lastPathComponent, rootURL: root)
         created.isEphemeral = ephemeral
+        created.rootBookmark = folderAccess.makeBookmark(for: root)   // 샌드박스: 재실행 뒤에도 이 폴더를 읽기 위해
         // 시작용 빈 워크스페이스(루트 없음, 탭 없음)는 대체한다.
         if workspaces.count == 1, workspaces[0].rootURL == nil, workspaces[0].isEmpty {
             workspaces = [created]
@@ -609,6 +612,31 @@ final class AppModel {
         }
         if activate { activateWorkspace(created.id, inWindow: window) } else { scheduleSave() }
         return created.id
+    }
+
+    /// 샌드박스에서 읽을 수 없는 워크스페이스 폴더(Finder에서 연 파일의 폴더, 풀리지 않은 북마크)의 접근을 열기 패널로 허용받는다.
+    /// 사용자가 다른 폴더를 고르면 그 폴더가 워크스페이스가 된다.
+    func grantFolderAccess(for workspaceID: UUID) {
+        guard let ws = workspace(id: workspaceID), let root = ws.rootURL else { return }
+        let panel = NSOpenPanel()
+        panel.canChooseFiles = false
+        panel.canChooseDirectories = true
+        panel.allowsMultipleSelection = false
+        panel.directoryURL = root
+        panel.message = String(localized: "이 폴더의 파일을 읽으려면 폴더를 선택해 접근을 허용하세요.")
+        panel.prompt = String(localized: "접근 허용")
+        guard panel.runModal() == .OK, let chosen = panel.url?.standardizedFileURL else { return }
+        folderAccess.start(chosen)
+        let bookmark = folderAccess.makeBookmark(for: chosen)
+        updateWorkspace(workspaceID) { ws in
+            if chosen != root.standardizedFileURL {
+                ws.rootURL = chosen
+                ws.name = chosen.lastPathComponent
+            }
+            ws.rootBookmark = bookmark
+        }
+        rebuildFileTree(for: workspaceID)
+        quickOpen.invalidateIndex()
     }
 
     func presentNewWorkspacePanel() {
@@ -667,6 +695,7 @@ final class AppModel {
     func closeWorkspace(_ id: UUID) {
         guard let index = workspaces.firstIndex(where: { $0.id == id }) else { return }
         captureViewerState()
+        if let root = workspaces[index].rootURL { folderAccess.stop(root) }
         workspaces.remove(at: index)
         if workspaces.isEmpty {
             workspaces = [Workspace.single(name: String(localized: "시작"))]
@@ -854,6 +883,15 @@ final class AppModel {
             let valid = session.workspaces.filter { $0.validate().isEmpty }
             guard !valid.isEmpty else { return }
             workspaces = valid
+            // 샌드박스: 북마크로 폴더 접근을 되살린다. 옮겨진 폴더는 새 위치로, 낡은 북마크는 새 것으로.
+            for index in workspaces.indices {
+                guard let data = workspaces[index].rootBookmark, let restored = folderAccess.restore(data) else { continue }
+                if restored.url.standardizedFileURL != workspaces[index].rootURL?.standardizedFileURL {
+                    workspaces[index].rootURL = restored.url
+                    workspaces[index].name = restored.url.lastPathComponent
+                }
+                if let refreshed = restored.refreshedBookmark { workspaces[index].rootBookmark = refreshed }
+            }
             let savedWindows = (session.windows ?? []).filter { record in valid.contains { $0.id == record.workspaceID } }
             var active = valid.first { $0.id == session.activeWorkspaceID }?.id ?? valid[0].id
             // 기본 창은 저장된 창 중 하나를 맡는다. 활성 워크스페이스가 어느 창에도 없었다면 첫 창의 것을 활성으로 한다(창이 하나 더 생기지 않도록).

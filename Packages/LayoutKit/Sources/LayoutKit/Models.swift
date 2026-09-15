@@ -67,6 +67,8 @@ public struct Workspace: Identifiable, Codable, Equatable, Sendable {
     public var name: String
     /// nil이면 느슨한 파일 모음.
     public var rootURL: URL?
+    /// 샌드박스 빌드에서 rootURL의 보안 범위 북마크. 재실행 뒤 폴더 접근 권한을 되살린다. 비샌드박스 빌드·이전 세션에는 없다.
+    public var rootBookmark: Data?
     public var layout: LayoutNode
     public var panes: [Pane]
     public var focusedPaneID: PaneID

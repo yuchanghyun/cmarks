@@ -38,10 +38,12 @@ struct AppCommands: Commands {
     var body: some Commands {
         // CommandsBuilder는 최상위 항목이 10개까지라 앞의 두 그룹을 Group으로 묶는다.
         Group {
+            #if !APPSTORE
             CommandGroup(after: .appInfo) {
                 Button("업데이트 확인…") { updater.checkForUpdates() }
                     .disabled(!updater.canCheckForUpdates)
             }
+            #endif
             CommandGroup(replacing: .newItem) {
                 Button("새 워크스페이스…") { model.presentNewWorkspacePanel() }
                     .keyboardShortcut(key(.newWorkspace))
@@ -115,8 +117,10 @@ struct AppCommands: Commands {
             Toggle("아웃라인", isOn: $model.isOutlineVisible)
                 .keyboardShortcut(key(.toggleOutline))
             Toggle("숨김 파일 표시", isOn: $model.showHiddenFiles)
+            #if !APPSTORE   // Finder에 Apple Event를 보내야 해서 샌드박스 판에는 없다(APPSTORE.md §2)
             Divider()
             Toggle("Finder 선택 따라가기", isOn: $model.isFollowingFinder)
+            #endif
         }
         CommandGroup(after: .toolbar) {
             Button("뒤로") { model.goBack() }

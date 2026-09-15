@@ -22,6 +22,9 @@ struct SidebarView: View {
                 }
                 Section {
                     if let tree = model.fileTree(inWindow: windowID) {
+                        if tree.rootUnreadable {
+                            FolderAccessBanner(workspaceID: shownWorkspaceID)
+                        }
                         FileTreeRows(tree: tree, relative: "", depth: 0)
                     } else {
                         Text("⌘N으로 폴더를 열어 워크스페이스를 만드세요.")
@@ -256,5 +259,28 @@ private struct FileRow: View {
                 NSPasteboard.general.setString(node.url.path(percentEncoded: false), forType: .string)
             }
         }
+    }
+}
+
+
+/// 워크스페이스 폴더를 읽지 못할 때(샌드박스 권한 없음, 폴더 사라짐). 샌드박스에서는 "폴더 접근 허용…"으로 열기 패널을 띄운다.
+private struct FolderAccessBanner: View {
+    @Environment(AppModel.self) private var model
+    let workspaceID: UUID?
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 6) {
+            if FolderAccess.isSandboxed {
+                Text("이 폴더를 읽을 권한이 없습니다. 접근을 허용하면 파일 목록과 문서 옆 이미지가 보입니다.")
+                if let workspaceID {
+                    Button("폴더 접근 허용…") { model.grantFolderAccess(for: workspaceID) }
+                }
+            } else {
+                Text("이 폴더를 읽을 수 없습니다.")
+            }
+        }
+        .font(.callout)
+        .foregroundStyle(.secondary)
+        .padding(.vertical, 4)
     }
 }

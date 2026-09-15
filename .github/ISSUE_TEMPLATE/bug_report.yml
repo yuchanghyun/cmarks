@@ -21,7 +21,7 @@ body:
     id: install
     attributes:
       label: How did you install cmarks?
-      options: [DMG, Homebrew, Built from source]
+      options: [DMG, Homebrew, App Store, Built from source]
     validations:
       required: true
   - type: textarea

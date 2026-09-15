@@ -17,6 +17,8 @@ final class FileTreeModel {
     var highlightedURL: URL?
     /// 마지막으로 클릭한 행(파일 또는 폴더)의 상대 경로.
     var selectedPath: String?
+    /// 루트 폴더 목록을 읽지 못했다(샌드박스에서 권한이 없거나 폴더가 사라짐). 사이드바가 안내와 "폴더 접근 허용" 버튼을 보여 준다.
+    private(set) var rootUnreadable = false
     var onExpandedChange: ((Set<String>) -> Void)?
 
     private let realRoot: String
@@ -99,13 +101,23 @@ final class FileTreeModel {
         let url = relative.isEmpty ? root : root.appending(path: relative)
         let filter = self.filter
         Task.detached(priority: .userInitiated) { [weak self] in
-            let nodes = (try? DirectoryLister.children(of: url, filter: filter)) ?? []
-            await self?.apply(nodes, for: relative)
+            let result = Result { try DirectoryLister.children(of: url, filter: filter) }
+            await self?.apply(result, for: relative)
         }
     }
 
-    private func apply(_ nodes: [FileTreeNode], for relative: String) {
-        children[relative] = nodes
+    private func apply(_ result: Result<[FileTreeNode], Error>, for relative: String) {
+        switch result {
+        case .success(let nodes):
+            children[relative] = nodes
+            if relative.isEmpty { rootUnreadable = false }
+        case .failure(let error):
+            children[relative] = []
+            if relative.isEmpty {
+                rootUnreadable = true
+                logger.notice("root unreadable: \(error.localizedDescription, privacy: .public)")
+            }
+        }
     }
 
     private func reloadLoaded() {

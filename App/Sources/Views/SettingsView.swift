@@ -161,6 +161,7 @@ private struct BehaviorSettingsTab: View {
                 Toggle("시작할 때 워크스페이스와 탭 복원", isOn: $settings.restoreSession)
                 Toggle("임시 워크스페이스는 마지막 탭을 닫으면 자동으로 정리", isOn: $settings.cleanupEphemeral)
             }
+            #if !APPSTORE
             Section {
                 Toggle("업데이트 자동 확인", isOn: $updater.automaticallyChecksForUpdates)
                     .disabled(!updater.isAvailable)
@@ -172,6 +173,7 @@ private struct BehaviorSettingsTab: View {
                 Text("하루 한 번 새 버전이 있는지 확인합니다. Homebrew로 설치했다면 brew upgrade --cask cmarks 로도 갱신됩니다.")
                     .font(.caption).foregroundStyle(.secondary)
             }
+            #endif
         }
         .formStyle(.grouped)
     }

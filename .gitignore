@@ -49,3 +49,6 @@ fixtures/**/*.pdf
 .DS_Store
 __pycache__/
 *.pyc
+build-appstore/
+App/Info-appstore.plist
+App/cmarks-appstore.entitlements

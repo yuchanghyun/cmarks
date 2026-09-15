@@ -29,7 +29,9 @@ nonisolated enum ProblemReporter {
         if sysctlInt("sysctl.proc_translated") == 1 { arch += " (Rosetta)" }
         let path = bundle.bundlePath
         let install: String
-        if ["/opt/homebrew/Caskroom/cmarks", "/usr/local/Caskroom/cmarks"].contains(where: { FileManager.default.fileExists(atPath: $0) }) {
+        if FolderAccess.isSandboxed {
+            install = "App Store"
+        } else if ["/opt/homebrew/Caskroom/cmarks", "/usr/local/Caskroom/cmarks"].contains(where: { FileManager.default.fileExists(atPath: $0) }) {
             install = "Homebrew"
         } else if path.hasPrefix("/Applications/") {
             install = "DMG"

@@ -1527,6 +1527,36 @@
         }
       }
     },
+    "이 폴더를 읽을 권한이 없습니다. 접근을 허용하면 파일 목록과 문서 옆 이미지가 보입니다.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "cmarks has no permission to read this folder. Grant access to see the file list and images next to the document."
+          }
+        }
+      }
+    },
+    "이 폴더를 읽을 수 없습니다.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "This folder can't be read."
+          }
+        }
+      }
+    },
+    "이 폴더의 파일을 읽으려면 폴더를 선택해 접근을 허용하세요.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "To read the files in this folder, select it to grant access."
+          }
+        }
+      }
+    },
     "이 표": {
       "localizations": {
         "en": {
@@ -1723,6 +1753,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Make Temporary"
+          }
+        }
+      }
+    },
+    "접근 허용": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Grant Access"
           }
         }
       }
@@ -2153,6 +2193,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Show Folder"
+          }
+        }
+      }
+    },
+    "폴더 접근 허용…": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Grant Folder Access…"
           }
         }
       }

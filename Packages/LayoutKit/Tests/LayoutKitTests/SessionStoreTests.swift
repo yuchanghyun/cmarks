@@ -33,3 +33,22 @@ struct SessionStoreTests {
         #expect(throws: (any Error).self) { try store.load() }
     }
 }
+
+// MARK: - rootBookmark (샌드박스 폴더 접근)
+
+@Suite struct WorkspaceBookmarkTests {
+    @Test func bookmarkRoundTripsAndOldSessionsDecodeWithoutIt() throws {
+        var ws = Workspace.single(name: "docs", rootURL: URL(fileURLWithPath: "/tmp/docs"))
+        ws.rootBookmark = Data([1, 2, 3])
+        let data = try JSONEncoder().encode(ws)
+        let back = try JSONDecoder().decode(Workspace.self, from: data)
+        #expect(back.rootBookmark == Data([1, 2, 3]))
+
+        // 이전 세션 파일에는 필드가 없다 → nil
+        var json = try JSONSerialization.jsonObject(with: data) as! [String: Any]
+        json.removeValue(forKey: "rootBookmark")
+        let old = try JSONDecoder().decode(Workspace.self, from: JSONSerialization.data(withJSONObject: json))
+        #expect(old.rootBookmark == nil)
+        #expect(old.rootURL == ws.rootURL)
+    }
+}

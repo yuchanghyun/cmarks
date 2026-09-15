@@ -33,8 +33,8 @@ packages:
     url: https://github.com/sparkle-project/Sparkle
     from: "2.9.6"
 
-targets:
-  cmarks:
+targetTemplates:
+  cmarksApp:
     type: application
     platform: macOS
     sources:
@@ -52,7 +52,6 @@ targets:
       - package: MarkdownCore
       - package: LayoutKit
       - package: FileKit
-      - package: Sparkle
       - target: cmarksQuickLook        # Finder Quick Look 미리보기 확장(PlugIns에 내장)
     configFiles:
       Debug: Config/Local.xcconfig
@@ -67,10 +66,8 @@ targets:
         ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
         SWIFT_DEFAULT_ACTOR_ISOLATION: MainActor
         GENERATE_INFOPLIST_FILE: NO
-        # Sparkle EdDSA 공개 키. `generate_keys`가 출력한 값. 비어 있으면 release.sh가 appcast 생성을 거부한다.
-        SPARKLE_PUBLIC_ED_KEY: "StZ0ga0h3/woXQbLX7rYKQbuUN3NuOKwKyQ0yF0vL9o="
     info:
-      path: App/Info.plist
+      path: ${infoPath}
       properties:
         CFBundleName: cmarks
         CFBundleDisplayName: cmarks
@@ -83,12 +80,6 @@ targets:
         NSHumanReadableCopyright: "© 2026 Changhyun Yoo"
         # 보기 ▸ Finder 선택 따라가기(Apple Events로 Finder 선택 항목을 읽는다)
         NSAppleEventsUsageDescription: "Finder에서 선택한 마크다운 파일을 따라가기 위해 Finder의 선택 항목을 읽습니다. / Reads the Finder selection so cmarks can follow it."
-        # Sparkle 자동 업데이트. appcast는 main 브랜치의 appcast.xml, 업데이트 zip은 GitHub Releases.
-        SUFeedURL: https://raw.githubusercontent.com/yuchanghyun/cmarks/main/appcast.xml
-        SUPublicEDKey: $(SPARKLE_PUBLIC_ED_KEY)
-        SUEnableAutomaticChecks: true
-        SUScheduledCheckInterval: 86400
-        SUEnableSystemProfiling: false
         # Finder "다음으로 열기" / 드래그&드롭 대상. Alternate = 사용자가 기본 앱으로 지정할 때만 기본.
         CFBundleDocumentTypes:
           - CFBundleTypeName: Markdown Document
@@ -129,6 +120,29 @@ targets:
             NSSendFileTypes:
               - net.daringfireball.markdown
               - public.folder
+
+
+targets:
+  # GitHub 판: Developer ID + Sparkle, 샌드박스 끔(ADR-5).
+  cmarks:
+    templates: [cmarksApp]
+    templateAttributes:
+      infoPath: App/Info.plist
+    dependencies:
+      - package: Sparkle
+    settings:
+      base:
+        # Sparkle EdDSA 공개 키. `generate_keys`가 출력한 값. 비어 있으면 release.sh가 appcast 생성을 거부한다.
+        SPARKLE_PUBLIC_ED_KEY: "StZ0ga0h3/woXQbLX7rYKQbuUN3NuOKwKyQ0yF0vL9o="
+    info:
+      path: App/Info.plist
+      properties:
+        # Sparkle 자동 업데이트. appcast는 main 브랜치의 appcast.xml, 업데이트 zip은 GitHub Releases.
+        SUFeedURL: https://raw.githubusercontent.com/yuchanghyun/cmarks/main/appcast.xml
+        SUPublicEDKey: $(SPARKLE_PUBLIC_ED_KEY)
+        SUEnableAutomaticChecks: true
+        SUScheduledCheckInterval: 86400
+        SUEnableSystemProfiling: false
     entitlements:
       path: App/cmarks.entitlements
       properties:
@@ -138,6 +152,26 @@ targets:
     scheme:
       testTargets:
         - cmarksTests
+
+  # Mac App Store 판(APPSTORE.md): 샌드박스 + 보안 범위 북마크, Sparkle·Finder 따라가기 없음. 같은 번들 ID.
+  # 빌드는 `make build-appstore`(derivedData가 다르다: build-appstore/).
+  cmarks-appstore:
+    templates: [cmarksApp]
+    templateAttributes:
+      infoPath: App/Info-appstore.plist
+    settings:
+      base:
+        SWIFT_ACTIVE_COMPILATION_CONDITIONS: APPSTORE
+    info:
+      path: App/Info-appstore.plist
+      properties:
+        ITSAppUsesNonExemptEncryption: false
+    entitlements:
+      path: App/cmarks-appstore.entitlements
+      properties:
+        com.apple.security.app-sandbox: true
+        com.apple.security.files.user-selected.read-only: true
+        com.apple.security.files.bookmarks.app-scope: true
 
   cmarksQuickLook:
     type: app-extension

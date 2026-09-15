@@ -1,4 +1,5 @@
 import Foundation
+#if canImport(Sparkle)
 import Sparkle
 
 /// Sparkle 자동 업데이트(App Store 밖 배포용). 피드 주소와 EdDSA 공개 키는 Info.plist(SUFeedURL, SUPublicEDKey).
@@ -44,3 +45,16 @@ final class UpdaterModel {
         controller?.checkForUpdates(nil)
     }
 }
+#else
+/// App Store 판(APPSTORE): Sparkle을 링크하지 않는다. 업데이트는 App Store가 맡고, 메뉴·설정은 #if !APPSTORE로 숨긴다.
+@MainActor
+@Observable
+final class UpdaterModel {
+    static let shared = UpdaterModel()
+    private(set) var canCheckForUpdates = false
+    var automaticallyChecksForUpdates = false
+    var isAvailable: Bool { false }
+    private init() {}
+    func checkForUpdates() {}
+}
+#endif

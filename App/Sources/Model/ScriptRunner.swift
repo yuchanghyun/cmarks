@@ -8,6 +8,7 @@ import OSLog
 ///
 /// 명령: sleep <ms> · dump <라벨> · key <슬롯 번호> · open <경로>(키 윈도우 사이드바 클릭과 같음) · openOutside <경로>(Finder 열기)
 ///      · activate <워크스페이스 이름> · newWindow · newWindowFor <이름> · closeWindow <슬롯 번호>(performClose) · closeWindowDirect <슬롯 번호>(close) · quit
+/// 워크스페이스 이름 뒤 ! = 루트 폴더를 읽지 못함(샌드박스 권한 없음).
 /// 덤프의 win= 표기: v/h(보임/숨김) + K(모델의 키 윈도우) + *(AppKit 키 윈도우). 화면이 잠겨 있으면 *는 붙지 않는다.
 @MainActor
 enum ScriptRunner {
@@ -98,7 +99,8 @@ enum ScriptRunner {
             let window = model.window(forSlot: slot.id)
             // K = 모델의 키 윈도우(동작 라우팅 기준), * = AppKit 키 윈도우. 화면이 잠겨 있으면 *는 붙지 않는다.
             let windowState = window.map { "\($0.isVisible ? "v" : "h")\(model.keyWindowID == slot.id ? "K" : "")\($0.isKeyWindow ? "*" : "")" } ?? "none"
-            return "\(short(slot.id))→\(ws?.name ?? "?")[\(tabs.joined(separator: ","))|active=\(active)] win=\(windowState)"
+            let unreadable = model.fileTree(inWindow: slot.id)?.rootUnreadable == true ? "!" : ""
+            return "\(short(slot.id))→\(ws?.name ?? "?")\(unreadable)[\(tabs.joined(separator: ","))|active=\(active)] win=\(windowState)"
         }
         let appWindows = NSApp.windows.filter { $0.isVisible && NSStringFromClass(type(of: $0)).contains("AppKitWindow") }
         let unmapped = appWindows.filter { model.slotID(of: $0) == nil }.count
