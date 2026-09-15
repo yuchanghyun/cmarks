@@ -18,13 +18,15 @@ enum ScriptRunner {
             logger.error("script not found: \(path, privacy: .public)")
             return
         }
-        // 진단: 창 알림이 실제로 게시되는지 전역으로 본다
+        // 진단: 창 알림이 실제로 게시되는지 전역으로 본다(메인 큐에서 오므로 메인 액터로 본다)
         for name in [NSWindow.willCloseNotification, NSWindow.didBecomeKeyNotification, NSWindow.didResignKeyNotification] {
             NotificationCenter.default.addObserver(forName: name, object: nil, queue: .main) { note in
                 let window = note.object as? NSWindow
-                let cls = window.map { NSStringFromClass(type(of: $0)) } ?? "?"
-                let slot = MainActor.assumeIsolated { window.flatMap { AppModel.shared.slotID(of: $0) }.map { String($0.uuidString.prefix(8)) } ?? "-" }
-                logger.notice("notification \(name.rawValue, privacy: .public) class=\(cls, privacy: .public) slot=\(slot, privacy: .public)")
+                MainActor.assumeIsolated {
+                    let cls = window.map { NSStringFromClass(type(of: $0)) } ?? "?"
+                    let slot = window.flatMap { AppModel.shared.slotID(of: $0) }.map { String($0.uuidString.prefix(8)) } ?? "-"
+                    logger.notice("notification \(name.rawValue, privacy: .public) class=\(cls, privacy: .public) slot=\(slot, privacy: .public)")
+                }
             }
         }
         let lines = text.split(separator: "\n").map { String($0).trimmingCharacters(in: .whitespaces) }.filter { !$0.isEmpty && !$0.hasPrefix("#") }
