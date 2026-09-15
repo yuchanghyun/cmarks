@@ -275,5 +275,40 @@ expect_contains "$L" "→A[README.md,second.md|active=second.md] win=vK" "A의 s
 check_key_agreement "$START"; kill_app; rm -rf "$T"
 }
 
-for s in ${SCENARIOS:-s1 s2 s3 s5 s6 s7 s4}; do "$s"; done
+s8() {
+echo "=== S8: ⌘⇧N으로 연 빈 창이 키일 때 Finder 열기는 그 창으로 ==="
+T=$(mktemp -d /tmp/cmarks-e2e.XXXX); make_session "$T" WS
+mkdir -p "$T/other"; printf '# other\n' > "$T/other/note.md"
+start_app "$T" "sleep 3000
+newWindow
+sleep 1500
+newWindow
+sleep 1500
+key 2
+sleep 500
+dump before
+sleep 7000
+dump afterInside
+sleep 7000
+dump afterOutside
+quit"
+sleep 10
+open -a "$APP" "$T/WS/second.md"         # 첫 창 WS 폴더 안의 파일 → 키 창(빈 시작)에서
+sleep 7
+open -a "$APP" "$T/other/note.md"        # 밖의 파일 → 같은 키 창? (키 창은 이제 WS 폴더의 임시 워크스페이스라 비어 있지 않음 → 임시 워크스페이스 추가)
+wait_script
+L=$(dumpline "$START" before); echo "  $L"
+expect_contains "$L" "windows=3 unmapped=0" "창 3개"
+expect_contains "$L" "→시작[|active=-] win=vK" "마지막 창(빈 시작)이 키"
+L=$(dumpline "$START" afterInside); echo "  $L"
+expect_contains "$L" "→WS[README.md|active=README.md] win=v " "첫 창 WS는 그대로(키 아님)"
+expect_contains "$L" "→WS[second.md|active=second.md] win=vK" "키 창이 WS 폴더의 워크스페이스가 되어 second.md 표시"
+expect_contains "$L" "windows=3 unmapped=0" "창 수 유지"
+L=$(dumpline "$START" afterOutside); echo "  $L"
+expect_contains "$L" "→other[note.md|active=note.md] win=vK" "밖의 파일은 키 창의 새 임시 워크스페이스에"
+expect_contains "$L" "windows=3 unmapped=0" "창 수 유지"
+check_key_agreement "$START"; kill_app; rm -rf "$T"
+}
+
+for s in ${SCENARIOS:-s1 s2 s3 s5 s6 s7 s8 s4}; do "$s"; done
 echo; [ "$FAIL" = 0 ] && echo "ALL PASS" || echo "FAILURES: $FAIL"

@@ -412,30 +412,34 @@ final class AppModel {
                 addWorkspace(root: url, ephemeral: false)
                 continue
             }
-            // 파일이 속한 워크스페이스가 어느 창에 떠 있으면 그 창에서, 아니면 키 윈도우에서 연다.
-            let targetWindow: UUID
-            if let containing = workspaces.first(where: { $0.contains(url) }) {
-                if let shown = windowID(showing: containing.id) {
-                    targetWindow = shown
-                    focusWindow(shown)
-                } else {
-                    targetWindow = keyWindowID
-                    activateWorkspace(containing.id, inWindow: targetWindow)
+            // 어느 창에서 열 것인가.
+            // 1) 키 윈도우(마지막으로 쓴 창)가 비어 있는 시작 워크스페이스를 보여 주면 거기서 연다. 사용자가 ⌘⇧N으로 새 창을 열어 둔 뜻을
+            //    존중한다. 같은 폴더의 워크스페이스가 다른 창에 있어도 그 창으로 보내지 않는다.
+            // 2) 파일이 속한 워크스페이스가 있으면: 키 윈도우의 것이 우선, 다른 창에 떠 있으면 그 창을 앞으로, 숨어 있으면 키 윈도우에 표시.
+            // 3) 어디에도 없으면 키 윈도우에 임시 워크스페이스를 만든다.
+            let targetWindow = keyWindowID
+            let folder = url.deletingLastPathComponent()
+            let containing = workspaces.filter { $0.contains(url) }
+            if let current = workspace(inWindow: targetWindow), current.rootURL == nil, current.isEmpty {
+                // 비어 있는 시작 워크스페이스는 그 폴더의 임시 워크스페이스로 바꿔 쓴다.
+                // (mutate(in:)는 빈 임시 워크스페이스를 정리하므로 쓰지 않는다: 탭이 열리기 전이라 되돌려졌다.)
+                updateWorkspace(current.id) { ws in
+                    ws.rootURL = folder
+                    ws.name = folder.lastPathComponent
+                    ws.isEphemeral = true
                 }
+                rebuildFileTree(for: current.id)
+                quickOpen.invalidateIndex()
+            } else if containing.contains(where: { $0.id == self.workspaceID(inWindow: targetWindow) }) {
+                // 키 윈도우의 워크스페이스 안이다. 그대로 연다.
+            } else if let shownWindow = containing.compactMap({ self.windowID(showing: $0.id) }).first {
+                focusWindow(shownWindow)
+                open(url, window: shownWindow)
+                continue
+            } else if let hidden = containing.first {
+                activateWorkspace(hidden.id, inWindow: targetWindow)
             } else {
-                targetWindow = keyWindowID
-                if let current = workspace(inWindow: targetWindow), current.rootURL == nil, current.isEmpty {
-                    // 비어 있는 시작 워크스페이스는 임시 워크스페이스로 바꿔 쓴다.
-                    let folder = url.deletingLastPathComponent()
-                    mutate(in: current.id) { ws in
-                        ws.rootURL = folder
-                        ws.name = folder.lastPathComponent
-                        ws.isEphemeral = true
-                    }
-                    rebuildFileTree(for: current.id)
-                } else {
-                    addWorkspace(root: url.deletingLastPathComponent(), ephemeral: true, inWindow: targetWindow)
-                }
+                addWorkspace(root: folder, ephemeral: true, inWindow: targetWindow)
             }
             open(url, window: targetWindow)
         }

@@ -1,5 +1,15 @@
 # 릴리스 노트
 
+## 1.3.4
+
+- **Finder에서 연 파일은 마지막으로 쓴 창에서 열립니다.** 파일 ▸ 새 창(⌘⇧N)으로 연 빈 창이 앞에 있으면, 그 파일이 다른 창의 워크스페이스 폴더에 속해 있어도 다른 창으로 보내지 않고 그 빈 창을 그 폴더의 워크스페이스로 만들어 엽니다. 앞 창이 비어 있지 않을 때는 이전처럼 파일이 속한 워크스페이스가 있는 창에서 열고 그 창을 앞으로 가져옵니다.
+- 창이 여러 개일 때 빈 창에서 Finder로 파일을 열면 워크스페이스 이름과 폴더가 정해지지 않고 파일만 열리던 문제를 고쳤습니다.
+
+### English
+
+- **Files opened from the Finder now open in the window you used last.** If an empty window opened with File ▸ New Window (⌘⇧N) is in front, the file opens there and that window becomes a workspace for the file's folder, even when another window already shows that folder. When the front window is not empty, the previous rule still applies: the file opens in the window showing its workspace, and that window comes forward.
+- Fixed opening a file from the Finder into an empty window while other windows were open: the workspace ended up with no name or folder, showing only the file.
+
 ## 1.3.3
 
 - **창을 모두 닫은 뒤 Finder에서 파일을 열어도 아무 일이 일어나지 않던 문제**를 고쳤습니다. 열기 요청을 창의 화면이 받아 처리하고 있어서, 창이 하나도 없으면 요청이 버려졌습니다(첫 번째는 닫힌 창의 잔상이 처리해 우연히 동작했습니다). 이제 앱이 요청을 직접 처리하고 필요하면 창을 다시 만듭니다.

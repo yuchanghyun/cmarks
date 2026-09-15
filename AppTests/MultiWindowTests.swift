@@ -347,3 +347,80 @@ struct MultiWindowLifecycleTests {
         #expect(restored.activeWorkspaceID == b)
     }
 }
+
+/// Finder에서 연 파일이 어느 창으로 가는가: 마지막으로 쓴 창(키 윈도우)이 비어 있는 시작 워크스페이스면 거기서 연다.
+@MainActor
+@Suite(.serialized)
+struct FinderOpenRoutingTests {
+    /// ⌘⇧N으로 연 빈 창이 키일 때 다른 창의 워크스페이스 폴더 안 파일을 열어도 그 창으로 보내지 않고 키 창에서 연다.
+    @Test func emptyStartWindowThatIsKeyReceivesFilesEvenFromAnotherWindowsFolder() async throws {
+        let (model, dir) = try makeTestModel()
+        defer { try? FileManager.default.removeItem(at: dir) }
+        let rootA = try MultiWindowTests.makeWorkspaceRoot("a")
+        defer { try? FileManager.default.removeItem(at: rootA) }
+        try "# deep\n".write(to: rootA.appending(path: "deep.md"), atomically: true, encoding: .utf8)
+        let a = model.addWorkspace(root: rootA, ephemeral: false)
+        model.open(rootA.appending(path: "README.md"))
+        let w2 = model.openNewWindow()                // 파일 ▸ 새 창: 빈 시작 워크스페이스
+        _ = model.consumeWindowOpenRequest(w2)
+        model.ensureWindowSlot(w2)
+        model.windowDidBecomeKey(w2)
+        let start = try #require(model.workspace(inWindow: w2))
+        #expect(start.rootURL == nil && start.isEmpty)
+
+        model.openFromOutside([rootA.appending(path: "deep.md")])
+        let converted = try #require(model.workspace(inWindow: w2))
+        #expect(converted.id == start.id, "시작 워크스페이스가 그 자리에서 바뀐다(다른 창으로 가지 않는다)")
+        #expect(converted.rootURL?.standardizedFileURL == rootA.standardizedFileURL)
+        #expect(converted.name == rootA.lastPathComponent, "이름은 폴더명으로")
+        #expect(converted.isEphemeral)
+        #expect(converted.focusedPane?.activeTab?.document.url.lastPathComponent == "deep.md")
+        #expect(model.workspace(id: a)?.focusedPane?.tabs.count == 1, "첫 창의 a는 그대로")
+        #expect(model.keyWindowID == w2)
+
+        // 같은 폴더의 다음 파일도 키 창(같은 폴더의 임시 워크스페이스)에서 열린다
+        model.openFromOutside([rootA.appending(path: "README.md")])
+        #expect(model.workspace(inWindow: w2)?.focusedPane?.tabs.count == 2)
+        #expect(model.workspace(id: a)?.focusedPane?.tabs.count == 1)
+    }
+
+    /// 키 창이 비어 있지 않으면 기존 규칙: 파일이 속한 워크스페이스가 떠 있는 창에서 열고 그 창을 앞으로.
+    @Test func nonEmptyKeyWindowStillRoutesToTheWindowShowingTheFilesWorkspace() async throws {
+        let (model, dir) = try makeTestModel()
+        defer { try? FileManager.default.removeItem(at: dir) }
+        let rootA = try MultiWindowTests.makeWorkspaceRoot("a"), rootB = try MultiWindowTests.makeWorkspaceRoot("b")
+        defer { try? FileManager.default.removeItem(at: rootA); try? FileManager.default.removeItem(at: rootB) }
+        try "# deep\n".write(to: rootA.appending(path: "deep.md"), atomically: true, encoding: .utf8)
+        let a = model.addWorkspace(root: rootA, ephemeral: false)
+        let b = model.addWorkspace(root: rootB, ephemeral: false, activate: false)
+        let w2 = model.openNewWindow(showing: b)
+        _ = model.consumeWindowOpenRequest(w2)
+        model.ensureWindowSlot(w2)
+        model.open(rootB.appending(path: "README.md"), window: w2)
+        model.windowDidBecomeKey(w2)
+
+        model.openFromOutside([rootA.appending(path: "deep.md")])
+        #expect(model.workspace(id: a)?.focusedPane?.activeTab?.document.url.lastPathComponent == "deep.md")
+        #expect(model.workspaceID(inWindow: w2) == b, "b 창은 그대로")
+        #expect(model.keyWindowID == AppModel.primaryWindowID, "a를 보여 주는 창이 앞으로 온다")
+    }
+
+    /// 시작 워크스페이스를 폴더 워크스페이스로 바꾸는 동안 "빈 임시 워크스페이스 정리"에 걸려 되돌아가지 않는다(1.3.3 회귀).
+    @Test func convertedStartWorkspaceKeepsItsFolderWhenOtherWindowsExist() async throws {
+        let (model, dir) = try makeTestModel()
+        defer { try? FileManager.default.removeItem(at: dir) }
+        let rootA = try MultiWindowTests.makeWorkspaceRoot("a"), outside = try MultiWindowTests.makeWorkspaceRoot("outside")
+        defer { try? FileManager.default.removeItem(at: rootA); try? FileManager.default.removeItem(at: outside) }
+        model.addWorkspace(root: rootA, ephemeral: false)
+        for _ in 0..<2 {
+            let w = model.openNewWindow(); _ = model.consumeWindowOpenRequest(w); model.ensureWindowSlot(w); model.windowDidBecomeKey(w)
+        }
+        let key = model.keyWindowID
+        model.openFromOutside([outside.appending(path: "README.md")])
+        let ws = try #require(model.workspace(inWindow: key))
+        #expect(ws.rootURL?.standardizedFileURL == outside.standardizedFileURL, "루트가 남는다")
+        #expect(ws.name == outside.lastPathComponent)
+        #expect(ws.focusedPane?.activeTab?.document.url.lastPathComponent == "README.md")
+        #expect(model.windowSlots.count == 3)
+    }
+}
