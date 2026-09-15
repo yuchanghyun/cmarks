@@ -40,6 +40,23 @@ cmarks keeps documents open. Open a project folder as a workspace, read its docu
 - **Integration.** Finder "Open With", drag and drop, a `cmarks` command-line tool, `cmarks://open?path=` links and File ▸ Open Recent. The installer can make cmarks the default app for `.md` files.
 - **English and Korean UI**, following the macOS system language.
 
+## How it compares
+
+cmarks is a reader, not an editor. It sits between Quick Look and a full editor.
+
+| | cmarks | QLMarkdown | Marked 2 | Typora | Obsidian |
+|---|---|---|---|---|---|
+| What it is | Reader with workspaces | Quick Look extension | Preview app | Editor | Notes app |
+| Keeps documents open in tabs and splits | ✓ | — | Windows only | Tabs | Tabs and panes |
+| GitHub's own renderer (cmark-gfm) and stylesheet | ✓ | ✓ | GitHub style available | Own renderer | Own renderer |
+| Live reload while another app edits the file | ✓ | — | ✓ | It is the editor | It is the editor |
+| Quick Look extension included | ✓ | ✓ | — | — | — |
+| Never modifies your files | ✓ | ✓ | ✓ | Edits | Edits |
+| Price | Free | Free | Paid | Paid | Free for personal use |
+| Open source | MIT | GPL | — | — | — |
+
+Based on public product pages as of September 2026. Corrections are welcome as issues.
+
 ## Install
 
 Requires macOS 15 Sequoia or later. Universal binary for Apple silicon and Intel. Builds are signed with a Developer ID and notarized by Apple.
