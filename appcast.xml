@@ -7,6 +7,45 @@
     <description>cmarks updates</description>
     <language>en</language>
     <item>
+      <title>cmarks 1.3.2</title>
+      <pubDate>Tue, 15 Sep 2026 00:19:03 +0000</pubDate>
+      <sparkle:version>9</sparkle:version>
+      <sparkle:shortVersionString>1.3.2</sparkle:shortVersionString>
+      <sparkle:minimumSystemVersion>15.0</sparkle:minimumSystemVersion>
+      <link>https://github.com/yuchanghyun/cmarks/releases/tag/v1.3.2</link>
+      <description xml:lang="en">
+&lt;ul&gt;&lt;li&gt;&lt;strong&gt;Fixed several multi-window bugs.&lt;/strong&gt;&lt;/li&gt;&lt;/ul&gt;
+&lt;p&gt;  - Opening a file from the Finder that belonged to a workspace not shown in the current window created an extra window, after which content could end up in the wrong window or in no window at all. The system was creating an additional default window for every open-file event; that no longer happens.&lt;/p&gt;
+&lt;p&gt;  - Choosing a file or workspace in the sidebar could open it in another window, or change every window. The sidebar, tab bar, Quick Open and Search now act only on the window they were used in.&lt;/p&gt;
+&lt;p&gt;  - After closing a window, choosing the workspace it had shown could bring the closed window back. Closed windows are now fully cleaned up.&lt;/p&gt;
+&lt;p&gt;  - Opening a file from the Finder after closing the last window showed no window at all.&lt;/p&gt;
+&lt;p&gt;  - After a force quit or a crash, the next launch could come up without any window.&lt;/p&gt;
+&lt;p&gt;  - Quitting while the front window showed only a temporary workspace (a file opened from the Finder) opened an extra window on the next launch.&lt;/p&gt;
+&lt;ul&gt;&lt;li&gt;Window position and size are saved with the session and restored on the next launch.&lt;/li&gt;&lt;/ul&gt;
+</description>
+      <description xml:lang="ko">
+&lt;ul&gt;&lt;li&gt;&lt;strong&gt;여러 창 관련 버그를 고쳤습니다.&lt;/strong&gt;&lt;/li&gt;&lt;/ul&gt;
+&lt;p&gt;  - Finder에서 현재 창에 없는 워크스페이스의 파일을 열면 창이 하나 더 생기고, 그 뒤로 내용이 두 창에 뒤섞이거나 아무 창에도 뜨지 않던 문제. 파일 열기 이벤트마다 시스템이 기본 창을 추가로 만들던 것을 막았습니다.&lt;/p&gt;
+&lt;p&gt;  - 사이드바에서 파일이나 워크스페이스를 고르면 다른 창에 열리거나 모든 창이 바뀌던 문제. 사이드바·탭 바·빠른 열기·검색은 이제 그 동작을 한 창, 즉 그 조작을 한 창에만 적용합니다.&lt;/p&gt;
+&lt;p&gt;  - 창을 닫은 뒤 그 창에 있던 워크스페이스를 고르면 닫힌 창이 다시 나타나던 문제. 닫힌 창은 완전히 정리됩니다.&lt;/p&gt;
+&lt;p&gt;  - 마지막 창을 닫은 뒤 Finder에서 파일을 열면 아무 창도 뜨지 않던 문제.&lt;/p&gt;
+&lt;p&gt;  - 강제 종료나 크래시 뒤에 다시 실행하면 창이 하나도 나타나지 않을 수 있던 문제.&lt;/p&gt;
+&lt;p&gt;  - Finder에서 연 파일(임시 워크스페이스)만 앞 창에 둔 채 종료하면 다음 실행 때 창이 하나 더 생기던 문제.&lt;/p&gt;
+&lt;ul&gt;&lt;li&gt;창의 위치와 크기를 세션에 함께 저장해 다음 실행 때 그대로 복원합니다.&lt;/li&gt;&lt;/ul&gt;
+</description>
+      <description>
+&lt;ul&gt;&lt;li&gt;&lt;strong&gt;Fixed several multi-window bugs.&lt;/strong&gt;&lt;/li&gt;&lt;/ul&gt;
+&lt;p&gt;  - Opening a file from the Finder that belonged to a workspace not shown in the current window created an extra window, after which content could end up in the wrong window or in no window at all. The system was creating an additional default window for every open-file event; that no longer happens.&lt;/p&gt;
+&lt;p&gt;  - Choosing a file or workspace in the sidebar could open it in another window, or change every window. The sidebar, tab bar, Quick Open and Search now act only on the window they were used in.&lt;/p&gt;
+&lt;p&gt;  - After closing a window, choosing the workspace it had shown could bring the closed window back. Closed windows are now fully cleaned up.&lt;/p&gt;
+&lt;p&gt;  - Opening a file from the Finder after closing the last window showed no window at all.&lt;/p&gt;
+&lt;p&gt;  - After a force quit or a crash, the next launch could come up without any window.&lt;/p&gt;
+&lt;p&gt;  - Quitting while the front window showed only a temporary workspace (a file opened from the Finder) opened an extra window on the next launch.&lt;/p&gt;
+&lt;ul&gt;&lt;li&gt;Window position and size are saved with the session and restored on the next launch.&lt;/li&gt;&lt;/ul&gt;
+</description>
+      <enclosure url="https://github.com/yuchanghyun/cmarks/releases/download/v1.3.2/cmarks-1.3.2.zip" type="application/octet-stream" length="5598948" sparkle:edSignature="yKkdBNQbcL3oDOT/6AyTK6uwmneg12fKyI1pQRElXRexedbFGSZFSHYBOvwHvzakbaIEL34hLIEk/eTp+D5uDw==" />
+    </item>
+    <item>
       <title>cmarks 1.3.1</title>
       <pubDate>Mon, 14 Sep 2026 14:26:05 +0000</pubDate>
       <sparkle:version>8</sparkle:version>
