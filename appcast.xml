@@ -7,6 +7,24 @@
     <description>cmarks updates</description>
     <language>en</language>
     <item>
+      <title>cmarks 1.3.4</title>
+      <pubDate>Tue, 15 Sep 2026 07:40:31 +0000</pubDate>
+      <sparkle:version>11</sparkle:version>
+      <sparkle:shortVersionString>1.3.4</sparkle:shortVersionString>
+      <sparkle:minimumSystemVersion>15.0</sparkle:minimumSystemVersion>
+      <link>https://github.com/yuchanghyun/cmarks/releases/tag/v1.3.4</link>
+      <description xml:lang="en">
+&lt;ul&gt;&lt;li&gt;&lt;strong&gt;Files opened from the Finder now open in the window you used last.&lt;/strong&gt; If an empty window opened with File ▸ New Window (⌘⇧N) is in front, the file opens there and that window becomes a workspace for the file's folder, even when another window already shows that folder. When the front window is not empty, the previous rule still applies: the file opens in the window showing its workspace, and that window comes forward.&lt;/li&gt;&lt;li&gt;Fixed opening a file from the Finder into an empty window while other windows were open: the workspace ended up with no name or folder, showing only the file.&lt;/li&gt;&lt;/ul&gt;
+</description>
+      <description xml:lang="ko">
+&lt;ul&gt;&lt;li&gt;&lt;strong&gt;Finder에서 연 파일은 마지막으로 쓴 창에서 열립니다.&lt;/strong&gt; 파일 ▸ 새 창(⌘⇧N)으로 연 빈 창이 앞에 있으면, 그 파일이 다른 창의 워크스페이스 폴더에 속해 있어도 다른 창으로 보내지 않고 그 빈 창을 그 폴더의 워크스페이스로 만들어 엽니다. 앞 창이 비어 있지 않을 때는 이전처럼 파일이 속한 워크스페이스가 있는 창에서 열고 그 창을 앞으로 가져옵니다.&lt;/li&gt;&lt;li&gt;창이 여러 개일 때 빈 창에서 Finder로 파일을 열면 워크스페이스 이름과 폴더가 정해지지 않고 파일만 열리던 문제를 고쳤습니다.&lt;/li&gt;&lt;/ul&gt;
+</description>
+      <description>
+&lt;ul&gt;&lt;li&gt;&lt;strong&gt;Files opened from the Finder now open in the window you used last.&lt;/strong&gt; If an empty window opened with File ▸ New Window (⌘⇧N) is in front, the file opens there and that window becomes a workspace for the file's folder, even when another window already shows that folder. When the front window is not empty, the previous rule still applies: the file opens in the window showing its workspace, and that window comes forward.&lt;/li&gt;&lt;li&gt;Fixed opening a file from the Finder into an empty window while other windows were open: the workspace ended up with no name or folder, showing only the file.&lt;/li&gt;&lt;/ul&gt;
+</description>
+      <enclosure url="https://github.com/yuchanghyun/cmarks/releases/download/v1.3.4/cmarks-1.3.4.zip" type="application/octet-stream" length="5607219" sparkle:edSignature="BdL0vaZOdIrOGeiKrbXKrWCpaD2HMLEhpkjlXnwpZ6c2ZyW4GoBOWbT+TkoGE7N8V35apoyi44+HBlHPSdD8Dg==" />
+    </item>
+    <item>
       <title>cmarks 1.3.3</title>
       <pubDate>Tue, 15 Sep 2026 07:07:44 +0000</pubDate>
       <sparkle:version>10</sparkle:version>
