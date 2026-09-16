@@ -17,7 +17,7 @@ kill_app() { local p; p=$(appPid); [ -n "$p" ] && kill "$p" 2>/dev/null; sleep 1
 STREAM=$(mktemp /tmp/cmarks-sandbox-stream.XXXX)
 /usr/bin/log stream --style compact --predicate 'process == "cmarks" AND (subsystem == "com.changhyunyoo.cmarks" OR (subsystem == "com.apple.WebKit" AND category == "Process"))' > "$STREAM" 2>&1 &
 STREAM_PID=$!; sleep 2
-trap 'kill $STREAM_PID 2>/dev/null; rm -f "$STREAM"' EXIT
+trap 'kill $STREAM_PID 2>/dev/null; wait $STREAM_PID 2>/dev/null; rm -f "$STREAM"' EXIT
 dumpline() { grep -F "[$2]" "$STREAM" | grep -F "slots=" | tail -1 | sed 's/.*\] \[/[/' | tr -d '*'; }
 wait_script() { for _ in $(seq 1 90); do sleep 1; grep -qE "script done|> quit" "$STREAM" && return 0; done; echo "  (script done 대기 시간 초과)"; }
 hung_in_secinit() { local p; p=$(appPid); [ -n "$p" ] && sample "$p" 1 -mayDie 2>/dev/null | grep -q "_libsecinit_appsandbox"; }
