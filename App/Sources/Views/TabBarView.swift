@@ -34,6 +34,9 @@ struct TabBarView: View {
                     HStack(spacing: 0) {
                         ForEach(pane.tabs) { tab in
                             TabItemView(tab: tab, isActive: tab.id == pane.activeTabID, isPaneFocused: isPaneFocused, paneID: pane.id)
+                                // 탭은 이름 폭(90~220pt)을 그대로 갖는다. 고정 크기가 아니면 HStack이 남는 폭을 탭에도 나눠 주거나
+                                // (탭이 늘어남) 빈 자리에 몰아주며 탭을 최소 폭으로 누른다(이름이 "AP….md"로 잘림).
+                                .fixedSize(horizontal: true, vertical: false)
                                 .draggable(TabDragItem(tabID: tab.id, paneID: pane.id)) {
                                     Text(tab.document.url.lastPathComponent)
                                         .padding(6)
@@ -41,10 +44,9 @@ struct TabBarView: View {
                                 }
                         }
                         DropIndicator(visible: endTargeted)
-                        // 탭 뒤 빈 자리: 클릭하면 패인 포커스, 탭을 놓으면 맨 끝으로 간다.
+                        // 탭 뒤 빈 자리: 클릭하면 패인 포커스, 탭을 놓으면 맨 끝으로 간다. 탭이 적을 때 남은 폭을 모두 차지한다.
                         Color.clear
                             .frame(minWidth: 24, maxWidth: .infinity, maxHeight: .infinity)
-                            .layoutPriority(1)   // 남는 폭은 탭을 넓히지 말고 빈 자리가 가져간다
                             .contentShape(Rectangle())
                             .onTapGesture { model.focus(pane.id) }
                             .dropDestination(for: TabDragItem.self) { items, _ in

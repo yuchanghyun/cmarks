@@ -1,5 +1,13 @@
 # 릴리스 노트
 
+## 1.3.6
+
+- **1.3.5에서 탭 이름이 "AP….md"처럼 두 글자로 잘리던 문제**를 고쳤습니다. 탭은 다시 파일 이름 폭을 그대로 갖고, 탭 목록은 + 버튼까지 이어집니다.
+
+### English
+
+- **Fixed tab titles being cut to two letters (like "AP….md") in 1.3.5.** Tabs are sized to their file names again, and the tab strip still extends to the + button.
+
 ## 1.3.5
 
 - **탭 목록이 창 폭의 절반만 쓰고 그 안에서 스크롤되던 문제**를 고쳤습니다. 이제 탭 목록이 오른쪽 + 버튼 바로 왼쪽까지 이어집니다.
