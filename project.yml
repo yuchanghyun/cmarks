@@ -78,8 +78,6 @@ targetTemplates:
         LSApplicationCategoryType: public.app-category.productivity
         NSPrincipalClass: NSApplication
         NSHumanReadableCopyright: "© 2026 Changhyun Yoo"
-        # 보기 ▸ Finder 선택 따라가기(Apple Events로 Finder 선택 항목을 읽는다)
-        NSAppleEventsUsageDescription: "Finder에서 선택한 마크다운 파일을 따라가기 위해 Finder의 선택 항목을 읽습니다. / Reads the Finder selection so cmarks can follow it."
         # Finder "다음으로 열기" / 드래그&드롭 대상. Alternate = 사용자가 기본 앱으로 지정할 때만 기본.
         CFBundleDocumentTypes:
           - CFBundleTypeName: Markdown Document
@@ -137,6 +135,8 @@ targets:
     info:
       path: App/Info.plist
       properties:
+        # 보기 ▸ Finder 선택 따라가기(Apple Events로 Finder 선택 항목을 읽는다)
+        NSAppleEventsUsageDescription: "Finder에서 선택한 마크다운 파일을 따라가기 위해 Finder의 선택 항목을 읽습니다. / Reads the Finder selection so cmarks can follow it."
         # Sparkle 자동 업데이트. appcast는 main 브랜치의 appcast.xml, 업데이트 zip은 GitHub Releases.
         SUFeedURL: https://raw.githubusercontent.com/yuchanghyun/cmarks/main/appcast.xml
         SUPublicEDKey: $(SPARKLE_PUBLIC_ED_KEY)
