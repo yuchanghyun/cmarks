@@ -26,29 +26,36 @@ struct TabBarView: View {
 
     var body: some View {
         HStack(spacing: 0) {
-            ScrollView(.horizontal, showsIndicators: false) {
-                HStack(spacing: 0) {
-                    ForEach(pane.tabs) { tab in
-                        TabItemView(tab: tab, isActive: tab.id == pane.activeTabID, isPaneFocused: isPaneFocused, paneID: pane.id)
-                            .draggable(TabDragItem(tabID: tab.id, paneID: pane.id)) {
-                                Text(tab.document.url.lastPathComponent)
-                                    .padding(6)
-                                    .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 4))
-                            }
+            // 스크롤 영역이 + 버튼 왼쪽까지 전부 차지한다. (빈 자리를 HStack의 형제로 두면 둘이 폭을 절반씩 나눠
+            // 탭 목록이 절반에서 스크롤되는 문제가 있었다.) 내용 폭을 뷰포트 폭 이상으로 두어, 탭이 적을 때는 빈 자리가
+            // 남은 폭을 채우고 탭이 넘칠 때는 최소 폭만 남긴다.
+            GeometryReader { geometry in
+                ScrollView(.horizontal, showsIndicators: false) {
+                    HStack(spacing: 0) {
+                        ForEach(pane.tabs) { tab in
+                            TabItemView(tab: tab, isActive: tab.id == pane.activeTabID, isPaneFocused: isPaneFocused, paneID: pane.id)
+                                .draggable(TabDragItem(tabID: tab.id, paneID: pane.id)) {
+                                    Text(tab.document.url.lastPathComponent)
+                                        .padding(6)
+                                        .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 4))
+                                }
+                        }
+                        DropIndicator(visible: endTargeted)
+                        // 탭 뒤 빈 자리: 클릭하면 패인 포커스, 탭을 놓으면 맨 끝으로 간다.
+                        Color.clear
+                            .frame(minWidth: 24, maxWidth: .infinity, maxHeight: .infinity)
+                            .layoutPriority(1)   // 남는 폭은 탭을 넓히지 말고 빈 자리가 가져간다
+                            .contentShape(Rectangle())
+                            .onTapGesture { model.focus(pane.id) }
+                            .dropDestination(for: TabDragItem.self) { items, _ in
+                                guard let item = items.first else { return false }
+                                model.moveTab(item.tabID, from: item.paneID, to: pane.id, before: nil)
+                                return true
+                            } isTargeted: { endTargeted = $0 }
                     }
-                    DropIndicator(visible: endTargeted)
+                    .frame(minWidth: geometry.size.width, alignment: .leading)
                 }
             }
-            // 탭 뒤 빈 자리에 놓으면 맨 끝으로 간다.
-            Color.clear
-                .frame(minWidth: 24, maxWidth: .infinity, maxHeight: .infinity)
-                .contentShape(Rectangle())
-                .onTapGesture { model.focus(pane.id) }
-                .dropDestination(for: TabDragItem.self) { items, _ in
-                    guard let item = items.first else { return false }
-                    model.moveTab(item.tabID, from: item.paneID, to: pane.id, before: nil)
-                    return true
-                } isTargeted: { endTargeted = $0 }
             Button {
                 model.focus(pane.id)
                 model.presentQuickOpen(inWindow: windowID)

@@ -1,5 +1,13 @@
 # 릴리스 노트
 
+## 1.3.5
+
+- **탭 목록이 창 폭의 절반만 쓰고 그 안에서 스크롤되던 문제**를 고쳤습니다. 이제 탭 목록이 오른쪽 + 버튼 바로 왼쪽까지 이어집니다.
+
+### English
+
+- **Fixed the tab strip using only half of the window width and scrolling inside it.** The tab strip now extends all the way to the + button on the right.
+
 ## 1.3.4
 
 - **Finder에서 연 파일은 마지막으로 쓴 창에서 열립니다.** 파일 ▸ 새 창(⌘⇧N)으로 연 빈 창이 앞에 있으면, 그 파일이 다른 창의 워크스페이스 폴더에 속해 있어도 다른 창으로 보내지 않고 그 빈 창을 그 폴더의 워크스페이스로 만들어 엽니다. 앞 창이 비어 있지 않을 때는 이전처럼 파일이 속한 워크스페이스가 있는 창에서 열고 그 창을 앞으로 가져옵니다.
