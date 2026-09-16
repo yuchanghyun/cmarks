@@ -24,8 +24,8 @@ test: test-packages test-web test-app
 build-appstore: gen ## App Store 판(샌드박스) 빌드 → build-appstore/Build/Products/$(CONFIG)/cmarks.app
 	xcodebuild -project $(PROJECT) -scheme cmarks-appstore -derivedDataPath build-appstore -configuration $(CONFIG) build -quiet
 
-archive-appstore: gen ## App Store 업로드용 archive (Xcode Organizer 또는 Transporter로 업로드)
-	xcodebuild -project $(PROJECT) -scheme cmarks-appstore -configuration Release -derivedDataPath build-appstore -archivePath build-appstore/cmarks-appstore.xcarchive archive -quiet
+archive-appstore: gen ## App Store 업로드용 archive (Xcode Organizer ▸ Distribute App ▸ App Store Connect로 업로드). 팀은 Config/Local.xcconfig
+	xcodebuild -project $(PROJECT) -scheme cmarks-appstore -configuration Release -derivedDataPath build-appstore -archivePath build-appstore/cmarks-appstore.xcarchive archive -quiet CODE_SIGN_STYLE=Manual CODE_SIGN_IDENTITY="Apple Development"
 
 e2e: build          ## 다중 창 E2E(실제 창을 띄움, 약 10분)
 	bash scripts/e2e-multiwindow.sh
