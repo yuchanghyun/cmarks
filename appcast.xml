@@ -7,6 +7,24 @@
     <description>cmarks updates</description>
     <language>en</language>
     <item>
+      <title>cmarks 1.3.5</title>
+      <pubDate>Wed, 16 Sep 2026 12:57:34 +0000</pubDate>
+      <sparkle:version>12</sparkle:version>
+      <sparkle:shortVersionString>1.3.5</sparkle:shortVersionString>
+      <sparkle:minimumSystemVersion>15.0</sparkle:minimumSystemVersion>
+      <link>https://github.com/yuchanghyun/cmarks/releases/tag/v1.3.5</link>
+      <description xml:lang="en">
+&lt;ul&gt;&lt;li&gt;&lt;strong&gt;Fixed the tab strip using only half of the window width and scrolling inside it.&lt;/strong&gt; The tab strip now extends all the way to the + button on the right.&lt;/li&gt;&lt;/ul&gt;
+</description>
+      <description xml:lang="ko">
+&lt;ul&gt;&lt;li&gt;&lt;strong&gt;탭 목록이 창 폭의 절반만 쓰고 그 안에서 스크롤되던 문제&lt;/strong&gt;를 고쳤습니다. 이제 탭 목록이 오른쪽 + 버튼 바로 왼쪽까지 이어집니다.&lt;/li&gt;&lt;/ul&gt;
+</description>
+      <description>
+&lt;ul&gt;&lt;li&gt;&lt;strong&gt;Fixed the tab strip using only half of the window width and scrolling inside it.&lt;/strong&gt; The tab strip now extends all the way to the + button on the right.&lt;/li&gt;&lt;/ul&gt;
+</description>
+      <enclosure url="https://github.com/yuchanghyun/cmarks/releases/download/v1.3.5/cmarks-1.3.5.zip" type="application/octet-stream" length="5630883" sparkle:edSignature="DFs1f2ogKKeblAnHAA+H85AbFFTwAdPMIe2qsQJ0K4xC4+fRGc5qBtDSUQqSTm8XhdZVXBIc+Es4hFwxZLtBCQ==" />
+    </item>
+    <item>
       <title>cmarks 1.3.4</title>
       <pubDate>Tue, 15 Sep 2026 07:40:31 +0000</pubDate>
       <sparkle:version>11</sparkle:version>
