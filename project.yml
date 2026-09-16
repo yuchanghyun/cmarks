@@ -172,6 +172,8 @@ targets:
         com.apple.security.app-sandbox: true
         com.apple.security.files.user-selected.read-only: true
         com.apple.security.files.bookmarks.app-scope: true
+        # WKWebView의 WebContent 프로세스가 샌드박스 앱에서 뜨려면 필요하다(없으면 "web process failed to launch"). 앱 자체는 네트워크에 나가지 않는다.
+        com.apple.security.network.client: true
 
   cmarksQuickLook:
     type: app-extension
