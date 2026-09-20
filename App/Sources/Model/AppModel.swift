@@ -765,7 +765,8 @@ final class AppModel {
         if let tab = focusedTab {
             closeTab(tab.id, in: focusedPaneID)
         } else if workspace.panes.count > 1 {
-            mutate { $0.closePane(focusedPaneID, viewport: viewport) }
+            let pane = focusedPaneID, viewport = viewport   // 클로저 안에서 self를 읽으면 workspaces 배타 접근과 겹친다
+            mutate { $0.closePane(pane, viewport: viewport) }
         } else {
             (keyWindow ?? NSApp.keyWindow)?.performClose(nil)
         }
@@ -776,11 +777,13 @@ final class AppModel {
     }
 
     func cycleTab(offset: Int) {
-        mutate { $0.cycleTab(in: focusedPaneID, offset: offset) }
+        let pane = focusedPaneID
+        mutate { $0.cycleTab(in: pane, offset: offset) }
     }
 
     func activateTab(at index: Int) {
-        mutate { $0.activateTab(at: index, in: focusedPaneID) }
+        let pane = focusedPaneID
+        mutate { $0.activateTab(at: index, in: pane) }
     }
 
     func togglePin(_ tabID: LayoutKit.Tab.ID, in pane: PaneID) {
@@ -955,8 +958,12 @@ final class AppModel {
     private func mutate(in target: UUID?, _ body: (inout Workspace) -> Void) {
         guard let target, let index = workspaces.firstIndex(where: { $0.id == target }) else { return }
         captureViewerState()
-        body(&workspaces[index])
-        workspaces[index].lastActiveAt = .now
+        // 복사해서 바꾼 뒤 되돌려 놓는다. `body(&workspaces[index])`처럼 제자리에서 바꾸면 body가 self의 상태(focusedPaneID 등,
+        // workspaces를 읽음)를 건드릴 때 Swift 배타적 접근 위반으로 앱이 즉시 종료된다(1.3.2~1.3.6 탭 이동 크래시).
+        var changed = workspaces[index]
+        body(&changed)
+        changed.lastActiveAt = .now
+        workspaces[index] = changed
         syncViewers()
         let url = workspaces[index].focusedPane?.activeTab?.document.url
         fileTrees[target]?.highlightedURL = url

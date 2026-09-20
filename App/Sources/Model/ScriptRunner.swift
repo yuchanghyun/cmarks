@@ -7,6 +7,7 @@ import OSLog
 /// 실제 창·키 윈도우·Finder 열기 이벤트를 포함한 다중 창 동작을 사람 손 없이 검증하는 데 쓴다.
 ///
 /// 명령: sleep <ms> · dump <라벨> · key <슬롯 번호> · open <경로>(키 윈도우 사이드바 클릭과 같음) · openOutside <경로>(Finder 열기)
+///      · nextTab · prevTab · tab <번호> · splitRight · closePane(메뉴와 같은 모델 호출)
 ///      · activate <워크스페이스 이름> · newWindow · newWindowFor <이름> · closeWindow <슬롯 번호>(performClose) · closeWindowDirect <슬롯 번호>(close) · quit
 /// 워크스페이스 이름 뒤 ! = 루트 폴더를 읽지 못함(샌드박스 권한 없음).
 /// 덤프의 win= 표기: v/h(보임/숨김) + K(모델의 키 윈도우) + *(AppKit 키 윈도우). 화면이 잠겨 있으면 *는 붙지 않는다.
@@ -65,6 +66,16 @@ enum ScriptRunner {
                 } else {
                     logger.error("activate: no workspace named \(argument, privacy: .public)")
                 }
+            case "nextTab":
+                model.cycleTab(offset: 1)
+            case "prevTab":
+                model.cycleTab(offset: -1)
+            case "tab":
+                model.activateTab(at: (Int(argument) ?? 1) - 1)
+            case "splitRight":
+                model.split(.right)
+            case "closePane":
+                model.closeActiveTabOrPane(keyWindow: nil)
             case "newWindow":
                 model.openNewWindow()
             case "newWindowFor":

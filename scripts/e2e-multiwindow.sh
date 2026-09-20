@@ -43,7 +43,8 @@ start_app() { # <dir> <script text> ; 앱을 띄우고 START를 설정(비차단
 }
 wait_script() { for _ in $(seq 1 90); do sleep 1; /usr/bin/log show --start "$START" --predicate 'subsystem == "com.changhyunyoo.cmarks" AND category == "script"' --style compact 2>/dev/null | grep -qE "script done|> quit" && return 0; done; echo "  (script done 대기 시간 초과)"; }
 run_script() { start_app "$1" "$2"; wait_script; }
-kill_app() { local p; p=$(appPid); [ -n "$p" ] && kill "$p" 2>/dev/null; sleep 1; }
+# 프로세스가 완전히 사라질 때까지 기다린다. 이전 인스턴스가 아직 종료 중이면 다음 시나리오의 파일 열기가 그쪽으로 가서(같은 경로) 검사가 흔들린다.
+kill_app() { local p; p=$(appPid); [ -n "$p" ] && kill "$p" 2>/dev/null; for _ in $(seq 1 20); do [ -z "$(appPid)" ] && return 0; sleep 0.25; done; pkill -9 -f "$APP" 2>/dev/null; sleep 0.5; }
 
 s1() {
 echo "=== S1: Finder 열기 이벤트가 창을 복제하지 않는다 ==="
@@ -66,7 +67,7 @@ expect_contains "$L" "→other[note.md|active=note.md]" "note.md가 임시 워�
 L=$(dumpline "$START" afterSecond); echo "  $L"
 expect_contains "$L" "windows=1 unmapped=0" "두 번째 열기 후에도 창 1개"
 expect_contains "$L" "→WS[README.md,second.md|active=second.md]" "WS가 다시 표시되고 second.md 탭 추가"
-check_key_agreement "$START"; check_key_agreement "$START"; kill_app; rm -rf "$T"
+check_key_agreement "$START"; kill_app; rm -rf "$T"
 }
 
 # S1 인스턴스는 quit 없이 SIGTERM으로 죽인다(강제 종료 뒤 AppKit이 hasPersistentStateToRestore=1로 보고 SwiftUI가 창을 만들지 않던 경로를 S2 시작에서 검사).
@@ -214,8 +215,8 @@ T=$(mktemp -d /tmp/cmarks-e2e.XXXX); make_session "$T" WS; mkdir -p "$T/other"; 
 printf 'sleep 5000\ndump launchWithFile\nquit\n' > "$T/script.txt"
 BEFORE=$(ls ~/Library/Logs/DiagnosticReports/ | grep -c "^cmarks-" || true)
 START=$(date '+%Y-%m-%d %H:%M:%S')
-open -na "$APP" --args -CmarksSessionDirectory "$T/session" -CmarksDisableUpdater YES -CmarksScript "$T/script.txt" &
-sleep 0.3; open -a "$APP" "$T/other/note.md"
+# 파일을 실행 명령에 함께 넘긴다(Finder에서 더블클릭해 앱을 띄우는 것과 같다). 실행 직후 따로 보내면 LaunchServices가 -600으로 거부할 수 있다.
+open -na "$APP" "$T/other/note.md" --args -CmarksSessionDirectory "$T/session" -CmarksDisableUpdater YES -CmarksScript "$T/script.txt"
 for _ in $(seq 1 30); do sleep 1; /usr/bin/log show --start "$START" --predicate 'subsystem == "com.changhyunyoo.cmarks" AND category == "script"' --style compact 2>/dev/null | grep -q "script done" && break; done
 AFTER=$(ls ~/Library/Logs/DiagnosticReports/ | grep -c "^cmarks-" || true)
 [ "$AFTER" = "$BEFORE" ] && pass "크래시 없음" || fail "크래시 리포트 생성"
@@ -310,5 +311,38 @@ expect_contains "$L" "windows=3 unmapped=0" "창 수 유지"
 check_key_agreement "$START"; kill_app; rm -rf "$T"
 }
 
-for s in ${SCENARIOS:-s1 s2 s3 s5 s6 s7 s8 s4}; do "$s"; done
+s9() {
+echo "=== S9: 메뉴 탭 동작(다음·이전·번호·분할·닫기)이 앱을 종료시키지 않는다 ==="
+T=$(mktemp -d /tmp/cmarks-e2e.XXXX); make_session "$T" WS
+start_app "$T" "sleep 3000
+open $T/WS/second.md
+sleep 800
+nextTab
+sleep 300
+dump afterNext
+prevTab
+sleep 300
+dump afterPrev
+tab 1
+sleep 300
+dump afterTab1
+splitRight
+sleep 800
+closePane
+sleep 800
+dump afterClosePane
+quit"
+wait_script
+L=$(dumpline "$START" afterNext); echo "  $L"
+expect_contains "$L" "→WS[README.md,second.md|active=README.md]" "다음 탭(끝에서 처음으로)"
+L=$(dumpline "$START" afterPrev); echo "  $L"
+expect_contains "$L" "→WS[README.md,second.md|active=second.md]" "이전 탭"
+L=$(dumpline "$START" afterTab1); echo "  $L"
+expect_contains "$L" "→WS[README.md,second.md|active=README.md]" "탭 1"
+L=$(dumpline "$START" afterClosePane); echo "  $L"
+expect_contains "$L" "→WS[" "분할 후 패인 닫기 뒤에도 살아 있음"
+check_key_agreement "$START"; kill_app; rm -rf "$T"
+}
+
+for s in ${SCENARIOS:-s1 s2 s3 s5 s6 s7 s8 s9 s4}; do "$s"; done
 echo; [ "$FAIL" = 0 ] && echo "ALL PASS" || echo "FAILURES: $FAIL"

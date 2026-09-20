@@ -1,5 +1,13 @@
 # 릴리스 노트
 
+## 1.3.7
+
+- **이전 탭·다음 탭·번호로 탭 선택·포커스 패인 닫기를 하면 앱이 바로 종료되던 문제**를 고쳤습니다. 1.3.2부터 있던 문제로, 탭을 바꾸는 도중 내부 상태를 다시 읽어 Swift 런타임이 앱을 중단시켰습니다.
+
+### English
+
+- **Fixed the app quitting immediately on Previous Tab, Next Tab, selecting a tab by number, or closing the focused pane.** Present since 1.3.2: internal state was read again while a tab change was in progress, which made the Swift runtime abort the app.
+
 ## 1.3.6
 
 - **1.3.5에서 탭 이름이 "AP….md"처럼 두 글자로 잘리던 문제**를 고쳤습니다. 탭은 다시 파일 이름 폭을 그대로 갖고, 탭 목록은 + 버튼까지 이어집니다.

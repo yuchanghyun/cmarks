@@ -424,3 +424,34 @@ struct FinderOpenRoutingTests {
         #expect(model.windowSlots.count == 3)
     }
 }
+
+/// 메뉴로 부르는 탭·패인 동작이 배타적 접근 위반(즉시 종료)을 내지 않는다. 1.3.2~1.3.6에서 이전/다음 탭이 앱을 종료시켰다.
+@MainActor
+@Suite(.serialized)
+struct TabMenuActionTests {
+    @Test func cyclingAndSelectingTabsDoesNotTrapAndChangesTheActiveTab() async throws {
+        let (model, dir) = try makeTestModel()
+        defer { try? FileManager.default.removeItem(at: dir) }
+        let root = try MultiWindowTests.makeWorkspaceRoot("tabs")
+        defer { try? FileManager.default.removeItem(at: root) }
+        try "# two\n".write(to: root.appending(path: "two.md"), atomically: true, encoding: .utf8)
+        model.addWorkspace(root: root, ephemeral: false)
+        model.open(root.appending(path: "README.md"))
+        model.open(root.appending(path: "two.md"))
+        func active() -> String? { model.workspace.focusedPane?.activeTab?.document.url.lastPathComponent }
+        #expect(active() == "two.md")
+
+        model.cycleTab(offset: 1)      // 다음 탭(끝에서 처음으로)
+        #expect(active() == "README.md")
+        model.cycleTab(offset: -1)     // 이전 탭
+        #expect(active() == "two.md")
+        model.activateTab(at: 0)       // 탭 1
+        #expect(active() == "README.md")
+
+        // 분할한 뒤 포커스 패인 닫기(closePane도 같은 경로를 탄다)
+        model.split(.right)
+        #expect(model.workspace.panes.count == 2)
+        model.closeActiveTabOrPane(keyWindow: nil)
+        #expect(model.workspace.panes.count >= 1)
+    }
+}
