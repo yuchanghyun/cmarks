@@ -1797,6 +1797,16 @@
         }
       }
     },
+    "창 다시 열기": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reopen Window"
+          }
+        }
+      }
+    },
     "창 닫기": {
       "localizations": {
         "en": {

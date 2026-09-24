@@ -121,10 +121,10 @@ expect_contains "$L" "→B[README.md,second.md|active=second.md] win=vK" "A에�
 expect_contains "$L" "→A[README.md,second.md|active=second.md] win=v " "A 창은 그대로 A"
 L=$(dumpline "$START" newWindow); echo "  $L"
 expect_contains "$L" "windows=3 unmapped=0" "새 창 → 3개"
-expect_contains "$L" "→시작[|active=-]" "새 창은 빈 임시 워크스페이스"
+expect_contains "$L" "→<start>[|active=-]" "새 창은 빈 임시 워크스페이스"
 L=$(dumpline "$START" closedWindow); echo "  $L"
 expect_contains "$L" "windows=2 unmapped=0" "닫으면 2개"
-expect_not_contains "$L" "시작" "빈 임시 워크스페이스는 사라짐"
+expect_not_contains "$L" "<start>" "빈 임시 워크스페이스는 사라짐"
 L=$(dumpline "$START" finderB); echo "  $L"
 expect_contains "$L" "→B[README.md,second.md|active=README.md] win=vK" "Finder에서 B 파일 → B 창이 키, README 탭 활성"
 expect_contains "$L" "windows=2" "창 수 유지"
@@ -300,7 +300,7 @@ open -a "$APP" "$T/other/note.md"        # 밖의 파일 → 같은 키 창? (�
 wait_script
 L=$(dumpline "$START" before); echo "  $L"
 expect_contains "$L" "windows=3 unmapped=0" "창 3개"
-expect_contains "$L" "→시작[|active=-] win=vK" "마지막 창(빈 시작)이 키"
+expect_contains "$L" "→<start>[|active=-] win=vK" "마지막 창(빈 시작)이 키"
 L=$(dumpline "$START" afterInside); echo "  $L"
 expect_contains "$L" "→WS[README.md|active=README.md] win=v " "첫 창 WS는 그대로(키 아님)"
 expect_contains "$L" "→WS[second.md|active=second.md] win=vK" "키 창이 WS 폴더의 워크스페이스가 되어 second.md 표시"
@@ -344,5 +344,25 @@ expect_contains "$L" "→WS[" "분할 후 패인 닫기 뒤에도 살아 있음"
 check_key_agreement "$START"; kill_app; rm -rf "$T"
 }
 
-for s in ${SCENARIOS:-s1 s2 s3 s5 s6 s7 s8 s9 s4}; do "$s"; done
+s10() {
+echo "=== S10: 마지막 창을 닫은 뒤 메뉴 '새 창'이 창을 되살린다(App Store 심사 2.1(a)·4) ==="
+T=$(mktemp -d /tmp/cmarks-e2e.XXXX); make_session "$T" WS
+run_script "$T" "sleep 3000
+closeWindow 0
+sleep 1500
+dump closed
+newWindow
+sleep 2500
+dump afterNewWindow
+quit"
+L=$(dumpline "$START" closed); echo "  $L"
+expect_contains "$L" "slots= | windows=0" "창 없음"
+L=$(dumpline "$START" afterNewWindow); echo "  $L"
+expect_contains "$L" "windows=1 unmapped=0" "새 창으로 창 1개"
+expect_contains "$L" "→WS[README.md|active=README.md] win=vK" "마지막 워크스페이스 WS가 되살아남"
+expect_not_contains "$L" "<start>" "빈 시작 워크스페이스가 생기지 않음"
+check_key_agreement "$START"; kill_app; rm -rf "$T"
+}
+
+for s in ${SCENARIOS:-s1 s2 s3 s5 s6 s7 s8 s9 s10 s4}; do "$s"; done
 echo; [ "$FAIL" = 0 ] && echo "ALL PASS" || echo "FAILURES: $FAIL"

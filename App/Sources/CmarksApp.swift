@@ -31,11 +31,20 @@ struct CmarksApp: App {
 struct AppCommands: Commands {
     @Bindable private var model = AppModel.shared
     private var updater = UpdaterModel.shared
+    /// 창이 하나도 없어도 메뉴에서 새 창을 띄울 수 있게 모델에 넘긴다.
+    @Environment(\.openWindow) private var openWindow
 
     private var settings: AppSettings { model.settings }
     private func key(_ action: ShortcutAction) -> KeyboardShortcut? { settings.keyboardShortcut(for: action) }
 
+    /// 메뉴의 openWindow를 모델에 넘긴다. 결과 빌더 안에서는 대입문을 쓸 수 없어 선언문으로 호출한다.
+    private func installWindowPresenter() {
+        let open = openWindow
+        model.presentWindow = { id in open(id: "main", value: id) }
+    }
+
     var body: some Commands {
+        let _ = installWindowPresenter()
         // CommandsBuilder는 최상위 항목이 10개까지라 앞의 두 그룹을 Group으로 묶는다.
         Group {
             #if !APPSTORE
@@ -44,6 +53,11 @@ struct AppCommands: Commands {
                     .disabled(!updater.canCheckForUpdates)
             }
             #endif
+            // 윈도우 메뉴: 메인 창을 닫은 뒤 다시 여는 길(App Store 심사 지침 4). 창이 보이는 동안은 비활성.
+            CommandGroup(before: .windowList) {
+                Button("창 다시 열기") { model.openNewWindow() }
+                    .disabled(model.hasVisibleWindow)
+            }
             CommandGroup(replacing: .newItem) {
                 Button("새 워크스페이스…") { model.presentNewWorkspacePanel() }
                     .keyboardShortcut(key(.newWorkspace))

@@ -68,6 +68,9 @@ final class AppModel {
     private(set) var paletteWindowID: UUID = AppModel.primaryWindowID
     private var windowRefs: [UUID: WeakWindow] = [:]
     private var windowObservers: [UUID: [NSObjectProtocol]] = [:]
+    /// 메뉴(Commands)의 openWindow. 창이 하나도 없어 ContentView가 요청을 처리하지 못할 때도 새 창을 띄운다
+    /// (App Store 심사: 메인 창을 닫은 뒤 "새 창"이 아무 일도 하지 않았다). AppCommands가 넣는다.
+    @ObservationIgnored var presentWindow: ((UUID) -> Void)?
     /// 닫힌 창. SwiftUI는 닫힌 창의 뷰를 한동안 살려 두고 다시 그리므로, 그 창이 WindowAccessor로 재등록되는 것을 막아야 한다.
     /// (재등록되면 숨은 창이 슬롯을 되살려 숨은 워크스페이스를 가로채고, 사이드바 클릭이 그 숨은 창을 다시 띄운다.)
     private let closedWindows = NSHashTable<NSWindow>.weakObjects()
@@ -330,10 +333,15 @@ final class AppModel {
     @discardableResult
     func openNewWindow(showing workspaceID: UUID? = nil, frame: String? = nil) -> UUID {
         let windowID = UUID()
-        let target = workspaceID.flatMap { workspace(id: $0) != nil && !displayedWorkspaceIDs.contains($0) ? $0 : nil } ?? makeFreshWorkspace()
+        var wanted = workspaceID
+        // 창이 하나도 안 보일 때의 "새 창"은 빈 워크스페이스 대신 마지막 활성 워크스페이스를 되살린다(메인 창 다시 열기).
+        if wanted == nil, !hasVisibleSlotWindow, !displayedWorkspaceIDs.contains(activeWorkspaceID) { wanted = activeWorkspaceID }
+        let target = wanted.flatMap { workspace(id: $0) != nil && !displayedWorkspaceIDs.contains($0) ? $0 : nil } ?? makeFreshWorkspace()
         pendingWindowWorkspaces[windowID] = target
         if let frame { pendingWindowFrames[windowID] = frame }
         windowOpenRequests.append(windowID)
+        // 메뉴가 준 openWindow가 있으면 바로 띄운다. 없으면(실행 초기·테스트) ContentView가 요청을 소비한다.
+        if let presentWindow, consumeWindowOpenRequest(windowID) { presentWindow(windowID) }
         return windowID
     }
 
@@ -353,12 +361,20 @@ final class AppModel {
         openNewWindow(showing: workspaceID)
     }
 
-    /// 보이는(또는 SwiftUI가 만들고 있는) 창이 있는가. 닫힌 창의 숨은 NSWindow는 세지 않는다.
-    /// 실행 직후 아직 등록되지 않은 기본 창도 세어야 재열기 이벤트로 창이 하나 더 생기지 않는다.
+    /// 슬롯에 매인 창 가운데 보이는 것이 있는가(모델이 아는 창만).
+    var hasVisibleSlotWindow: Bool {
+        windowSlots.contains { windowRefs[$0.id]?.window?.isVisible == true }
+    }
+
+    /// 보이는(또는 SwiftUI가 만들고 있는) 메인 창이 있는가. 닫힌 창의 숨은 NSWindow는 세지 않는다.
+    /// 실행 직후 아직 등록되지 않은 기본 창(SwiftUI identifier "main-AppWindow-…")도 세어야 재열기 이벤트로 창이 하나 더 생기지 않는다.
+    /// 설정 창 같은 다른 SwiftUI 창은 세지 않는다.
     var hasVisibleWindow: Bool {
-        if windowSlots.contains(where: { windowRefs[$0.id]?.window?.isVisible == true }) { return true }
+        if hasVisibleSlotWindow { return true }
         return NSApp.windows.contains { window in
-            NSStringFromClass(type(of: window)).contains("AppKitWindow") && !closedWindows.contains(window)
+            NSStringFromClass(type(of: window)).contains("AppKitWindow")
+                && (window.identifier?.rawValue.hasPrefix("main-AppWindow") ?? false)
+                && !closedWindows.contains(window)
         }
     }
 

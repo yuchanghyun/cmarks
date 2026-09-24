@@ -9,7 +9,7 @@ import OSLog
 /// 명령: sleep <ms> · dump <라벨> · key <슬롯 번호> · open <경로>(키 윈도우 사이드바 클릭과 같음) · openOutside <경로>(Finder 열기)
 ///      · nextTab · prevTab · tab <번호> · splitRight · closePane(메뉴와 같은 모델 호출)
 ///      · activate <워크스페이스 이름> · newWindow · newWindowFor <이름> · closeWindow <슬롯 번호>(performClose) · closeWindowDirect <슬롯 번호>(close) · quit
-/// 워크스페이스 이름 뒤 ! = 루트 폴더를 읽지 못함(샌드박스 권한 없음).
+/// 워크스페이스 이름 뒤 ! = 루트 폴더를 읽지 못함(샌드박스 권한 없음). 루트 없는 시작 워크스페이스는 <start>.
 /// 덤프의 win= 표기: v/h(보임/숨김) + K(모델의 키 윈도우) + *(AppKit 키 윈도우). 화면이 잠겨 있으면 *는 붙지 않는다.
 @MainActor
 enum ScriptRunner {
@@ -111,14 +111,16 @@ enum ScriptRunner {
             // K = 모델의 키 윈도우(동작 라우팅 기준), * = AppKit 키 윈도우. 화면이 잠겨 있으면 *는 붙지 않는다.
             let windowState = window.map { "\($0.isVisible ? "v" : "h")\(model.keyWindowID == slot.id ? "K" : "")\($0.isKeyWindow ? "*" : "")" } ?? "none"
             let unreadable = model.fileTree(inWindow: slot.id)?.rootUnreadable == true ? "!" : ""
-            return "\(short(slot.id))→\(ws?.name ?? "?")\(unreadable)[\(tabs.joined(separator: ","))|active=\(active)] win=\(windowState)"
+            // 루트 없는 시작 워크스페이스는 언어와 무관하게 <start>로 적는다("시작"/"Untitled")
+            let name = ws.map { $0.rootURL == nil ? "<start>" : $0.name } ?? "?"
+            return "\(short(slot.id))→\(name)\(unreadable)[\(tabs.joined(separator: ","))|active=\(active)] win=\(windowState)"
         }
         let appWindows = NSApp.windows.filter { $0.isVisible && NSStringFromClass(type(of: $0)).contains("AppKitWindow") }
         let unmapped = appWindows.filter { model.slotID(of: $0) == nil }.count
         for window in NSApp.windows where NSStringFromClass(type(of: window)).contains("AppKitWindow") {
             let slot = model.slotID(of: window).map { String($0.uuidString.prefix(8)) } ?? "-"
-            logger.notice("[\(label, privacy: .public)] window slot=\(slot, privacy: .public) visible=\(window.isVisible) key=\(window.isKeyWindow) released=\(window.isReleasedWhenClosed) title=\(window.title, privacy: .public)")
+            logger.notice("[\(label, privacy: .public)] window slot=\(slot, privacy: .public) id=\(window.identifier?.rawValue ?? "-", privacy: .public) visible=\(window.isVisible) key=\(window.isKeyWindow) title=\(window.title, privacy: .public)")
         }
-        logger.notice("[\(label, privacy: .public)] slots=\(slots.joined(separator: " ; "), privacy: .public) | windows=\(appWindows.count) unmapped=\(unmapped) key=\(short(model.keyWindowID), privacy: .public) active=\(model.workspace.name, privacy: .public) workspaces=\(model.workspaces.map(\.name).joined(separator: ","), privacy: .public)")
+        logger.notice("[\(label, privacy: .public)] slots=\(slots.joined(separator: " ; "), privacy: .public) | windows=\(appWindows.count) unmapped=\(unmapped) key=\(short(model.keyWindowID), privacy: .public) active=\(model.workspace.name, privacy: .public) workspaces=\(model.workspaces.map { $0.rootURL == nil ? "<start>" : $0.name }.joined(separator: ","), privacy: .public)")
     }
 }

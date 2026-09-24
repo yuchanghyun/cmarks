@@ -455,3 +455,43 @@ struct TabMenuActionTests {
         #expect(model.workspace.panes.count >= 1)
     }
 }
+
+/// 메뉴 "새 창"은 창이 하나도 없어도 동작해야 한다(App Store 심사 2.1(a)·4). 메뉴가 준 openWindow로 바로 띄우고,
+/// 창이 없을 때는 빈 워크스페이스 대신 마지막 활성 워크스페이스를 되살린다.
+@MainActor
+@Suite(.serialized)
+struct NewWindowWithoutWindowsTests {
+    @Test func newWindowPresentsThroughTheMenuAndRestoresTheLastWorkspace() async throws {
+        let (model, dir) = try makeTestModel()
+        defer { try? FileManager.default.removeItem(at: dir) }
+        let root = try MultiWindowTests.makeWorkspaceRoot("a")
+        defer { try? FileManager.default.removeItem(at: root) }
+        let a = model.addWorkspace(root: root, ephemeral: false)
+        let window = NSWindow(contentRect: NSRect(x: 0, y: 0, width: 300, height: 200), styleMask: [.titled, .closable], backing: .buffered, defer: false)
+        window.isReleasedWhenClosed = false
+        window.orderFront(nil)
+        model.registerWindow(window, id: AppModel.primaryWindowID)
+        #expect(model.hasVisibleSlotWindow)
+
+        var presented: [UUID] = []
+        model.presentWindow = { presented.append($0) }
+
+        // 창이 있을 때의 새 창: 빈 시작 워크스페이스, 메뉴 경로로 바로 표시, 큐에는 남지 않는다
+        let fresh = model.openNewWindow()
+        #expect(presented == [fresh])
+        #expect(model.windowOpenRequests.isEmpty)
+        model.ensureWindowSlot(fresh)
+        #expect(model.workspace(inWindow: fresh)?.rootURL == nil)
+        model.windowWillClose(fresh)
+
+        // 마지막 창을 닫은 뒤의 새 창: 마지막 활성 워크스페이스 a를 되살린다
+        window.close()
+        #expect(!model.hasVisibleSlotWindow)   // 테스트 호스트 앱의 창이 있어 hasVisibleWindow는 검사하지 않는다
+        #expect(model.windowSlots.isEmpty)
+        let reopened = model.openNewWindow()
+        #expect(presented.last == reopened)
+        model.ensureWindowSlot(reopened)
+        #expect(model.workspaceID(inWindow: reopened) == a, "빈 창이 아니라 마지막 워크스페이스")
+        #expect(!model.workspaces.contains { $0.rootURL == nil && $0.isEphemeral }, "빈 임시 워크스페이스를 만들지 않는다")
+    }
+}
