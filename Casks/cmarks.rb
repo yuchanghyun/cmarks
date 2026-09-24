@@ -1,8 +1,8 @@
 # Homebrew cask. 설치: brew tap yuchanghyun/cmarks https://github.com/yuchanghyun/cmarks && brew trust yuchanghyun/cmarks && brew install --cask cmarks
 # scripts/release.sh 가 버전과 sha256을 갱신한다.
 cask "cmarks" do
-  version "1.3.7"
-  sha256 "8e2e06390318739d054834bfeadb69a9fe5e977baab9e0e5dd10865b92633219"
+  version "1.3.8"
+  sha256 "d4c75010eaefb69b317163e1db4297cf464848913393885c71a820cc3da8dbc9"
 
   url "https://github.com/yuchanghyun/cmarks/releases/download/v#{version}/cmarks-#{version}.zip"
   name "cmarks"

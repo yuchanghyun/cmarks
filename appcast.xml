@@ -7,6 +7,24 @@
     <description>cmarks updates</description>
     <language>en</language>
     <item>
+      <title>cmarks 1.3.8</title>
+      <pubDate>Thu, 24 Sep 2026 01:53:11 +0000</pubDate>
+      <sparkle:version>15</sparkle:version>
+      <sparkle:shortVersionString>1.3.8</sparkle:shortVersionString>
+      <sparkle:minimumSystemVersion>15.0</sparkle:minimumSystemVersion>
+      <link>https://github.com/yuchanghyun/cmarks/releases/tag/v1.3.8</link>
+      <description xml:lang="en">
+&lt;ul&gt;&lt;li&gt;&lt;strong&gt;Fixed File ▸ New Window doing nothing after all windows were closed.&lt;/strong&gt; It now reopens a window with the workspace you last used.&lt;/li&gt;&lt;li&gt;Added &lt;strong&gt;Reopen Window&lt;/strong&gt; to the Window menu. It brings the main window back when no window is open.&lt;/li&gt;&lt;/ul&gt;
+</description>
+      <description xml:lang="ko">
+&lt;ul&gt;&lt;li&gt;&lt;strong&gt;창을 모두 닫은 뒤 파일 ▸ 새 창이 아무 일도 하지 않던 문제&lt;/strong&gt;를 고쳤습니다. 이제 마지막에 보던 워크스페이스로 창을 다시 엽니다.&lt;/li&gt;&lt;li&gt;윈도우 메뉴에 &lt;strong&gt;창 다시 열기&lt;/strong&gt;를 추가했습니다. 창이 하나도 없을 때 메인 창을 되살립니다.&lt;/li&gt;&lt;/ul&gt;
+</description>
+      <description>
+&lt;ul&gt;&lt;li&gt;&lt;strong&gt;Fixed File ▸ New Window doing nothing after all windows were closed.&lt;/strong&gt; It now reopens a window with the workspace you last used.&lt;/li&gt;&lt;li&gt;Added &lt;strong&gt;Reopen Window&lt;/strong&gt; to the Window menu. It brings the main window back when no window is open.&lt;/li&gt;&lt;/ul&gt;
+</description>
+      <enclosure url="https://github.com/yuchanghyun/cmarks/releases/download/v1.3.8/cmarks-1.3.8.zip" type="application/octet-stream" length="5643983" sparkle:edSignature="h5URpHlEmeAzUALECYJgRYS4irxtL8wGnVFYsRTjibQCBmVZ7yz8/xJCYqxXMnHIXlr8un3DCi47+6M0GxWfBQ==" />
+    </item>
+    <item>
       <title>cmarks 1.3.7</title>
       <pubDate>Sun, 20 Sep 2026 07:51:38 +0000</pubDate>
       <sparkle:version>14</sparkle:version>
