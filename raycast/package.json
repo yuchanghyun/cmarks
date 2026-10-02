@@ -4,7 +4,7 @@
   "title": "cmarks",
   "description": "Search and open Markdown files from your cmarks workspaces, reopen recent files, and send Finder selections to cmarks.",
   "icon": "icon.png",
-  "author": "yuchanghyun",
+  "author": "changhyun_yoo",
   "categories": ["Productivity", "Developer Tools"],
   "license": "MIT",
   "platforms": ["macOS"],
