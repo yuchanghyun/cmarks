@@ -3,6 +3,7 @@
 **A GitHub-accurate Markdown reader for macOS with workspaces, tabs and splits. It reads, it never edits.**
 
 [![Release](https://img.shields.io/github/v/release/yuchanghyun/cmarks?label=release)](https://github.com/yuchanghyun/cmarks/releases/latest)
+[![Mac App Store](https://img.shields.io/badge/Mac_App_Store-free-blue?logo=apple)](https://apps.apple.com/app/cmarks/id6813011637)
 [![CI](https://github.com/yuchanghyun/cmarks/actions/workflows/ci.yml/badge.svg)](https://github.com/yuchanghyun/cmarks/actions/workflows/ci.yml)
 [![macOS 15+](https://img.shields.io/badge/macOS-15%2B-blue)](#install)
 [![License: MIT](https://img.shields.io/badge/license-MIT-green)](LICENSE)
@@ -61,6 +62,12 @@ Based on public product pages as of September 2026. Corrections are welcome as i
 
 Requires macOS 15 Sequoia or later. Universal binary for Apple silicon and Intel. Builds are signed with a Developer ID and notarized by Apple.
 
+**Mac App Store** (free):
+
+<a href="https://apps.apple.com/app/cmarks/id6813011637"><img src="https://tools.applemediaservices.com/api/badges/download-on-the-mac-app-store/black/en-us?size=250x83" alt="Download on the Mac App Store" height="48"></a>
+
+The App Store version runs in the macOS sandbox: it keeps its own settings and session, updates through the App Store instead of Sparkle, asks you once to grant access to a folder when you open a file from the Finder, and does not include Follow Finder Selection. Everything else is the same.
+
 **DMG**: download `cmarks-<version>.dmg` from [Releases](https://github.com/yuchanghyun/cmarks/releases/latest) and drag cmarks to Applications.
 
 **Homebrew** (this repository is the tap):
@@ -71,7 +78,7 @@ brew trust yuchanghyun/cmarks
 brew install --cask cmarks
 ```
 
-**Updates**: cmarks checks for a new version once a day and offers to install it (Sparkle). Turn it off in Settings ▸ Behavior ▸ Updates. Homebrew installs can also use `brew upgrade --cask cmarks`.
+**Updates**: the DMG and Homebrew builds check for a new version once a day and offer to install it (Sparkle). Turn it off in Settings ▸ Behavior ▸ Updates. Homebrew installs can also use `brew upgrade --cask cmarks`. The App Store version updates through the App Store.
 
 **From source**: Xcode 26 or later and `brew install xcodegen node pnpm`, then:
 

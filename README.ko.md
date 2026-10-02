@@ -55,6 +55,12 @@ cmarks는 편집기가 아니라 뷰어입니다. Quick Look과 본격 편집기
 
 macOS 15 Sequoia 이상, Apple silicon과 Intel 모두 지원합니다.
 
+**Mac App Store**(무료):
+
+<a href="https://apps.apple.com/app/cmarks/id6813011637"><img src="https://tools.applemediaservices.com/api/badges/download-on-the-mac-app-store/black/ko-kr?size=250x83" alt="Mac App Store에서 다운로드" height="48"></a>
+
+App Store 판은 macOS 샌드박스에서 실행됩니다. 설정과 세션을 따로 저장하고, 업데이트는 Sparkle 대신 App Store가 맡으며, Finder에서 파일을 열면 그 폴더 접근을 한 번 허용해 달라고 묻고, Finder 선택 따라가기가 없습니다. 나머지는 같습니다.
+
 **DMG**: [Releases](https://github.com/yuchanghyun/cmarks/releases)에서 `cmarks-<버전>.dmg`를 받아 Applications 폴더로 끌어 넣습니다. Developer ID로 서명하고 Apple 공증을 마친 빌드라 경고 없이 실행됩니다.
 
 **Homebrew**:
@@ -65,7 +71,7 @@ brew trust yuchanghyun/cmarks
 brew install --cask cmarks
 ```
 
-**업데이트**: 하루 한 번 새 버전을 확인해 바로 설치할 수 있게 안내합니다(Sparkle). 설정 ▸ 동작 ▸ 업데이트에서 끌 수 있고, Homebrew 설치는 `brew upgrade --cask cmarks`도 됩니다.
+**업데이트**: DMG·Homebrew 판은 하루 한 번 새 버전을 확인해 바로 설치할 수 있게 안내합니다(Sparkle). 설정 ▸ 동작 ▸ 업데이트에서 끌 수 있고, Homebrew 설치는 `brew upgrade --cask cmarks`도 됩니다. App Store 판은 App Store가 업데이트합니다.
 
 **소스에서 빌드**: Xcode 26 이상과 `brew install xcodegen node pnpm`이 필요합니다.
 
