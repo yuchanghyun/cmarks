@@ -100,6 +100,18 @@ writeFileSync(
   '# Third-party licenses\n\n' +
     '`App/Resources/web/vendor`에 번들된 웹 라이브러리의 라이선스 전문. `make assets`가 생성한다.\n' +
     'Swift 의존성(cmark-gfm: BSD-2-Clause/MIT)은 Packages/MarkdownCore/Package.swift 참고.\n\n' +
-    licenses.join('\n'),
+    licenses.join('\n') + '\n' + swiftLicenses().join('\n'),
 );
 console.log('vendored:', versions);
+
+// Swift 패키지 의존성(SwiftPM 체크아웃이 빌드 폴더에만 있어 원문을 docs/licenses에 둔다). 앱의 도움말 ▸ 감사 표기가 이 파일을 보여 준다.
+function swiftLicenses() {
+  const entries = [
+    ['cmark-gfm (swift-cmark, gfm branch)', 'cmark-gfm.txt'],
+    ['Sparkle 2.9.6 (GitHub and Homebrew builds only)', 'sparkle.txt'],
+  ];
+  return entries.map(([title, file]) => {
+    const text = readFileSync(join(root, 'docs', 'licenses', file), 'utf8').trim();
+    return `## ${title}\n\n\`\`\`\n${text}\n\`\`\`\n`;
+  });
+}

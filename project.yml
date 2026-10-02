@@ -48,6 +48,8 @@ targetTemplates:
         buildPhase: resources
       - path: scripts/cmarks         # CLI 스크립트를 번들에 함께 넣는다(Homebrew cask binary, 수동 설치용)
         buildPhase: resources
+      - path: THIRD_PARTY_LICENSES.md  # 도움말 ▸ 감사 표기가 앱 안에서 보여 준다
+        buildPhase: resources
     dependencies:
       - package: MarkdownCore
       - package: LayoutKit

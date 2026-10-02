@@ -655,6 +655,13 @@ final class AppModel {
         quickOpen.invalidateIndex()
     }
 
+    /// 도움말 ▸ 감사 표기: 번들된 THIRD_PARTY_LICENSES.md를 cmarks 자신의 렌더러로 연다(창이 없으면 창부터).
+    func showAcknowledgements() {
+        guard let url = Bundle.main.url(forResource: "THIRD_PARTY_LICENSES", withExtension: "md") else { return }
+        open(url, preview: true, window: keyWindowID)
+        ensureVisibleWindow()
+    }
+
     func presentNewWorkspacePanel() {
         let panel = NSOpenPanel()
         panel.canChooseFiles = false

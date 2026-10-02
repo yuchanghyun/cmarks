@@ -166,6 +166,8 @@ struct AppCommands: Commands {
             Divider()
             Button("문제 신고…") { ProblemReporter.report(settings: model.settings) }
             Button("GitHub에서 cmarks 보기") { NSWorkspace.shared.open(URL(string: "https://github.com/yuchanghyun/cmarks")!) }
+            Divider()
+            Button("감사 표기…") { model.showAcknowledgements() }
         }
         CommandMenu("워크스페이스") {
             Button("워크스페이스 닫기") { model.closeActiveWorkspace() }

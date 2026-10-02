@@ -267,6 +267,16 @@
         }
       }
     },
+    "감사 표기…": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Acknowledgements…"
+          }
+        }
+      }
+    },
     "같은 조합을 쓰는 동작: %@": {
       "localizations": {
         "en": {

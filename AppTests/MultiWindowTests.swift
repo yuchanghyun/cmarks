@@ -495,3 +495,18 @@ struct NewWindowWithoutWindowsTests {
         #expect(!model.workspaces.contains { $0.rootURL == nil && $0.isEphemeral }, "빈 임시 워크스페이스를 만들지 않는다")
     }
 }
+
+/// 도움말 ▸ 감사 표기: 번들된 라이선스 목록을 탭으로 연다.
+@MainActor
+@Suite(.serialized)
+struct AcknowledgementsTests {
+    @Test func acknowledgementsOpenTheBundledLicenseListAsATab() async throws {
+        let (model, dir) = try makeTestModel()
+        defer { try? FileManager.default.removeItem(at: dir) }
+        let url = try #require(Bundle.main.url(forResource: "THIRD_PARTY_LICENSES", withExtension: "md"), "라이선스 목록이 번들에 있어야 한다")
+        let text = try String(contentsOf: url, encoding: .utf8)
+        #expect(text.contains("## cmark-gfm") && text.contains("## Sparkle"), "Swift 의존성도 포함")
+        model.showAcknowledgements()
+        #expect(model.workspace.focusedPane?.activeTab?.document.url.lastPathComponent == "THIRD_PARTY_LICENSES.md")
+    }
+}
