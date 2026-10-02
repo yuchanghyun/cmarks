@@ -8,6 +8,13 @@
 # 공증 프로파일 만들기(1회):
 #   xcrun notarytool store-credentials cmarks --apple-id <Apple ID> --team-id <TEAM> --password <앱 암호>
 # 그 뒤: CMARKS_NOTARY_PROFILE=cmarks make release
+#
+#   4) App Store 업로드(선택): App Store Connect API 키가 있으면 cmarks-appstore 타겟을 archive하고 App Store Connect에 올린다.
+#      배포 인증서는 Xcode가 클라우드에서 관리하므로(로컬 키체인에 없음) -allowProvisioningUpdates + API 키로 서명한다.
+#      1회: App Store Connect ▸ 사용자 및 액세스 ▸ 통합 ▸ 키 ▸ App Store Connect API ▸ 팀 키 생성(역할 App Manager)
+#           → AuthKey_<KEYID>.p8 을 ~/.appstoreconnect/private_keys/ 에 둔다(한 번만 내려받을 수 있다).
+#      그 뒤: CMARKS_NOTARY_PROFILE=cmarks CMARKS_ASC_KEY_ID=<KEYID> CMARKS_ASC_ISSUER_ID=<ISSUER UUID> make release
+#      건너뛰기: CMARKS_SKIP_APPSTORE=1. 업로드 뒤 App Store Connect에서 새 버전을 만들고 빌드를 골라 심사에 제출한다(수동 2분).
 set -euo pipefail
 cd "$(dirname "$0")/.."
 
@@ -142,8 +149,43 @@ cask "cmarks" do
 end
 CASK
 
+# ---------- App Store(선택) ----------
+APPSTORE_UPLOADED=0
+if [ -n "${CMARKS_ASC_KEY_ID:-}" ] && [ -n "${CMARKS_ASC_ISSUER_ID:-}" ] && [ -z "${CMARKS_SKIP_APPSTORE:-}" ]; then
+  KEY_PATH="${CMARKS_ASC_KEY_PATH:-$HOME/.appstoreconnect/private_keys/AuthKey_$CMARKS_ASC_KEY_ID.p8}"
+  if [ ! -f "$KEY_PATH" ]; then
+    echo "App Store Connect API 키 파일이 없다: $KEY_PATH (CMARKS_ASC_KEY_PATH로 위치를 줄 수 있다)" >&2; exit 1
+  fi
+  [ -n "$TEAM_ID" ] || { echo "App Store 업로드에는 Developer ID 인증서(팀 ID)가 필요하다." >&2; exit 1; }
+  echo "App Store: cmarks-appstore archive…"
+  AS_OUT="$OUT/appstore"; rm -rf "$AS_OUT"; mkdir -p "$AS_OUT"
+  xcodebuild -project cmarks.xcodeproj -scheme cmarks-appstore -configuration Release -derivedDataPath build-appstore \
+    -archivePath "$AS_OUT/cmarks-appstore.xcarchive" archive -quiet CODE_SIGN_STYLE=Manual CODE_SIGN_IDENTITY="Apple Development"
+  cat > "$AS_OUT/ExportOptions.plist" <<PLIST
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0"><dict>
+  <key>method</key><string>app-store-connect</string>
+  <key>destination</key><string>upload</string>
+  <key>signingStyle</key><string>automatic</string>
+  <key>teamID</key><string>$TEAM_ID</string>
+  <key>uploadSymbols</key><true/>
+  <key>manageAppVersionAndBuildNumber</key><false/>
+</dict></plist>
+PLIST
+  echo "App Store: 서명(클라우드 배포 인증서) + 업로드…"
+  xcodebuild -exportArchive -archivePath "$AS_OUT/cmarks-appstore.xcarchive" -exportOptionsPlist "$AS_OUT/ExportOptions.plist" \
+    -exportPath "$AS_OUT/export" -allowProvisioningUpdates \
+    -authenticationKeyPath "$KEY_PATH" -authenticationKeyID "$CMARKS_ASC_KEY_ID" -authenticationKeyIssuerID "$CMARKS_ASC_ISSUER_ID" -quiet
+  APPSTORE_UPLOADED=1
+  echo "App Store: 빌드 $VERSION ($BUILD) 업로드 완료. 처리(10~30분) 뒤 App Store Connect에서 버전 $VERSION을 만들고 이 빌드를 골라 심사에 제출한다."
+elif [ -z "${CMARKS_SKIP_APPSTORE:-}" ]; then
+  echo "App Store 업로드는 건너뛴다(CMARKS_ASC_KEY_ID·CMARKS_ASC_ISSUER_ID 없음). 수동: make archive-appstore → Organizer 업로드."
+fi
+
 echo
 echo "산출물:"; ls -la "$OUT"/*.zip "$OUT"/*.dmg "$OUT/checksums.txt" Casks/cmarks.rb appcast.xml
+[ "$APPSTORE_UPLOADED" = 1 ] && echo "App Store archive: $OUT/appstore/cmarks-appstore.xcarchive (업로드됨)"
 if [ "$NOTARIZED" = 1 ]; then
   echo "Developer ID 서명 + 공증 + 스테이플 완료. GitHub Releases에 올린 뒤 Casks/cmarks.rb와 appcast.xml을 커밋·푸시한다."
 elif [ -n "$IDENTITY" ]; then

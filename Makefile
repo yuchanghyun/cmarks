@@ -48,7 +48,7 @@ icon:               ## 앱 아이콘 생성 (cmux처럼 밝은 바탕 + 파란 �
 install:            ## /Applications에 설치 (공증본이 있으면 그것을, 없으면 Release 빌드를 재서명해서)
 	bash scripts/install.sh
 
-release:            ## 직접 배포용 zip·DMG (Developer ID + 공증 설정이 있으면 공증까지)
+release:            ## 배포: Developer ID zip·DMG + 공증 + appcast + cask. CMARKS_ASC_KEY_ID·CMARKS_ASC_ISSUER_ID가 있으면 App Store에도 업로드
 	bash scripts/release.sh
 
 logs:               ## 앱 로그 실시간 보기 (zsh의 log 내장 명령과 겹쳐 절대 경로 사용)
