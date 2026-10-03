@@ -1,5 +1,15 @@
 # 릴리스 노트
 
+## 1.3.9
+
+- 도움말 메뉴에 **감사 표기…**를 추가했습니다. cmarks가 쓰는 오픈소스 라이브러리(cmark-gfm, highlight.js, KaTeX, Mermaid 등)의 라이선스 전문을 앱 안에서 봅니다.
+- Raycast 확장이 나왔습니다. 워크스페이스의 마크다운 검색, 최근 파일 열기, Finder 선택 항목을 cmarks로 열기. Raycast 스토어 심사 중이며 저장소의 `raycast/` 폴더에서 바로 쓸 수 있습니다.
+
+### English
+
+- Added **Acknowledgements…** to the Help menu: the full license texts of the open-source libraries cmarks uses (cmark-gfm, highlight.js, KaTeX, Mermaid and others), shown inside the app.
+- A Raycast extension is available: search Markdown files across your workspaces, reopen recent files, and open the Finder selection in cmarks. It is under review for the Raycast Store and can be used from the `raycast/` folder in the repository today.
+
 ## 1.3.8
 
 - **창을 모두 닫은 뒤 파일 ▸ 새 창이 아무 일도 하지 않던 문제**를 고쳤습니다. 이제 마지막에 보던 워크스페이스로 창을 다시 엽니다.
