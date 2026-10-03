@@ -45,4 +45,4 @@ echo "App Store: 배포 서명 + 업로드…"
 xcodebuild -exportArchive -archivePath "$AS_OUT/cmarks-appstore.xcarchive" -exportOptionsPlist "$AS_OUT/ExportOptions.plist" \
   -exportPath "$AS_OUT/export" -allowProvisioningUpdates \
   -authenticationKeyPath "$KEY_PATH" -authenticationKeyID "$CMARKS_ASC_KEY_ID" -authenticationKeyIssuerID "$CMARKS_ASC_ISSUER_ID" -quiet
-echo "App Store: 빌드 $VERSION ($BUILD) 업로드 완료. 처리(10~30분) 뒤 App Store Connect에서 버전 $VERSION을 만들고 이 빌드를 골라 심사에 제출한다."
+echo "App Store: 빌드 $VERSION ($BUILD) 업로드 완료. 처리(10~30분) 뒤 App Store Connect에서 버전 ${VERSION}을 만들고 이 빌드를 골라 심사에 제출한다."
