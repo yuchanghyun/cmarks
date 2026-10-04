@@ -7,7 +7,7 @@ APP      := $(DERIVED)/Build/Products/$(CONFIG)/cmarks.app
 PACKAGES := Packages/MarkdownCore Packages/LayoutKit Packages/FileKit
 XCB      := xcodebuild -project $(PROJECT) -scheme $(SCHEME) -derivedDataPath $(DERIVED)
 
-.PHONY: gen build build-appstore archive-appstore upload-appstore run test test-packages test-web test-app assets icon install release logs clean
+.PHONY: gen build build-appstore archive-appstore upload-appstore submit-appstore appstore-status run test test-packages test-web test-app assets icon install release logs clean
 
 gen:                ## project.yml → cmarks.xcodeproj (로컬 서명 설정 파일이 없으면 예시로 만든다)
 	@[ -f Config/Local.xcconfig ] || cp Config/Local.xcconfig.example Config/Local.xcconfig
@@ -53,6 +53,12 @@ release:            ## 배포: Developer ID zip·DMG + 공증 + appcast + cask. 
 
 upload-appstore:    ## App Store 판만 archive·서명·App Store Connect 업로드 (CMARKS_ASC_KEY_ID·CMARKS_ASC_ISSUER_ID 필요)
 	bash scripts/appstore-upload.sh
+
+submit-appstore:    ## 업로드된 빌드를 App Store 버전에 붙이고 새로운 기능 입력 후 심사 제출 (처리 완료까지 기다림)
+	python3 scripts/asc.py submit --wait
+
+appstore-status:    ## App Store Connect의 빌드·버전 상태
+	python3 scripts/asc.py status
 
 logs:               ## 앱 로그 실시간 보기 (zsh의 log 내장 명령과 겹쳐 절대 경로 사용)
 	/usr/bin/log stream --level info --style compact --predicate 'subsystem == "com.changhyunyoo.cmarks"'

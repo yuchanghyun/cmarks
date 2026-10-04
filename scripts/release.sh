@@ -14,7 +14,8 @@
 #      1회: App Store Connect ▸ 사용자 및 액세스 ▸ 통합 ▸ 키 ▸ App Store Connect API ▸ 팀 키 생성(역할 App Manager)
 #           → AuthKey_<KEYID>.p8 을 ~/.appstoreconnect/private_keys/ 에 둔다(한 번만 내려받을 수 있다).
 #      그 뒤: CMARKS_NOTARY_PROFILE=cmarks CMARKS_ASC_KEY_ID=<KEYID> CMARKS_ASC_ISSUER_ID=<ISSUER UUID> make release
-#      건너뛰기: CMARKS_SKIP_APPSTORE=1. 업로드 뒤 App Store Connect에서 새 버전을 만들고 빌드를 골라 심사에 제출한다(수동 2분).
+#      건너뛰기: CMARKS_SKIP_APPSTORE=1. 업로드 뒤 scripts/asc.py가 처리 완료를 기다려 버전 생성·빌드 연결·새로운 기능·심사 제출까지 한다
+#      (CMARKS_SKIP_SUBMIT=1 로 제출만 건너뛸 수 있다). 출시는 '수동'으로 만들어지므로 승인 뒤 App Store Connect에서 출시 버튼을 누른다.
 set -euo pipefail
 cd "$(dirname "$0")/.."
 
@@ -154,6 +155,10 @@ CASK
 APPSTORE_UPLOADED=0
 if [ -n "${CMARKS_ASC_KEY_ID:-}" ] && [ -n "${CMARKS_ASC_ISSUER_ID:-}" ] && [ -z "${CMARKS_SKIP_APPSTORE:-}" ]; then
   CMARKS_TEAM_ID="$TEAM_ID" bash scripts/appstore-upload.sh && APPSTORE_UPLOADED=1
+  # 처리(보통 10~30분)를 기다렸다가 버전 생성·빌드 연결·새로운 기능 입력·심사 제출까지 한다. 시간이 넘으면 make submit-appstore 로 이어서.
+  if [ "$APPSTORE_UPLOADED" = 1 ] && [ -z "${CMARKS_SKIP_SUBMIT:-}" ]; then
+    python3 scripts/asc.py submit --wait || echo "심사 제출은 나중에: make submit-appstore"
+  fi
 elif [ -z "${CMARKS_SKIP_APPSTORE:-}" ]; then
   echo "App Store 업로드는 건너뛴다(CMARKS_ASC_KEY_ID·CMARKS_ASC_ISSUER_ID 없음). 나중에: make upload-appstore"
 fi
