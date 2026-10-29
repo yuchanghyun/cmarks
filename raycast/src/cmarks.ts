@@ -99,13 +99,19 @@ async function readPref<T>(key: string, source: "defaults" | "container"): Promi
 }
 
 /** 공백·쉼표로 나뉜 설정 문자열. 확장자는 앞의 점을 떼고 소문자로, 폴더 이름은 cmarks와 같이 그대로(대소문자·점 유지) 비교한다. */
-function splitList(value: string | undefined, fallback: string[], kind: "extensions" | "folders"): Set<string> {
-  if (!value || !value.trim()) return new Set(fallback);
+function splitList(value: string, kind: "extensions" | "folders"): string[] {
   const items = value
     .split(/[\s,]+/)
     .map((s) => s.trim())
     .filter(Boolean);
-  return new Set(kind === "extensions" ? items.map((s) => s.replace(/^\./, "").toLowerCase()) : items);
+  return kind === "extensions" ? items.map((s) => s.replace(/^\./, "").toLowerCase()) : items;
+}
+
+/** 두 판(GitHub 판 defaults, App Store 판 컨테이너)의 설정을 합친다. 어느 쪽도 바꾸지 않았으면 기본값. */
+function mergeLists(values: (string | undefined)[], fallback: string[], kind: "extensions" | "folders"): Set<string> {
+  const custom = values.filter((v): v is string => typeof v === "string" && v.trim().length > 0);
+  if (custom.length === 0) return new Set(fallback);
+  return new Set(custom.flatMap((v) => splitList(v, kind)));
 }
 
 export interface Filter {
@@ -113,14 +119,17 @@ export interface Filter {
   ignored: Set<string>;
 }
 
+/** 설정의 확장자·무시 폴더. 최근 파일과 같이 GitHub 판(defaults)과 App Store 판(컨테이너 plist) 양쪽을 읽는다. */
 export async function loadFilter(): Promise<Filter> {
-  const [extensions, ignored] = await Promise.all([
+  const [extDefaults, extContainer, ignDefaults, ignContainer] = await Promise.all([
     readPref<string>("markdownExtensions", "defaults"),
+    readPref<string>("markdownExtensions", "container"),
     readPref<string>("ignoredDirectories", "defaults"),
+    readPref<string>("ignoredDirectories", "container"),
   ]);
   return {
-    extensions: splitList(extensions, DEFAULT_EXTENSIONS, "extensions"),
-    ignored: splitList(ignored, DEFAULT_IGNORED, "folders"),
+    extensions: mergeLists([extDefaults, extContainer], DEFAULT_EXTENSIONS, "extensions"),
+    ignored: mergeLists([ignDefaults, ignContainer], DEFAULT_IGNORED, "folders"),
   };
 }
 
