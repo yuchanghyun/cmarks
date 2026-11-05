@@ -14,13 +14,13 @@ const SESSION_PATHS = [
   path.join(homedir(), "Library/Application Support/cmarks/session.json"),
   path.join(homedir(), "Library/Containers", BUNDLE_ID, "Data/Library/Application Support/cmarks/session.json"),
 ];
-const CONTAINER_PREFS = path.join(
-  homedir(),
-  "Library/Containers",
-  BUNDLE_ID,
-  "Data/Library/Preferences",
-  `${BUNDLE_ID}.plist`,
-);
+/** 설정 파일. GitHub/Homebrew 판은 ~/Library/Preferences, App Store 판은 샌드박스 컨테이너 안.
+ *  번들 ID로 `defaults export com.changhyunyoo.cmarks`를 하면 컨테이너가 있는 Mac에서는 cfprefsd가 컨테이너 쪽으로
+ *  돌려 읽어 GitHub 판 설정이 보이지 않으므로, 두 판 모두 파일 경로로 읽는다(경로 형식도 cfprefsd를 거쳐 캐시와 일치). */
+const PREFS_PATHS = {
+  github: path.join(homedir(), "Library/Preferences", `${BUNDLE_ID}.plist`),
+  container: path.join(homedir(), "Library/Containers", BUNDLE_ID, "Data/Library/Preferences", `${BUNDLE_ID}.plist`),
+};
 
 /** cmarks 기본값과 같다(FileKit FileFilter). 설정에서 바꿨으면 defaults에서 읽은 값으로 덮어쓴다. */
 const DEFAULT_EXTENSIONS = ["md", "markdown", "mdown", "mkd", "mkdn", "mdtxt", "mdtext", "mdx", "qmd", "rmd"];
@@ -86,15 +86,18 @@ export async function loadWorkspaces(): Promise<Workspace[]> {
 }
 
 /** 설정 값 하나를 읽는다. 설정 plist에는 JSON으로 바꿀 수 없는 값(창 프레임 등)이 섞여 있어 키 하나씩 뽑는다. */
-async function readPref<T>(key: string, source: "defaults" | "container"): Promise<T | undefined> {
+async function readPref<T>(key: string, source: keyof typeof PREFS_PATHS): Promise<T | undefined> {
   try {
-    const { stdout } =
-      source === "defaults"
-        ? await run("sh", ["-c", `defaults export ${BUNDLE_ID} - | plutil -extract ${key} json -o - -`])
-        : await run("plutil", ["-extract", key, "json", "-o", "-", CONTAINER_PREFS]);
+    const { stdout } = await run("sh", [
+      "-c",
+      'defaults export "$1" - | plutil -extract "$2" json -o - -',
+      "sh",
+      PREFS_PATHS[source],
+      key,
+    ]);
     return JSON.parse(stdout) as T;
   } catch {
-    return undefined; // 키가 없거나(기본값 사용) 파일이 없다(App Store 판 미설치)
+    return undefined; // 키가 없거나(기본값 사용) 그 판이 설치된 적 없어 파일이 없다
   }
 }
 
@@ -107,7 +110,7 @@ function splitList(value: string, kind: "extensions" | "folders"): string[] {
   return kind === "extensions" ? items.map((s) => s.replace(/^\./, "").toLowerCase()) : items;
 }
 
-/** 두 판(GitHub 판 defaults, App Store 판 컨테이너)의 설정을 합친다. 어느 쪽도 바꾸지 않았으면 기본값. */
+/** 두 판(GitHub 판, App Store 판)의 설정을 합친다. 어느 쪽도 바꾸지 않았으면 기본값. */
 function mergeLists(values: (string | undefined)[], fallback: string[], kind: "extensions" | "folders"): Set<string> {
   const custom = values.filter((v): v is string => typeof v === "string" && v.trim().length > 0);
   if (custom.length === 0) return new Set(fallback);
@@ -119,12 +122,12 @@ export interface Filter {
   ignored: Set<string>;
 }
 
-/** 설정의 확장자·무시 폴더. 최근 파일과 같이 GitHub 판(defaults)과 App Store 판(컨테이너 plist) 양쪽을 읽는다. */
+/** 설정의 확장자·무시 폴더. 최근 파일과 같이 GitHub 판과 App Store 판의 설정 파일을 모두 읽는다. */
 export async function loadFilter(): Promise<Filter> {
   const [extDefaults, extContainer, ignDefaults, ignContainer] = await Promise.all([
-    readPref<string>("markdownExtensions", "defaults"),
+    readPref<string>("markdownExtensions", "github"),
     readPref<string>("markdownExtensions", "container"),
-    readPref<string>("ignoredDirectories", "defaults"),
+    readPref<string>("ignoredDirectories", "github"),
     readPref<string>("ignoredDirectories", "container"),
   ]);
   return {
@@ -175,7 +178,7 @@ export async function listMarkdownFiles(workspaces: Workspace[], filter: Filter)
 /** 최근 파일(앞이 최근). 두 판의 목록을 합치고 없는 파일은 뺀다. */
 export async function loadRecentFiles(): Promise<string[]> {
   const [github, appstore] = await Promise.all([
-    readPref<string[]>("recentFiles", "defaults"),
+    readPref<string[]>("recentFiles", "github"),
     readPref<string[]>("recentFiles", "container"),
   ]);
   const merged: string[] = [];
