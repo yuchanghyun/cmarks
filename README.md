@@ -4,6 +4,7 @@
 
 [![Release](https://img.shields.io/github/v/release/yuchanghyun/cmarks?label=release)](https://github.com/yuchanghyun/cmarks/releases/latest)
 [![Mac App Store](https://img.shields.io/badge/Mac_App_Store-free-blue?logo=apple)](https://apps.apple.com/app/cmarks/id6813011637)
+[![Raycast Store](https://img.shields.io/badge/Raycast_Store-extension-red?logo=raycast)](https://www.raycast.com/changhyun_yoo/cmarks)
 [![CI](https://github.com/yuchanghyun/cmarks/actions/workflows/ci.yml/badge.svg)](https://github.com/yuchanghyun/cmarks/actions/workflows/ci.yml)
 [![macOS 15+](https://img.shields.io/badge/macOS-15%2B-blue)](#install)
 [![License: MIT](https://img.shields.io/badge/license-MIT-green)](LICENSE)
@@ -39,6 +40,7 @@ cmarks keeps documents open. Open a project folder as a workspace, read its docu
 - **Follow Finder Selection.** Turn it on in the View menu and cmarks shows whichever Markdown file you select in the Finder, like a Quick Look that never disappears.
 - **Custom CSS** in Settings ▸ Appearance, and cmarks remembers where you were in each file.
 - **Integration.** Finder "Open With", drag and drop, a `cmarks` command-line tool, `cmarks://open?path=` links and File ▸ Open Recent. The installer can make cmarks the default app for `.md` files.
+- **Raycast extension.** [cmarks on the Raycast Store](https://www.raycast.com/changhyun_yoo/cmarks): search every Markdown file across your workspaces, reopen recent files, and send the Finder selection to cmarks, all from Raycast. It reads your cmarks workspaces and settings, so there is nothing to configure.
 - **English and Korean UI**, following the macOS system language.
 
 ## How it compares
@@ -79,6 +81,8 @@ brew install --cask cmarks
 ```
 
 **Updates**: the DMG and Homebrew builds check for a new version once a day and offer to install it (Sparkle). Turn it off in Settings ▸ Behavior ▸ Updates. Homebrew installs can also use `brew upgrade --cask cmarks`. The App Store version updates through the App Store.
+
+**Raycast**: install the [cmarks extension](https://www.raycast.com/changhyun_yoo/cmarks) from the Raycast Store (or search "cmarks" in Raycast ▸ Store). Works with both the App Store and the DMG/Homebrew builds.
 
 **From source**: Xcode 26 or later and `brew install xcodegen node pnpm`, then:
 

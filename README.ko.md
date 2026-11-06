@@ -33,6 +33,7 @@ cmarks는 문서를 탭으로 붙잡아 두는 뷰어입니다. 프로젝트 폴
 - **Finder 선택 따라가기**: 보기 메뉴에서 켜 두면 Finder에서 고르는 마크다운 파일을 cmarks가 그때그때 보여 줍니다. 사라지지 않는 Quick Look입니다.
 - **사용자 CSS**(설정 ▸ 외형)와 파일별 읽던 자리 기억.
 - **연동**: Finder "다음으로 열기", 드래그&드롭, `cmarks` 명령줄 도구, `cmarks://open?path=` 딥링크, 파일 ▸ 최근 파일 열기. 설치 시 `.md` 기본 앱으로 지정할 수 있습니다.
+- **Raycast 확장**: [Raycast 스토어의 cmarks](https://www.raycast.com/changhyun_yoo/cmarks). 워크스페이스의 모든 마크다운 파일 검색, 최근 파일 다시 열기, Finder에서 선택한 항목을 cmarks로 열기를 Raycast에서 바로 합니다. cmarks의 워크스페이스와 설정을 그대로 읽어 따로 설정할 것이 없습니다.
 
 ## 다른 도구와 비교
 
@@ -72,6 +73,8 @@ brew install --cask cmarks
 ```
 
 **업데이트**: DMG·Homebrew 판은 하루 한 번 새 버전을 확인해 바로 설치할 수 있게 안내합니다(Sparkle). 설정 ▸ 동작 ▸ 업데이트에서 끌 수 있고, Homebrew 설치는 `brew upgrade --cask cmarks`도 됩니다. App Store 판은 App Store가 업데이트합니다.
+
+**Raycast**: Raycast 스토어에서 [cmarks 확장](https://www.raycast.com/changhyun_yoo/cmarks)을 설치합니다(Raycast ▸ Store에서 "cmarks" 검색). App Store 판과 DMG·Homebrew 판 모두에서 동작합니다.
 
 **소스에서 빌드**: Xcode 26 이상과 `brew install xcodegen node pnpm`이 필요합니다.
 
